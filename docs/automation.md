@@ -54,7 +54,7 @@ Guardrails:
   a required status check.
 - No audio, prompts, projects, model weights, or user data are ever sent.
 
-The default model is `openai/gpt-4o-mini`. Set the repository variable
+The default model is `openai/gpt-4.1`. Set the repository variable
 `AI_REVIEW_MODEL` to another GitHub Models chat model to change it.
 
 ### Review workflow

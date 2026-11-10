@@ -20,7 +20,8 @@ from typing import Any, Dict, List, Optional
 
 MARKER = "<!-- klyraudio-ai-review -->"
 MODELS_URL = "https://models.github.ai/inference/chat/completions"
-DEFAULT_MODEL = "openai/gpt-4o-mini"
+DEFAULT_MODEL = "openai/gpt-4.1"
+API_VERSION = "2026-03-10"
 MAX_TOTAL_CHARS = 48_000
 MAX_FILE_CHARS = 12_000
 SKIPPED_NAMES = {
@@ -135,6 +136,8 @@ def request_review(model: str, prompt: str, token: str) -> Optional[str]:
         data=json.dumps(payload).encode("utf-8"),
         headers={
             "Authorization": f"Bearer {token}",
+            "Accept": "application/vnd.github+json",
+            "X-GitHub-Api-Version": API_VERSION,
             "Content-Type": "application/json",
             "User-Agent": "klyraudio-ai-review",
         },

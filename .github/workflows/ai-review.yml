@@ -34,5 +34,5 @@ jobs:
       - name: Review pull request
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          AI_REVIEW_MODEL: ${{ vars.AI_REVIEW_MODEL || 'openai/gpt-4o-mini' }}
+          AI_REVIEW_MODEL: ${{ vars.AI_REVIEW_MODEL || 'openai/gpt-4.1' }}
         run: python .github/scripts/ai_review.py
