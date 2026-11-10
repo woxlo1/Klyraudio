@@ -3,8 +3,9 @@
 ## Requirements
 
 - A 64-bit desktop distribution with a modern glibc
-- Node.js 20+ and npm 10+
+- Node.js 22.22+ and npm 10+
 - Python 3.10+ with venv support
+
 - libsndfile
 - Optional: FFmpeg for compressed import and lossy export
 - A working X11 or Wayland session for the desktop app
@@ -30,7 +31,7 @@ Arch:
 sudo pacman -S python libsndfile ffmpeg git
 ```
 
-Install Node.js 20+ from your distribution or the official NodeSource
+Install Node.js 22.22+ from your distribution or the official NodeSource
 instructions. Verify:
 
 ```bash

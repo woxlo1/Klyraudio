@@ -3,8 +3,9 @@
 ## Requirements
 
 - macOS 12 or newer
-- Node.js 20+ and npm 10+
+- Node.js 22.22+ and npm 10+
 - Python 3.10+ (Homebrew Python or python.org)
+
 - Xcode Command Line Tools for some Python packages
 - Optional: FFmpeg for compressed import and lossy export
 
