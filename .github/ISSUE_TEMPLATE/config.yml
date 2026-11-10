@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/woxlo1/Klyraudio/security/advisories/new
+    about: Report security issues privately. Do not open a public issue.
+  - name: Setup and troubleshooting
+    url: https://github.com/woxlo1/Klyraudio/blob/main/docs/troubleshooting.md
+    about: Check installation, FFmpeg, model download, and desktop startup guides first.
+  - name: Contributing guide
+    url: https://github.com/woxlo1/Klyraudio/blob/main/CONTRIBUTING.md
+    about: Read the branch, test, translation, and licensing expectations before sending code.
