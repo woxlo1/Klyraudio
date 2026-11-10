@@ -19,10 +19,10 @@ Dependabot. Workflows request the least privilege they need.
 ## Dependabot
 
 `.github/dependabot.yml` tracks npm, pip, and GitHub Actions updates weekly and
-groups routine patches and minors. Dependency updates are never merged
-automatically: every update runs the same required checks as a human change.
-Major updates are reviewed separately because they can change behavior even when
-the build is green.
+groups routine patches and minors. Only patch and minor updates join a group;
+major updates open as individual pull requests so breaking changes are reviewed
+on their own. Dependency updates are never merged automatically: every update
+runs the same required checks as a human change.
 
 ## Security automation
 
@@ -56,6 +56,12 @@ Guardrails:
 
 The default model is `openai/gpt-4.1`. Set the repository variable
 `AI_REVIEW_MODEL` to another GitHub Models chat model to change it.
+
+GitHub Models access depends on the repository owner's account, region, and
+service availability. When the service returns a response that is not a chat
+completion, the step exits with an `AI review skipped` notice and posts no
+comment. The workflow stays enabled so review resumes when model access becomes
+available; the job log shows the reason for each skip.
 
 ### Review workflow
 
