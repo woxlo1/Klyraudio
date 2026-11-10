@@ -232,8 +232,14 @@ def fetch_changed_files(repo: str, number: int, token: str) -> list[dict[str, An
     return files
 
 
+def response_detail(body: Any) -> str:
+    if isinstance(body, dict) and body.get("message"):
+        return f": {body['message']}"
+    return ""
+
+
 def ensure_label(repo: str, name: str, token: str) -> None:
-    status, _ = github_request(
+    status, body = github_request(
         "POST",
         f"/repos/{repo}/labels",
         token,
@@ -244,7 +250,10 @@ def ensure_label(repo: str, name: str, token: str) -> None:
         },
     )
     if status not in (201, 422):
-        print(f"::warning::Could not create label {name!r} (HTTP {status}).")
+        print(
+            f"::warning::Could not create label {name!r} "
+            f"(HTTP {status}{response_detail(body)})."
+        )
 
 
 def apply_labels(
@@ -262,23 +271,26 @@ def apply_labels(
     for name in missing:
         ensure_label(repo, name, token)
     if missing:
-        status, _ = github_request(
+        status, body = github_request(
             "POST",
             f"/repos/{repo}/issues/{number}/labels",
             token,
             {"labels": missing},
         )
         if status != 200:
-            print(f"::warning::Could not add labels (HTTP {status}).")
+            print(f"::warning::Could not add labels (HTTP {status}{response_detail(body)}).")
     for name in stale:
         encoded = urllib.parse.quote(name, safe="")
-        status, _ = github_request(
+        status, body = github_request(
             "DELETE",
             f"/repos/{repo}/issues/{number}/labels/{encoded}",
             token,
         )
         if status not in (200, 204, 404):
-            print(f"::warning::Could not remove label {name!r} (HTTP {status}).")
+            print(
+                f"::warning::Could not remove label {name!r} "
+                f"(HTTP {status}{response_detail(body)})."
+            )
 
     print(f"Labels: desired={sorted(desired)} added={missing} removed={stale}")
 
