@@ -27,6 +27,11 @@ List the commands you ran and any manual verification.
 
 If a check could not run, explain why instead of leaving it silently unchecked.
 
+## Review notes
+
+Post a comment with decisions, trade-offs, verification evidence, and follow-ups.
+Keep the description above as the stable summary.
+
 ## Checklist
 
 - [ ] The change is limited to this pull request's scope.
@@ -37,6 +42,8 @@ If a check could not run, explain why instead of leaving it silently unchecked.
 - [ ] New dependencies and models are recorded in `NOTICE.md` with a compatible license.
 - [ ] The service still binds to loopback by default and keeps origin and path checks intact.
 - [ ] Commit messages are in English and the branch is not `main`.
+- [ ] Commits are logically split, and any `Co-authored-by` trailer names only
+      someone who contributed to that commit and consented to the credit.
 
 ## Related issues
 
