@@ -102,6 +102,19 @@ jobs:
       - name: Lint automation scripts
         run: >-
           python -m ruff check --line-length 100 --target-version py310
-          .github/scripts/pr_quality.py .github/scripts/test_pr_quality.py
+          .github/scripts
       - name: Test automation scripts
         run: python -m pytest .github/scripts -q
+
+  docs:
+    name: Docs links
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - name: Set up Python
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0
+        with:
+          python-version: "3.12"
+      - name: Check Markdown links
+        run: python .github/scripts/check_links.py
