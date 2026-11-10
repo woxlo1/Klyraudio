@@ -27,7 +27,7 @@ correct, tested behavior over impressive-looking placeholders.
    git switch -c feature/short-description
    ```
 
-2. Make one coherent change.
+2. Make one coherent change, split into small logical commits.
 3. Add or update tests and documentation.
 4. Run the relevant checks locally (see below).
 5. Review `git diff` and confirm no generated or private files are staged.
@@ -49,6 +49,24 @@ chore(ci): add backend test workflow
 
 Keep the subject under about 72 characters. Explain the reason in the body when
 it is not obvious.
+
+### Commit granularity
+
+A pull request should contain several small, logical commits instead of one
+large commit. For a substantial change, aim for roughly three to seven commits.
+That range is a guideline, not a quota: a one-line typo fix can stay a single
+commit, and no one should split a change into artificial fragments to reach a
+number.
+
+- Commit each step that can be reviewed on its own, such as documentation,
+  implementation, tests, and CI wiring.
+- Keep every commit coherent, and leave the tree buildable where practical. Do
+  not commit knowingly broken code as an intermediate step.
+- Use `wip` or `fixup` commits only while working locally, then squash purely
+  mechanical noise before opening the pull request.
+- Keep meaningful review fixes as additional commits. Do not rewrite published
+  history after review unless a maintainer asks for it; rebase merges preserve
+  the commits, so the history is part of the review.
 
 ## Development checks
 
