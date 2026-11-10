@@ -1,0 +1,71 @@
+# Dependencies
+node_modules/
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# Build outputs
+dist/
+build/
+out/
+release/
+*.tsbuildinfo
+apps/desktop/dist/
+apps/web/dist/
+services/api/build/
+services/api/dist/
+*.spec
+
+# Local runtime data (audio, databases, models, caches)
+data/
+models/*/
+!models/README.md
+*.sqlite
+*.sqlite3
+*.db
+*.klyra.json.autosave
+exports/
+recordings/
+.DS_Store
+Thumbs.db
+
+# Generated / large media
+*.wav
+*.mp3
+*.flac
+*.ogg
+*.opus
+*.m4a
+*.aac
+*.aiff
+!services/api/tests/fixtures/*.wav
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets/
+hf_token.txt
+
+# Private implementation prompts and local agent instructions
+Klyraudio_Complete_Implementation_Prompt.md
+implementation_prompt*.md
+PROMPT*.md
+prompts/private/
+.agent/
+AGENTS.private.md
+CLAUDE.private.md
+
+# Logs
+*.log
+logs/
+npm-debug.log*

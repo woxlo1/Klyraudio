@@ -1,0 +1,45 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "klyraudio-api"
+version = "0.1.0"
+description = "Local API and audio engine for Klyraudio"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "GPL-3.0-only" }
+dependencies = [
+  "fastapi==0.115.6",
+  "uvicorn==0.34.0",
+  "pydantic==2.10.4",
+  "numpy==1.26.4",
+  "soundfile==0.12.1",
+  "httpx==0.28.1",
+  "python-multipart==0.0.20",
+]
+
+[project.optional-dependencies]
+dev = ["pytest==8.3.4", "pytest-cov==6.0.0", "ruff==0.8.4"]
+musicgen = ["torch>=2.2", "transformers>=4.40", "scipy>=1.10"]
+audiogen = ["torch>=2.2", "transformers>=4.40", "scipy>=1.10"]
+stable-audio = ["torch>=2.2", "diffusers>=0.31", "transformers>=4.40"]
+
+[project.scripts]
+klyraudio-api = "klyraudio_api.__main__:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["klyraudio_api*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 100
+target-version = "py39"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+ignore = ["E501", "UP006", "UP007", "UP035"]
