@@ -8,10 +8,11 @@ human review, and it must never be able to merge its own changes.
 
 | Workflow | Trigger | Purpose |
 | --- | --- | --- |
-| `ci.yml` | Pull requests, pushes to `main`, manual | Typecheck, lint, formatting, tests, and production build for the web UI; syntax checks and tests for the Electron shell; ruff and pytest for the API across supported Python versions. |
+| `ci.yml` | Pull requests, pushes to `main`, manual | Typecheck, lint, formatting, tests, and production build for the web UI; syntax checks and tests for the Electron shell; ruff and pytest for the API across supported Python versions; ruff and pytest for repository automation scripts. |
 | `codeql.yml` | Pull requests, pushes to `main`, weekly, manual | CodeQL analysis for JavaScript/TypeScript and Python. |
 | `dependency-review.yml` | Pull requests | Blocks high-severity dependency changes. The job probes the dependency-graph API first and publishes a notice instead of failing when the graph is unavailable. |
 | `ai-review.yml` | Pull request activity | Posts or refreshes an advisory AI review comment. |
+| `pr-quality.yml` | Pull request activity | Validates the Conventional Commits title and applies area, size, and translation-sync labels. |
 
 All third-party actions are pinned to full commit SHAs and updated through
 Dependabot. Workflows request the least privilege they need.
@@ -62,6 +63,30 @@ service availability. When the service returns a response that is not a chat
 completion, the step exits with an `AI review skipped` notice and posts no
 comment. The workflow stays enabled so review resumes when model access becomes
 available; the job log shows the reason for each skip.
+
+## Pull request quality
+
+`pr-quality.yml` runs `.github/scripts/pr_quality.py` on pull request activity.
+It validates the title against Conventional Commits and applies triage labels
+for same-repository pull requests authored by people.
+
+- Titles use a type such as `feat`, `fix`, `docs`, `test`, `ci`, or `chore`, an
+  optional lowercase scope, and a short description. An invalid title fails the
+  `PR quality` job with an annotation that explains the expected form.
+- `area: web`, `area: api`, `area: desktop`, `area: docs`, and `area: ci` follow
+  the changed paths.
+- `size: xs` through `size: xl` use added and removed lines, ignoring lockfiles,
+  build output, coverage, and virtual environments.
+- `needs: ja update` and `needs: en update` flag a changed translation pair
+  (`README.md`/`README.ja.md`, `en.ts`/`ja.ts`) when only one side changed.
+- Fork and bot pull requests receive the title check only, because their token
+  cannot write labels. A failure to create or apply a label produces a warning,
+  not a failed check.
+- Only labels under the `area: `, `size: `, and `needs: ` prefixes are managed
+  or removed. Other labels are left untouched.
+
+The title, path, size, and translation logic is covered by
+`.github/scripts/test_pr_quality.py` in the `Automation scripts` CI job.
 
 ### Review workflow
 
