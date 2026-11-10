@@ -7,7 +7,9 @@ export function usePolling(
   enabled = true,
 ): void {
   const taskRef = useRef(task);
-  taskRef.current = task;
+  useEffect(() => {
+    taskRef.current = task;
+  });
 
   useEffect(() => {
     if (!enabled) return;
@@ -46,7 +48,9 @@ export function useDocumentTitle(title: string | null | undefined): void {
 
 export function useKeyDown(handler: (event: KeyboardEvent) => void, enabled = true): void {
   const handlerRef = useRef(handler);
-  handlerRef.current = handler;
+  useEffect(() => {
+    handlerRef.current = handler;
+  });
   useEffect(() => {
     if (!enabled) return;
     const listener = (event: KeyboardEvent) => handlerRef.current(event);

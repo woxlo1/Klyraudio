@@ -2,8 +2,9 @@
 
 ## Prerequisites
 
-- Node.js 20+ with npm 10+
+- Node.js 22.22+ with npm 10+
 - Python 3.10+
+
 - Git
 - Optional: FFmpeg/FFprobe for compressed import and lossy export
 - Optional: CUDA or Apple MPS for neural models

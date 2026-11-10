@@ -15,6 +15,10 @@ export default tseslint.config(
     plugins: { "react-hooks": reactHooks },
     rules: {
       ...reactHooks.configs.recommended.rules,
+      // The v7 preset includes the React Compiler rules. Page components still
+      // reset state inside effects when the selected resource changes; deriving
+      // that state during render is a separate refactor.
+      "react-hooks/set-state-in-effect": "off",
       "@typescript-eslint/no-explicit-any": "warn",
       "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
     },

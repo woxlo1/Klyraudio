@@ -37,8 +37,9 @@
   --wave-selected: rgba(94, 234, 212, 0.95);
   --wave-grid: rgba(255, 255, 255, 0.07);
   --wave-playhead: #f8fafc;
-  --font-sans: "Inter", "Segoe UI", "Hiragino Sans", "Yu Gothic UI", Meiryo, system-ui,
-    -apple-system, sans-serif;
+  --font-sans:
+    "Inter", "Segoe UI", "Hiragino Sans", "Yu Gothic UI", Meiryo, system-ui, -apple-system,
+    sans-serif;
   --font-mono: "JetBrains Mono", "Cascadia Code", "SFMono-Regular", Consolas, monospace;
 }
 
@@ -298,8 +299,8 @@ canvas {
 .app-shell {
   display: flex;
   min-height: 100vh;
-  background: radial-gradient(1200px 600px at 80% -10%, var(--accent-soft), transparent 60%),
-    var(--bg);
+  background:
+    radial-gradient(1200px 600px at 80% -10%, var(--accent-soft), transparent 60%), var(--bg);
 }
 
 .sidebar {
@@ -864,7 +865,8 @@ canvas {
 
 .select {
   appearance: none;
-  background-image: linear-gradient(45deg, transparent 50%, var(--text-muted) 50%),
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--text-muted) 50%),
     linear-gradient(135deg, var(--text-muted) 50%, transparent 50%);
   background-position:
     calc(100% - 16px) 16px,
@@ -1631,7 +1633,8 @@ canvas {
   padding: 34px 34px;
   border-radius: var(--radius-lg);
   border: 1px solid var(--border);
-  background: radial-gradient(600px 300px at 88% 20%, var(--accent-soft), transparent 70%),
+  background:
+    radial-gradient(600px 300px at 88% 20%, var(--accent-soft), transparent 70%),
     linear-gradient(150deg, var(--surface), var(--surface-2));
   overflow: hidden;
 }
@@ -3240,8 +3243,8 @@ button.stat:hover {
   padding: 30px;
   border-radius: var(--radius-lg);
   border: 1px solid var(--border);
-  background: radial-gradient(500px 240px at 90% 0%, var(--accent-soft), transparent 70%),
-    var(--surface);
+  background:
+    radial-gradient(500px 240px at 90% 0%, var(--accent-soft), transparent 70%), var(--surface);
   min-height: 340px;
 }
 

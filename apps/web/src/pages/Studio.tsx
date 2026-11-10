@@ -258,6 +258,22 @@ export function StudioPage() {
     setAssets(map);
   };
 
+  const stopPreview = () => {
+    if (frameRef.current) {
+      cancelAnimationFrame(frameRef.current);
+      frameRef.current = 0;
+    }
+    for (const source of sourcesRef.current) {
+      try {
+        source.stop();
+      } catch {
+        // A source that already ended cannot be stopped again.
+      }
+    }
+    sourcesRef.current = [];
+    setPlaying(false);
+  };
+
   useEffect(() => {
     void refreshProjects();
   }, []);
@@ -362,22 +378,6 @@ export function StudioPage() {
     // Autosave intentionally depends on the document, the dirty flag, and the toggle.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [document, dirty, autosave]);
-
-  const stopPreview = () => {
-    if (frameRef.current) {
-      cancelAnimationFrame(frameRef.current);
-      frameRef.current = 0;
-    }
-    for (const source of sourcesRef.current) {
-      try {
-        source.stop();
-      } catch {
-        // A source that already ended cannot be stopped again.
-      }
-    }
-    sourcesRef.current = [];
-    setPlaying(false);
-  };
 
   useEffect(() => {
     return () => {

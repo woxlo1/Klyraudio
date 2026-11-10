@@ -70,7 +70,7 @@ services/api    Python FastAPI サービス: REST API、SQLite、ジョブ、DSP
 
 ## 必要なもの
 
-- **Node.js 20 以上**と npm 10 以上。
+- **Node.js 22.22 以上**と npm 10 以上。
 - ローカルサービス用の **Python 3.10 以上**（3.11 または 3.12 を推奨）。
 - **任意:** 圧縮形式のインポートと MP3/Ogg/Opus/AAC/M4A の書き出しには
   FFmpeg と FFprobe。WAV、FLAC、AIFF は FFmpeg なしで動作します。
