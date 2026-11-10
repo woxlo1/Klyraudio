@@ -68,6 +68,23 @@ number.
   history after review unless a maintainer asks for it; rebase merges preserve
   the commits, so the history is part of the review.
 
+### Co-author trailers
+
+When two people genuinely pair on a commit, credit the second person with a
+trailer on its own line at the end of the commit message:
+
+```text
+Co-authored-by: Name <email@example.com>
+```
+
+- Add one trailer per co-author.
+- Only credit someone who contributed to that commit and agreed to the credit.
+- Never add a person's name or email address without consent.
+- AI-assisted commits use the project assistant identity
+  `Co-authored-by: opencode <221189863+opencode-agent@users.noreply.github.com>`.
+  The address belongs to the public OpenCode assistant account. The trailer
+  discloses tool assistance; it is not a claim that a human wrote the commit.
+
 ## Development checks
 
 Frontend and desktop:
