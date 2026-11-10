@@ -42,4 +42,5 @@ target-version = "py310"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B"]
-ignore = ["E501", "UP006", "UP007", "UP035"]
+# Optional[...] annotations are migrated to PEP 604 syntax in a separate refactor.
+ignore = ["E501", "UP006", "UP007", "UP035", "UP045"]
