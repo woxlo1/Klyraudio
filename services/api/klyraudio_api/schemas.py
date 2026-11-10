@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Any, Dict, List, Literal, Optional
 
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 TaskType = Literal["music", "sfx", "ambient"]
 JobStatus = Literal["queued", "running", "completed", "failed", "cancelled"]
@@ -70,6 +70,11 @@ class RuntimeSettingsResponse(BaseModel):
 
 
 class RuntimeSettingsUpdate(BaseModel):
+    # Unknown fields are rejected instead of silently ignored. This keeps the
+    # local-only guarantee explicit: a client cannot opt into telemetry or any
+    # other field the service does not support.
+    model_config = ConfigDict(extra="forbid")
+
     language: Optional[str] = None
     theme: Optional[str] = None
     default_export_format: Optional[str] = None

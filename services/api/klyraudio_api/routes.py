@@ -13,6 +13,7 @@ from typing import Optional
 
 from fastapi import APIRouter, File, Form, Query, Request, UploadFile
 from fastapi.responses import JSONResponse, Response, StreamingResponse
+from pydantic import ValidationError
 from starlette.background import BackgroundTask
 
 from .audio import io, waveform
@@ -109,7 +110,15 @@ def build_router(services: Services) -> APIRouter:
         changes = update.model_dump(exclude_unset=True, exclude_none=True)
         if not changes:
             return RuntimeSettingsResponse(**services.config.settings.model_dump())
-        settings = services.config.update(**changes)
+        try:
+            settings = services.config.update(**changes)
+        except ValidationError as exc:
+            issue = exc.errors()[0] if exc.errors() else {}
+            location = ".".join(str(part) for part in issue.get("loc", ()))
+            raise ValidationFailed(
+                str(issue.get("msg", "The setting value is invalid.")),
+                {"field": location} if location else {},
+            ) from exc
         return RuntimeSettingsResponse(**settings.model_dump())
 
     @router.get("/storage")
