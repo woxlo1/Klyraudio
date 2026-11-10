@@ -24,6 +24,7 @@ List the commands you ran and any manual verification.
 - [ ] `npm run build`
 - [ ] `python -m pytest services/api/tests -q`
 - [ ] `python -m ruff check services/api`
+- [ ] `python .github/scripts/check_links.py`
 
 If a check could not run, explain why instead of leaving it silently unchecked.
 
