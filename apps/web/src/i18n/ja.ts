@@ -206,8 +206,7 @@ export const ja: Widen<typeof en> = {
       "内蔵の Sketch DSP エンジンは今すぐ使えます。AI 生成が必要になったらニューラルモデルをインストールしてください。",
     manageModels: "モデルを管理",
     onboardingTitle: "初回セットアップ",
-    onboardingBody:
-      "音声の保存場所を選び、モデルのライセンスを確認し、生成を試してみましょう。",
+    onboardingBody: "音声の保存場所を選び、モデルのライセンスを確認し、生成を試してみましょう。",
     startSetup: "セットアップを始める",
     resumeSetup: "セットアップを続ける",
     privacyTitle: "ローカル設計",
@@ -230,18 +229,15 @@ export const ja: Widen<typeof en> = {
     musicSubtitle:
       "楽器、雰囲気、エネルギーを描写してください。選択したモデルが扱えないコントロールは表示されません。",
     sfxTitle: "効果音を作る",
-    sfxSubtitle:
-      "UI 音、衝撃音、機械的な質感、魔法の効果などを文章からデザインします。",
+    sfxSubtitle: "UI 音、衝撃音、機械的な質感、魔法の効果などを文章からデザインします。",
     ambientTitle: "環境音を作る",
     ambientSubtitle:
       "雨、風、森、街、機械、想像上の環境を構築します。対応モデルではループ後処理も利用できます。",
     prompt: "プロンプト",
     promptPlaceholderMusic:
       "温かなローファイピアノ、柔らかなレコードノイズ、ゆっくりしたドラム、雨の夜、インストゥルメンタル",
-    promptPlaceholderSfx:
-      "重い金属の衝撃音、短く暗い余韻、かすかな魔法のきらめき",
-    promptPlaceholderAmbient:
-      "トタン屋根に当たる穏やかな雨、遠くの雷鳴、雨樋から落ちる水滴",
+    promptPlaceholderSfx: "重い金属の衝撃音、短く暗い余韻、かすかな魔法のきらめき",
+    promptPlaceholderAmbient: "トタン屋根に当たる穏やかな雨、遠くの雷鳴、雨樋から落ちる水滴",
     promptHint: "聴こえる音を描写してください。単語一つより具体的な詳細の方が効果的です。",
     negativePrompt: "ネガティブプロンプト",
     negativePlaceholder: "歪み、耳障り、クリッピング、ボーカル",
@@ -279,8 +275,7 @@ export const ja: Widen<typeof en> = {
     loopPost: "ループ（後処理）",
     generate: "音声を生成",
     generating: "生成をキューに追加しました",
-    queueNote:
-      "生成はローカルで実行されます。このページを離れてもジョブはキューで継続します。",
+    queueNote: "生成はローカルで実行されます。このページを離れてもジョブはキューで継続します。",
     queuedTitle: "生成をキューに追加しました",
     queuedBody: "ジョブはローカルキューで実行中です。キューを開いて進捗を確認できます。",
     warnings: "ハードウェアの注意",
@@ -382,7 +377,8 @@ export const ja: Widen<typeof en> = {
     createProject: "プロジェクトを作成",
     openProject: "開く",
     deleteProject: "プロジェクトを削除",
-    deleteProjectBody: "「{name}」を削除しますか？ライブラリ内のレンダリング済み音声は削除されません。",
+    deleteProjectBody:
+      "「{name}」を削除しますか？ライブラリ内のレンダリング済み音声は削除されません。",
     projectDeleted: "プロジェクトを削除しました。",
     track: "トラック",
     tracks: "トラック",
@@ -453,7 +449,8 @@ export const ja: Widen<typeof en> = {
       "レンダリングではトラックのゲイン、パン、フェード、マスターエフェクトを適用し、新しい WAV をライブラリに保存します。",
     previewNote:
       "リアルタイムプレビューではトラック音量とパン付きでクリップを再生します。マスターエフェクトはレンダリング時に適用されます。",
-    realtimeNote: "プレビューはブラウザーのオーディオエンジンを使用します。レンダリングはローカルサービスが行います。",
+    realtimeNote:
+      "プレビューはブラウザーのオーディオエンジンを使用します。レンダリングはローカルサービスが行います。",
     play: "再生",
     pause: "一時停止",
     stop: "停止",
@@ -650,8 +647,7 @@ export const ja: Widen<typeof en> = {
   },
   queue: {
     title: "生成キュー",
-    subtitle:
-      "ローカルジョブ、進捗、出力です。進捗はモデルが報告した場合にのみ表示されます。",
+    subtitle: "ローカルジョブ、進捗、出力です。進捗はモデルが報告した場合にのみ表示されます。",
     active: "実行中",
     history: "履歴",
     emptyTitle: "キューは空です",
@@ -839,8 +835,7 @@ export const ja: Widen<typeof en> = {
     testBody:
       "内蔵エンジンで短い音を生成し、サービス、キュー、音声ライブラリが動作することを確認してください。",
     doneTitle: "準備ができました",
-    doneBody:
-      "音楽、効果音、環境音の作成を探検し、スタジオで音を配置しましょう。",
+    doneBody: "音楽、効果音、環境音の作成を探検し、スタジオで音を配置しましょう。",
     checking: "確認中…",
     ready: "準備完了",
     issue: "要確認",
@@ -890,7 +885,8 @@ export const ja: Widen<typeof en> = {
     invalid_model_file: "モデル配布元が安全でないファイルパスを返しました。",
     job_delete_failed: "ジョブを削除できませんでした。",
     host_not_allowed: "リクエストはローカルホストからのみ受け付けます。",
-    origin_not_allowed: "このブラウザーのオリジンはローカルサービスへのアクセスを許可されていません。",
+    origin_not_allowed:
+      "このブラウザーのオリジンはローカルサービスへのアクセスを許可されていません。",
     upload_too_large: "ファイルが大きすぎて読み込めません。",
     unsupported_file: "このファイル形式には対応していません。",
     open_folder_failed: "フォルダーを開けませんでした。",
@@ -931,8 +927,7 @@ export const ja: Widen<typeof en> = {
   },
   sketches: {
     title: "内蔵 Sketch エンジン",
-    body:
-      "モデルのダウンロードは不要です。Klyraudio の DSP シンセサイザーが、あらゆるタスクの出発点となる音を CPU だけで作成します。",
+    body: "モデルのダウンロードは不要です。Klyraudio の DSP シンセサイザーが、あらゆるタスクの出発点となる音を CPU だけで作成します。",
     notAi: "このエンジンは AI モデルではありません。",
   },
   catalog: {

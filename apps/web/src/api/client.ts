@@ -193,7 +193,9 @@ export const api = {
     request<{ deleted: boolean }>(`/jobs/${encodeURIComponent(jobId)}`, { method: "DELETE" }),
 
   assets: (query: AssetQuery = {}) =>
-    request<AssetListResponse>(`/assets${queryString(query as Record<string, string | number | boolean | undefined>)}`),
+    request<AssetListResponse>(
+      `/assets${queryString(query as Record<string, string | number | boolean | undefined>)}`,
+    ),
   asset: (assetId: string) => request<AssetInfo>(`/assets/${encodeURIComponent(assetId)}`),
   assetTags: () => request<TagCount[]>("/assets/tags"),
   updateAsset: (assetId: string, update: AssetUpdate) =>
@@ -233,7 +235,8 @@ export const api = {
   projects: () => request<ProjectSummary[]>("/projects"),
   createProject: (payload: ProjectCreate) =>
     request<ProjectInfo>("/projects", { method: "POST", body: payload }),
-  project: (projectId: string) => request<ProjectInfo>(`/projects/${encodeURIComponent(projectId)}`),
+  project: (projectId: string) =>
+    request<ProjectInfo>(`/projects/${encodeURIComponent(projectId)}`),
   updateProject: (projectId: string, payload: ProjectUpdate) =>
     request<ProjectInfo>(`/projects/${encodeURIComponent(projectId)}`, {
       method: "PUT",

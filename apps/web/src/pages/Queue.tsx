@@ -167,7 +167,11 @@ export function QueuePage() {
             compact
             icon={<ListMusic size={22} aria-hidden="true" />}
             title={t("queue.noJobsActive")}
-            action={<Button size="sm" onClick={() => navigate("/generate/music")}>{t("queue.createMusic")}</Button>}
+            action={
+              <Button size="sm" onClick={() => navigate("/generate/music")}>
+                {t("queue.createMusic")}
+              </Button>
+            }
           />
         ) : (
           <ul className="job-list">
@@ -196,7 +200,13 @@ export function QueuePage() {
           <Button
             size="sm"
             variant="ghost"
-            icon={showFinished ? <ChevronUp size={14} aria-hidden="true" /> : <ChevronDown size={14} aria-hidden="true" />}
+            icon={
+              showFinished ? (
+                <ChevronUp size={14} aria-hidden="true" />
+              ) : (
+                <ChevronDown size={14} aria-hidden="true" />
+              )
+            }
             onClick={() => setShowFinished((value) => !value)}
           >
             {showFinished ? t("queue.hideFinished") : t("queue.showFinished")}
@@ -294,22 +304,57 @@ function JobCard({
       ) : null}
 
       <dl className="detail-list detail-list--inline job-card__meta">
-        <div><dt>{t("queue.model")}</dt><dd>{modelName}</dd></div>
-        <div><dt>{t("queue.task")}</dt><dd>{t(`task.${job.task}`)}</dd></div>
-        <div><dt>{t("queue.durationRequested")}</dt><dd>{formatDuration(job.duration_requested)}</dd></div>
-        <div><dt>{t("queue.variationsCount")}</dt><dd>{job.requested_variations}</dd></div>
-        <div><dt>{t("queue.seed")}</dt><dd>{job.seed ?? "—"}</dd></div>
-        {job.backend ? <div><dt>{t("queue.backend")}</dt><dd>{job.backend}</dd></div> : null}
-        <div><dt>{t("common.created")}</dt><dd>{formatDate(job.created_at)}</dd></div>
-        {job.started_at ? <div><dt>{t("queue.startedAt", { time: "" })}</dt><dd>{formatDate(job.started_at)}</dd></div> : null}
-        {job.finished_at ? <div><dt>{t("queue.finishedAt", { time: "" })}</dt><dd>{formatDate(job.finished_at)}</dd></div> : null}
+        <div>
+          <dt>{t("queue.model")}</dt>
+          <dd>{modelName}</dd>
+        </div>
+        <div>
+          <dt>{t("queue.task")}</dt>
+          <dd>{t(`task.${job.task}`)}</dd>
+        </div>
+        <div>
+          <dt>{t("queue.durationRequested")}</dt>
+          <dd>{formatDuration(job.duration_requested)}</dd>
+        </div>
+        <div>
+          <dt>{t("queue.variationsCount")}</dt>
+          <dd>{job.requested_variations}</dd>
+        </div>
+        <div>
+          <dt>{t("queue.seed")}</dt>
+          <dd>{job.seed ?? "—"}</dd>
+        </div>
+        {job.backend ? (
+          <div>
+            <dt>{t("queue.backend")}</dt>
+            <dd>{job.backend}</dd>
+          </div>
+        ) : null}
+        <div>
+          <dt>{t("common.created")}</dt>
+          <dd>{formatDate(job.created_at)}</dd>
+        </div>
+        {job.started_at ? (
+          <div>
+            <dt>{t("queue.startedAt", { time: "" })}</dt>
+            <dd>{formatDate(job.started_at)}</dd>
+          </div>
+        ) : null}
+        {job.finished_at ? (
+          <div>
+            <dt>{t("queue.finishedAt", { time: "" })}</dt>
+            <dd>{formatDate(job.finished_at)}</dd>
+          </div>
+        ) : null}
       </dl>
 
       {job.error ? (
         <div className="job-error" role="alert">
           <strong>{t("queue.errorTitle")}</strong>
           <p>{job.error.message ?? t("errors.generic")}</p>
-          {job.error.code ? <span className="muted small">{t("queue.errorCode", { code: job.error.code })}</span> : null}
+          {job.error.code ? (
+            <span className="muted small">{t("queue.errorCode", { code: job.error.code })}</span>
+          ) : null}
           {job.error.remediation ? (
             <>
               <strong>{t("queue.errorRemediation")}</strong>
@@ -331,10 +376,20 @@ function JobCard({
                 <span className="muted small">
                   {t("queue.outputReady")} {index + 1}
                 </span>
-                <Button size="sm" variant="ghost" icon={<Pencil size={13} aria-hidden="true" />} onClick={() => onOpenAsset(assetId)}>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  icon={<Pencil size={13} aria-hidden="true" />}
+                  onClick={() => onOpenAsset(assetId)}
+                >
                   {t("generate.viewInEditor")}
                 </Button>
-                <Button size="sm" variant="ghost" loading={busy} onClick={() => onSendAsset(assetId)}>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  loading={busy}
+                  onClick={() => onSendAsset(assetId)}
+                >
                   {t("generate.addToStudio")}
                 </Button>
               </li>
@@ -345,16 +400,33 @@ function JobCard({
 
       <div className="job-card__actions">
         {isActive ? (
-          <Button size="sm" variant="ghost" icon={<Ban size={14} aria-hidden="true" />} loading={busy} onClick={onCancel}>
+          <Button
+            size="sm"
+            variant="ghost"
+            icon={<Ban size={14} aria-hidden="true" />}
+            loading={busy}
+            onClick={onCancel}
+          >
             {t("queue.cancel")}
           </Button>
         ) : null}
         {canRetry ? (
-          <Button size="sm" variant="ghost" icon={<RotateCcw size={14} aria-hidden="true" />} loading={busy} onClick={onRetry}>
+          <Button
+            size="sm"
+            variant="ghost"
+            icon={<RotateCcw size={14} aria-hidden="true" />}
+            loading={busy}
+            onClick={onRetry}
+          >
             {t("queue.retry")}
           </Button>
         ) : null}
-        <Button size="sm" variant="ghost" icon={<Trash2 size={14} aria-hidden="true" />} onClick={onDelete}>
+        <Button
+          size="sm"
+          variant="ghost"
+          icon={<Trash2 size={14} aria-hidden="true" />}
+          onClick={onDelete}
+        >
           {t("queue.delete")}
         </Button>
       </div>

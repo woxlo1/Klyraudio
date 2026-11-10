@@ -63,14 +63,21 @@ export function signedDb(value: number): string {
   return `${value > 0 ? "+" : ""}${value.toFixed(1)} dB`;
 }
 
-export function panLabel(value: number, labels: { left: string; center: string; right: string }): string {
+export function panLabel(
+  value: number,
+  labels: { left: string; center: string; right: string },
+): string {
   if (Math.abs(value) < 0.02) return labels.center;
   const side = value < 0 ? labels.left : labels.right;
   return `${side} ${Math.round(Math.abs(value) * 100)}%`;
 }
 
 export function downloadFileName(name: string, extension: string): string {
-  const stem = name.replace(/[<>:"/\\|?*]/g, "").replace(/\p{Cc}/gu, "").trim() || "audio";
+  const stem =
+    name
+      .replace(/[<>:"/\\|?*]/g, "")
+      .replace(/\p{Cc}/gu, "")
+      .trim() || "audio";
   return stem.toLowerCase().endsWith(`.${extension}`) ? stem : `${stem}.${extension}`;
 }
 

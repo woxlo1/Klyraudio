@@ -14,14 +14,7 @@ import {
 } from "lucide-react";
 import { api } from "../api/client";
 import type { AssetInfo, JobInfo, ModelInfo } from "../api/types";
-import {
-  Badge,
-  Button,
-  InlineNotice,
-  PageHeader,
-  ProgressBar,
-  Spinner,
-} from "../components/ui";
+import { Badge, Button, InlineNotice, PageHeader, ProgressBar, Spinner } from "../components/ui";
 import { useI18n } from "../i18n";
 import { describeError } from "../lib/errors";
 import { formatBytes, formatMemoryMb } from "../lib/format";
@@ -182,7 +175,12 @@ export function OnboardingPage() {
       ok: online === true,
       pending: online === null,
       label: t("settings.serviceStatus"),
-      detail: online === null ? t("onboarding.checking") : online ? t("settings.online") : t("settings.offline"),
+      detail:
+        online === null
+          ? t("onboarding.checking")
+          : online
+            ? t("settings.online")
+            : t("settings.offline"),
     },
     {
       ok: Boolean(system?.ffmpeg_available),
@@ -190,7 +188,7 @@ export function OnboardingPage() {
       label: t("settings.ffmpeg"),
       detail: system
         ? system.ffmpeg_available
-          ? system.ffmpeg_version ?? t("common.available")
+          ? (system.ffmpeg_version ?? t("common.available"))
           : t("settings.ffmpegMissing")
         : t("onboarding.checking"),
     },
@@ -263,7 +261,11 @@ export function OnboardingPage() {
                   </span>
                   <span className="spacer" />
                   <Badge tone={check.pending ? "neutral" : check.ok ? "success" : "warning"}>
-                    {check.pending ? t("onboarding.checking") : check.ok ? t("onboarding.ready") : t("onboarding.issue")}
+                    {check.pending
+                      ? t("onboarding.checking")
+                      : check.ok
+                        ? t("onboarding.ready")
+                        : t("onboarding.issue")}
                   </Badge>
                 </li>
               ))}
@@ -334,7 +336,9 @@ export function OnboardingPage() {
                 <div className="row row--wrap">
                   <Badge tone="accent">{t("models.sketchBadge")}</Badge>
                   <Badge tone={builtinModel?.availability === "ready" ? "success" : "warning"}>
-                    {builtinModel?.availability === "ready" ? t("onboarding.ready") : t("onboarding.issue")}
+                    {builtinModel?.availability === "ready"
+                      ? t("onboarding.ready")
+                      : t("onboarding.issue")}
                   </Badge>
                 </div>
               </div>
@@ -384,14 +388,14 @@ export function OnboardingPage() {
                     <Boxes size={18} aria-hidden="true" />
                     <div>
                       <strong>{model.name}</strong>
-                      <p>
-                        {model.license_name}
-                      </p>
+                      <p>{model.license_name}</p>
                       <div className="row row--wrap">
                         <Badge tone={COMMERCIAL_TONES[model.commercial_use]}>
                           {t(COMMERCIAL_KEYS[model.commercial_use])}
                         </Badge>
-                        {model.gated ? <Badge tone="warning">{t("models.gatedTitle")}</Badge> : null}
+                        {model.gated ? (
+                          <Badge tone="warning">{t("models.gatedTitle")}</Badge>
+                        ) : null}
                         <a
                           className="text-button"
                           href={model.license_url}
@@ -455,7 +459,11 @@ export function OnboardingPage() {
           <>
             <ul className="onboarding-checklist">
               <li className={online ? "is-ok" : "is-warn"}>
-                {online ? <CheckCircle2 size={16} aria-hidden="true" /> : <AlertTriangle size={16} aria-hidden="true" />}
+                {online ? (
+                  <CheckCircle2 size={16} aria-hidden="true" />
+                ) : (
+                  <AlertTriangle size={16} aria-hidden="true" />
+                )}
                 <span>{t("settings.serviceStatus")}</span>
               </li>
               <li className={builtinModel?.availability === "ready" ? "is-ok" : "is-warn"}>
@@ -530,16 +538,15 @@ export function OnboardingPage() {
 
           <div className="onboarding-actions">
             {step > 0 ? (
-              <Button onClick={() => setStep((value) => Math.max(0, value - 1))} disabled={finishing}>
+              <Button
+                onClick={() => setStep((value) => Math.max(0, value - 1))}
+                disabled={finishing}
+              >
                 {t("onboarding.back")}
               </Button>
             ) : null}
             {!isLast ? (
-              <Button
-                variant="ghost"
-                loading={finishing}
-                onClick={() => void finishSetup(true)}
-              >
+              <Button variant="ghost" loading={finishing} onClick={() => void finishSetup(true)}>
                 {t("onboarding.skip")}
               </Button>
             ) : null}

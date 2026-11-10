@@ -67,7 +67,9 @@ export function ExportDialog({
         setCapabilities(caps);
         setExportFolder(folder.path);
         const preferred =
-          caps.formats.find((item) => item.id === settings?.default_export_format && item.available) ??
+          caps.formats.find(
+            (item) => item.id === settings?.default_export_format && item.available,
+          ) ??
           caps.formats.find((item) => item.id === "wav" && item.available) ??
           caps.formats.find((item) => item.available);
         if (preferred) setFormat(preferred.id);
@@ -127,7 +129,11 @@ export function ExportDialog({
       <Modal
         title={t("export.success")}
         onClose={onClose}
-        footer={<Button variant="primary" onClick={onClose}>{t("common.close")}</Button>}
+        footer={
+          <Button variant="primary" onClick={onClose}>
+            {t("common.close")}
+          </Button>
+        }
       >
         <div className="export-success">
           <div className="export-success__icon">
@@ -138,7 +144,9 @@ export function ExportDialog({
               <Badge tone="success">{result.format.toUpperCase()}</Badge>
               {result.verified ? <Badge tone="info">{t("export.verifiedBadge")}</Badge> : null}
               <span className="muted">{formatBytes(result.size_bytes)}</span>
-              {result.duration ? <span className="muted">{formatDuration(result.duration)}</span> : null}
+              {result.duration ? (
+                <span className="muted">{formatDuration(result.duration)}</span>
+              ) : null}
             </div>
             <p>{result.verified ? t("export.verified") : t("export.notVerified")}</p>
             <div className="path-box">
@@ -230,7 +238,11 @@ export function ExportDialog({
                 ))}
               </Select>
             </Field>
-            <Field label={t("export.fileSize")} htmlFor="export-filename" hint={t("export.filenameHint")}>
+            <Field
+              label={t("export.fileSize")}
+              htmlFor="export-filename"
+              hint={t("export.filenameHint")}
+            >
               <TextInput
                 id="export-filename"
                 value={filename}
@@ -241,7 +253,9 @@ export function ExportDialog({
           </div>
 
           {selectedFormat && !selectedFormat.available ? (
-            <InlineNotice tone="warning">{selectedFormat.reason ?? t("export.formatUnavailable")}</InlineNotice>
+            <InlineNotice tone="warning">
+              {selectedFormat.reason ?? t("export.formatUnavailable")}
+            </InlineNotice>
           ) : null}
 
           <div className="form-grid__two">
@@ -344,7 +358,9 @@ export function ExportDialog({
             </div>
           ) : null}
 
-          {error ? <InlineNotice tone="danger">{describeError(error, t).message}</InlineNotice> : null}
+          {error ? (
+            <InlineNotice tone="danger">{describeError(error, t).message}</InlineNotice>
+          ) : null}
           {exporting ? <ProgressBar value={null} label={t("export.exporting")} /> : null}
         </div>
       )}

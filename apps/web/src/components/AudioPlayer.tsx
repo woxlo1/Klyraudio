@@ -1,10 +1,4 @@
-import {
-  forwardRef,
-  useEffect,
-  useImperativeHandle,
-  useRef,
-  useState,
-} from "react";
+import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
 import { Pause, Play, Repeat, Square, Volume2, VolumeX } from "lucide-react";
 import { useI18n } from "../i18n";
 import { clamp, formatDuration } from "../lib/format";

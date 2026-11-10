@@ -50,7 +50,10 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   const notify = useCallback((input: ToastInput | string, tone: ToastTone = "info") => {
     const resolved: ToastInput = typeof input === "string" ? { message: input, tone } : input;
     const id = uid("toast");
-    setItems((current) => [...current.slice(-4), { ...resolved, id, tone: resolved.tone ?? "info" }]);
+    setItems((current) => [
+      ...current.slice(-4),
+      { ...resolved, id, tone: resolved.tone ?? "info" },
+    ]);
     return id;
   }, []);
 
@@ -83,7 +86,12 @@ function ToastCard({ item, onDismiss }: { item: ToastItem; onDismiss: () => void
         {item.title ? <strong className="toast__title">{item.title}</strong> : null}
         <span>{item.message}</span>
       </div>
-      <button type="button" className="icon-button icon-button--small" onClick={onDismiss} aria-label="Dismiss">
+      <button
+        type="button"
+        className="icon-button icon-button--small"
+        onClick={onDismiss}
+        aria-label="Dismiss"
+      >
         <X size={14} aria-hidden="true" />
       </button>
     </div>

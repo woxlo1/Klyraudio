@@ -235,7 +235,8 @@ export const en = {
     prompt: "Prompt",
     promptPlaceholderMusic:
       "Warm lo-fi piano with soft vinyl crackle, slow drums, rainy night, instrumental",
-    promptPlaceholderSfx: "Heavy metallic impact with a short dark tail and a subtle magical shimmer",
+    promptPlaceholderSfx:
+      "Heavy metallic impact with a short dark tail and a subtle magical shimmer",
     promptPlaceholderAmbient: "Gentle rain on a tin roof with distant thunder and dripping gutters",
     promptHint: "Describe what you hear. Concrete details work better than a single word.",
     negativePrompt: "Negative prompt",
@@ -274,8 +275,7 @@ export const en = {
     loopPost: "Loop (post-processing)",
     generate: "Generate audio",
     generating: "Queued for generation",
-    queueNote:
-      "Generation runs locally. You can leave this page; the job continues in the queue.",
+    queueNote: "Generation runs locally. You can leave this page; the job continues in the queue.",
     queuedTitle: "Generation queued",
     queuedBody: "The job is running in your local queue. Open the queue to follow progress.",
     warnings: "Hardware notes",
@@ -305,7 +305,8 @@ export const en = {
   },
   editor: {
     title: "Editor",
-    subtitle: "Trim, fade, shape, and refine a single piece of audio without destroying the source.",
+    subtitle:
+      "Trim, fade, shape, and refine a single piece of audio without destroying the source.",
     source: "Source audio",
     chooseSource: "Choose an audio file",
     importAudio: "Import audio",
@@ -448,7 +449,8 @@ export const en = {
       "Rendering applies track gains, pans, fades, and master effects, then stores a new WAV in the library.",
     previewNote:
       "Real-time preview plays clips with track volume and pan. Master effects are applied when you render.",
-    realtimeNote: "Preview uses the browser audio engine. Rendered audio is produced by the local service.",
+    realtimeNote:
+      "Preview uses the browser audio engine. Rendered audio is produced by the local service.",
     play: "Play",
     pause: "Pause",
     stop: "Stop",
@@ -640,11 +642,13 @@ export const en = {
     openDocs: "Installation guide",
     copyCommand: "Copy command",
     commandCopied: "Command copied.",
-    installNotes: "Model weights stay in your Klyraudio data folder and are never committed to Git.",
+    installNotes:
+      "Model weights stay in your Klyraudio data folder and are never committed to Git.",
   },
   queue: {
     title: "Generation queue",
-    subtitle: "Local jobs, their progress, and their outputs. Progress is shown only when the model reports it.",
+    subtitle:
+      "Local jobs, their progress, and their outputs. Progress is shown only when the model reports it.",
     active: "Active",
     history: "History",
     emptyTitle: "The queue is empty",
@@ -667,7 +671,8 @@ export const en = {
     retry: "Retry job",
     delete: "Delete job",
     deleteTitle: "Delete this job?",
-    deleteBody: "The job record is removed. Generated audio that already exists stays in the library.",
+    deleteBody:
+      "The job record is removed. Generated audio that already exists stays in the library.",
     cancelled: "Job cancelled.",
     retryCreated: "Retry queued.",
     showFinished: "Show finished jobs",
@@ -759,7 +764,8 @@ export const en = {
   },
   export: {
     title: "Export audio",
-    subtitle: "Choose a format and options. Klyraudio verifies the exported file before reporting success.",
+    subtitle:
+      "Choose a format and options. Klyraudio verifies the exported file before reporting success.",
     format: "Format",
     codec: "Codec",
     bitrate: "Bitrate",
@@ -774,7 +780,8 @@ export const en = {
     dither: "Dither",
     ditherHint: "TPDF dither is applied only for 16-bit integer output.",
     filename: "File name",
-    filenameHint: "The correct extension is added automatically. Files are saved in the export folder.",
+    filenameHint:
+      "The correct extension is added automatically. Files are saved in the export folder.",
     export: "Export",
     exporting: "Exporting…",
     success: "Export complete",
@@ -923,8 +930,7 @@ export const en = {
   },
   sketches: {
     title: "Built-in Sketch engine",
-    body:
-      "No model download. Klyraudio's DSP synthesizer creates a usable starting point for any task, entirely on the CPU.",
+    body: "No model download. Klyraudio's DSP synthesizer creates a usable starting point for any task, entirely on the CPU.",
     notAi: "This engine is not an AI model.",
   },
   catalog: {

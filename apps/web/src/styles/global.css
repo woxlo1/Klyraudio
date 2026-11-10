@@ -298,8 +298,7 @@ canvas {
 .app-shell {
   display: flex;
   min-height: 100vh;
-  background:
-    radial-gradient(1200px 600px at 80% -10%, var(--accent-soft), transparent 60%),
+  background: radial-gradient(1200px 600px at 80% -10%, var(--accent-soft), transparent 60%),
     var(--bg);
 }
 
@@ -332,7 +331,11 @@ canvas {
   width: 38px;
   height: 38px;
   border-radius: 11px;
-  background: linear-gradient(140deg, var(--accent), color-mix(in srgb, var(--accent) 40%, #5eead4));
+  background: linear-gradient(
+    140deg,
+    var(--accent),
+    color-mix(in srgb, var(--accent) 40%, #5eead4)
+  );
   color: var(--accent-contrast);
   box-shadow: var(--shadow-sm);
 }
@@ -385,7 +388,9 @@ canvas {
   color: var(--text-muted);
   font-size: 13.5px;
   font-weight: 550;
-  transition: background 0.12s ease, color 0.12s ease;
+  transition:
+    background 0.12s ease,
+    color 0.12s ease;
 }
 
 .nav__link:hover {
@@ -663,7 +668,10 @@ canvas {
   font-size: 13px;
   font-weight: 600;
   white-space: nowrap;
-  transition: background 0.12s ease, border-color 0.12s ease, transform 0.06s ease,
+  transition:
+    background 0.12s ease,
+    border-color 0.12s ease,
+    transform 0.06s ease,
     opacity 0.12s ease;
 }
 
@@ -689,7 +697,11 @@ canvas {
 }
 
 .btn--primary {
-  background: linear-gradient(140deg, var(--accent), color-mix(in srgb, var(--accent) 72%, #5eead4));
+  background: linear-gradient(
+    140deg,
+    var(--accent),
+    color-mix(in srgb, var(--accent) 72%, #5eead4)
+  );
   border-color: transparent;
   color: var(--accent-contrast);
   box-shadow: 0 6px 18px color-mix(in srgb, var(--accent) 32%, transparent);
@@ -697,7 +709,11 @@ canvas {
 
 .btn--primary:hover:not(:disabled) {
   filter: brightness(1.06);
-  background: linear-gradient(140deg, var(--accent), color-mix(in srgb, var(--accent) 72%, #5eead4));
+  background: linear-gradient(
+    140deg,
+    var(--accent),
+    color-mix(in srgb, var(--accent) 72%, #5eead4)
+  );
 }
 
 .btn--secondary {
@@ -741,7 +757,9 @@ canvas {
   border: 1px solid transparent;
   background: transparent;
   color: var(--text-muted);
-  transition: background 0.12s ease, color 0.12s ease;
+  transition:
+    background 0.12s ease,
+    color 0.12s ease;
 }
 
 .icon-button:hover:not(:disabled) {
@@ -813,7 +831,9 @@ canvas {
   background: var(--bg-2);
   color: var(--text);
   font-size: 13px;
-  transition: border-color 0.12s ease, box-shadow 0.12s ease;
+  transition:
+    border-color 0.12s ease,
+    box-shadow 0.12s ease;
 }
 
 .textarea {
@@ -846,8 +866,12 @@ canvas {
   appearance: none;
   background-image: linear-gradient(45deg, transparent 50%, var(--text-muted) 50%),
     linear-gradient(135deg, var(--text-muted) 50%, transparent 50%);
-  background-position: calc(100% - 16px) 16px, calc(100% - 11px) 16px;
-  background-size: 5px 5px, 5px 5px;
+  background-position:
+    calc(100% - 16px) 16px,
+    calc(100% - 11px) 16px;
+  background-size:
+    5px 5px,
+    5px 5px;
   background-repeat: no-repeat;
   padding-right: 30px;
 }
@@ -935,7 +959,9 @@ canvas {
   border: 1px solid var(--border-strong);
   background: var(--surface-3);
   padding: 0;
-  transition: background 0.15s ease, border-color 0.15s ease;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease;
 }
 
 .switch__thumb {
@@ -946,7 +972,9 @@ canvas {
   height: 18px;
   border-radius: 50%;
   background: var(--text-muted);
-  transition: transform 0.16s ease, background 0.16s ease;
+  transition:
+    transform 0.16s ease,
+    background 0.16s ease;
 }
 
 .switch.is-on {
@@ -1515,12 +1543,7 @@ canvas {
 .waveform__loading {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    var(--accent-soft),
-    transparent
-  );
+  background: linear-gradient(90deg, transparent, var(--accent-soft), transparent);
   animation: shimmer 1.3s ease-in-out infinite;
 }
 
@@ -1608,8 +1631,7 @@ canvas {
   padding: 34px 34px;
   border-radius: var(--radius-lg);
   border: 1px solid var(--border);
-  background:
-    radial-gradient(600px 300px at 88% 20%, var(--accent-soft), transparent 70%),
+  background: radial-gradient(600px 300px at 88% 20%, var(--accent-soft), transparent 70%),
     linear-gradient(150deg, var(--surface), var(--surface-2));
   overflow: hidden;
 }
@@ -1652,7 +1674,11 @@ canvas {
   flex: 1;
   min-width: 2px;
   border-radius: 999px;
-  background: linear-gradient(to top, var(--accent), color-mix(in srgb, var(--accent) 45%, #5eead4));
+  background: linear-gradient(
+    to top,
+    var(--accent),
+    color-mix(in srgb, var(--accent) 45%, #5eead4)
+  );
   opacity: 0.85;
   animation: wave-pulse 2.4s ease-in-out infinite alternate;
 }
@@ -2044,7 +2070,9 @@ button.stat:hover {
   border: 1px solid var(--border);
   background: var(--surface);
   overflow: hidden;
-  transition: border-color 0.12s ease, transform 0.12s ease;
+  transition:
+    border-color 0.12s ease,
+    transform 0.12s ease;
 }
 
 .asset-card:hover {
@@ -2081,22 +2109,38 @@ button.stat:hover {
 }
 
 .asset-card__art--music {
-  background: linear-gradient(150deg, color-mix(in srgb, var(--accent) 22%, var(--surface-2)), var(--surface-2));
+  background: linear-gradient(
+    150deg,
+    color-mix(in srgb, var(--accent) 22%, var(--surface-2)),
+    var(--surface-2)
+  );
   color: var(--accent-strong);
 }
 
 .asset-card__art--sfx {
-  background: linear-gradient(150deg, color-mix(in srgb, var(--warning) 18%, var(--surface-2)), var(--surface-2));
+  background: linear-gradient(
+    150deg,
+    color-mix(in srgb, var(--warning) 18%, var(--surface-2)),
+    var(--surface-2)
+  );
   color: var(--warning);
 }
 
 .asset-card__art--ambient {
-  background: linear-gradient(150deg, color-mix(in srgb, var(--info) 18%, var(--surface-2)), var(--surface-2));
+  background: linear-gradient(
+    150deg,
+    color-mix(in srgb, var(--info) 18%, var(--surface-2)),
+    var(--surface-2)
+  );
   color: var(--info);
 }
 
 .asset-card__art--voice {
-  background: linear-gradient(150deg, color-mix(in srgb, var(--success) 18%, var(--surface-2)), var(--surface-2));
+  background: linear-gradient(
+    150deg,
+    color-mix(in srgb, var(--success) 18%, var(--surface-2)),
+    var(--surface-2)
+  );
   color: var(--success);
 }
 
@@ -2968,12 +3012,20 @@ button.stat:hover {
 
 .timeline-clip--sfx {
   border-color: color-mix(in srgb, var(--warning) 45%, transparent);
-  background: linear-gradient(160deg, color-mix(in srgb, var(--warning) 22%, var(--surface)), var(--surface));
+  background: linear-gradient(
+    160deg,
+    color-mix(in srgb, var(--warning) 22%, var(--surface)),
+    var(--surface)
+  );
 }
 
 .timeline-clip--ambient {
   border-color: color-mix(in srgb, var(--info) 45%, transparent);
-  background: linear-gradient(160deg, color-mix(in srgb, var(--info) 22%, var(--surface)), var(--surface));
+  background: linear-gradient(
+    160deg,
+    color-mix(in srgb, var(--info) 22%, var(--surface)),
+    var(--surface)
+  );
 }
 
 .timeline-clip span {
@@ -3188,8 +3240,7 @@ button.stat:hover {
   padding: 30px;
   border-radius: var(--radius-lg);
   border: 1px solid var(--border);
-  background:
-    radial-gradient(500px 240px at 90% 0%, var(--accent-soft), transparent 70%),
+  background: radial-gradient(500px 240px at 90% 0%, var(--accent-soft), transparent 70%),
     var(--surface);
   min-height: 340px;
 }

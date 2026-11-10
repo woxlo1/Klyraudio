@@ -43,7 +43,9 @@ export function AppShell() {
   usePolling(async () => {
     try {
       const jobs = await api.jobs();
-      setActiveJobs(jobs.filter((job) => job.status === "queued" || job.status === "running").length);
+      setActiveJobs(
+        jobs.filter((job) => job.status === "queued" || job.status === "running").length,
+      );
     } catch {
       setActiveJobs(null);
     }
@@ -122,7 +124,9 @@ export function AppShell() {
           <NavLink
             to="/queue"
             className="service-status"
-            title={online === null ? t("nav.connecting") : online ? t("nav.online") : t("nav.offline")}
+            title={
+              online === null ? t("nav.connecting") : online ? t("nav.online") : t("nav.offline")
+            }
           >
             <span
               className={classNames(

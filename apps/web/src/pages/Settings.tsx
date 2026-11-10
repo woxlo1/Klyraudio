@@ -45,16 +45,8 @@ const FALLBACK_FORMATS = ["wav", "flac", "aiff", "mp3", "ogg", "opus"];
 
 export function SettingsPage() {
   const { t, language } = useI18n();
-  const {
-    settings,
-    system,
-    online,
-    loading,
-    loadError,
-    refresh,
-    update,
-    setLanguage,
-  } = useSettings();
+  const { settings, system, online, loading, loadError, refresh, update, setLanguage } =
+    useSettings();
   const { notify } = useToast();
   const navigate = useNavigate();
   useDocumentTitle(t("settings.title"));
@@ -179,7 +171,8 @@ export function SettingsPage() {
   }
 
   const formats =
-    capabilities?.formats.filter((item) => item.available).map((item) => item.id) ?? FALLBACK_FORMATS;
+    capabilities?.formats.filter((item) => item.available).map((item) => item.id) ??
+    FALLBACK_FORMATS;
   const memoryTotal = system?.ram_total_mb ?? null;
   const memoryAvailable = system?.ram_available_mb ?? null;
   const memoryUsedPct =
@@ -279,11 +272,13 @@ export function SettingsPage() {
                     void persist({ default_export_format: event.target.value }, "format")
                   }
                 >
-                  {Array.from(new Set([settings.default_export_format, ...formats])).map((format) => (
-                    <option key={format} value={format}>
-                      {format.toUpperCase()}
-                    </option>
-                  ))}
+                  {Array.from(new Set([settings.default_export_format, ...formats])).map(
+                    (format) => (
+                      <option key={format} value={format}>
+                        {format.toUpperCase()}
+                      </option>
+                    ),
+                  )}
                 </Select>
               </div>
             </div>
@@ -320,9 +315,7 @@ export function SettingsPage() {
                   value={settings.gpu_preference}
                   aria-label={t("settings.gpu")}
                   disabled={busyKey === "gpu"}
-                  onChange={(event) =>
-                    void persist({ gpu_preference: event.target.value }, "gpu")
-                  }
+                  onChange={(event) => void persist({ gpu_preference: event.target.value }, "gpu")}
                 >
                   <option value="auto">{t("settings.gpuAuto")}</option>
                   <option value="cuda">{t("settings.gpuCuda")}</option>
@@ -478,9 +471,7 @@ export function SettingsPage() {
               </div>
               <div>
                 <dt>{t("settings.platform")}</dt>
-                <dd>
-                  {system ? `${system.platform} ${system.platform_release}` : "—"}
-                </dd>
+                <dd>{system ? `${system.platform} ${system.platform_release}` : "—"}</dd>
               </div>
               <div>
                 <dt>{t("settings.architecture")}</dt>
@@ -488,9 +479,7 @@ export function SettingsPage() {
               </div>
               <div>
                 <dt>{t("settings.cpu")}</dt>
-                <dd>
-                  {system ? `${system.cpu_model} (${system.cpu_count})` : "—"}
-                </dd>
+                <dd>{system ? `${system.cpu_model} (${system.cpu_count})` : "—"}</dd>
               </div>
               <div>
                 <dt>{t("settings.memory")}</dt>
@@ -528,7 +517,11 @@ export function SettingsPage() {
               </div>
               <div>
                 <dt>{t("settings.ffmpeg")}</dt>
-                <dd>{system?.ffmpeg_available ? system.ffmpeg_version ?? "—" : t("settings.ffmpegMissing")}</dd>
+                <dd>
+                  {system?.ffmpeg_available
+                    ? (system.ffmpeg_version ?? "—")
+                    : t("settings.ffmpegMissing")}
+                </dd>
               </div>
               <div>
                 <dt>{t("settings.ffprobe")}</dt>

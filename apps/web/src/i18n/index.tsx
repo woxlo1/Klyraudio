@@ -51,7 +51,7 @@ export function translate(locale: Locale, key: string, vars?: TranslateVars): st
   if (value && typeof value === "object" && !Array.isArray(value)) {
     const count = Number(vars?.count ?? 1);
     const forms = value as Record<string, string>;
-    const template = count === 1 ? forms.one ?? forms.other : forms.other ?? forms.one;
+    const template = count === 1 ? (forms.one ?? forms.other) : (forms.other ?? forms.one);
     return template ? interpolate(template, { ...vars, count }) : key;
   }
   return key;

@@ -6,10 +6,7 @@ import { uid } from "./format";
  * Create a new Studio project containing one asset as its first clip.
  * This mirrors what the "Send to Studio" action promises in the interface.
  */
-export async function addAssetToNewProject(
-  asset: AssetInfo,
-  name?: string,
-): Promise<ProjectInfo> {
+export async function addAssetToNewProject(asset: AssetInfo, name?: string): Promise<ProjectInfo> {
   const project = await api.createProject({
     name: name ?? asset.name,
     sample_rate: asset.sample_rate,

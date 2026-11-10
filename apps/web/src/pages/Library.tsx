@@ -34,12 +34,7 @@ import {
 } from "../components/ui";
 import { useI18n } from "../i18n";
 import { describeError } from "../lib/errors";
-import {
-  classNames,
-  formatBytes,
-  formatDuration,
-  formatSampleRate,
-} from "../lib/format";
+import { classNames, formatBytes, formatDuration, formatSampleRate } from "../lib/format";
 import { useDocumentTitle } from "../lib/hooks";
 import { addAssetToNewProject } from "../lib/studioActions";
 import { useToast } from "../state/toast";
@@ -111,31 +106,34 @@ export function LibraryPage() {
   useEffect(() => {
     let cancelled = false;
     setLoading(true);
-    const timer = window.setTimeout(async () => {
-      try {
-        const [assets, tagCounts] = await Promise.all([
-          api.assets({
-            query: query.trim() || undefined,
-            media_type: mediaType || undefined,
-            origin: origin || undefined,
-            favorite: favoritesOnly ? true : undefined,
-            tag: tag || undefined,
-            sort,
-            limit: PAGE_SIZE,
-            offset,
-          }),
-          api.assetTags(),
-        ]);
-        if (cancelled) return;
-        setResponse(assets);
-        setTags(tagCounts);
-        setError(null);
-      } catch (caught) {
-        if (!cancelled) setError(caught);
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
-    }, query ? 220 : 0);
+    const timer = window.setTimeout(
+      async () => {
+        try {
+          const [assets, tagCounts] = await Promise.all([
+            api.assets({
+              query: query.trim() || undefined,
+              media_type: mediaType || undefined,
+              origin: origin || undefined,
+              favorite: favoritesOnly ? true : undefined,
+              tag: tag || undefined,
+              sort,
+              limit: PAGE_SIZE,
+              offset,
+            }),
+            api.assetTags(),
+          ]);
+          if (cancelled) return;
+          setResponse(assets);
+          setTags(tagCounts);
+          setError(null);
+        } catch (caught) {
+          if (!cancelled) setError(caught);
+        } finally {
+          if (!cancelled) setLoading(false);
+        }
+      },
+      query ? 220 : 0,
+    );
     return () => {
       cancelled = true;
       window.clearTimeout(timer);
@@ -342,7 +340,11 @@ export function LibraryPage() {
           <option value="edited">{t("library.edited")}</option>
           <option value="rendered">{t("library.rendered")}</option>
         </Select>
-        <Select value={tag} onChange={(event) => setTag(event.target.value)} aria-label={t("library.tags")}>
+        <Select
+          value={tag}
+          onChange={(event) => setTag(event.target.value)}
+          aria-label={t("library.tags")}
+        >
           <option value="">{t("library.allTags")}</option>
           {tags.map((entry) => (
             <option key={entry.tag} value={entry.tag}>
@@ -350,7 +352,11 @@ export function LibraryPage() {
             </option>
           ))}
         </Select>
-        <Select value={sort} onChange={(event) => setSort(event.target.value)} aria-label={t("library.sort")}>
+        <Select
+          value={sort}
+          onChange={(event) => setSort(event.target.value)}
+          aria-label={t("library.sort")}
+        >
           <option value="newest">{t("library.newest")}</option>
           <option value="oldest">{t("library.oldest")}</option>
           <option value="name">{t("library.name")}</option>
@@ -417,7 +423,9 @@ export function LibraryPage() {
           <div className="library-summary">
             <span className="muted small">{t("library.total", { count: total })}</span>
             {selectMode ? (
-              <span className="muted small">{t("library.selectionCount", { count: selectedIds.length })}</span>
+              <span className="muted small">
+                {t("library.selectionCount", { count: selectedIds.length })}
+              </span>
             ) : null}
           </div>
           <div className="asset-grid">
@@ -434,7 +442,12 @@ export function LibraryPage() {
                     onClick={() => (selectMode ? toggleSelected(asset.id) : setDetailsAsset(asset))}
                     aria-label={asset.name}
                   >
-                    <div className={classNames("asset-card__art", `asset-card__art--${asset.media_type}`)}>
+                    <div
+                      className={classNames(
+                        "asset-card__art",
+                        `asset-card__art--${asset.media_type}`,
+                      )}
+                    >
                       <FileAudio size={22} aria-hidden="true" />
                       <span className="asset-card__duration">{formatDuration(asset.duration)}</span>
                       {selectMode ? (
@@ -473,12 +486,24 @@ export function LibraryPage() {
                       onClick={() => void toggleFavorite(asset)}
                       disabled={busyId === asset.id}
                     >
-                      <Heart size={14} aria-hidden="true" fill={asset.favorite ? "currentColor" : "none"} />
+                      <Heart
+                        size={14}
+                        aria-hidden="true"
+                        fill={asset.favorite ? "currentColor" : "none"}
+                      />
                     </IconButton>
-                    <IconButton label={t("library.details")} size="sm" onClick={() => setDetailsAsset(asset)}>
+                    <IconButton
+                      label={t("library.details")}
+                      size="sm"
+                      onClick={() => setDetailsAsset(asset)}
+                    >
                       <SlidersHorizontal size={14} aria-hidden="true" />
                     </IconButton>
-                    <IconButton label={t("library.openInEditor")} size="sm" onClick={() => navigate(`/editor/${asset.id}`)}>
+                    <IconButton
+                      label={t("library.openInEditor")}
+                      size="sm"
+                      onClick={() => navigate(`/editor/${asset.id}`)}
+                    >
                       <Pencil size={14} aria-hidden="true" />
                     </IconButton>
                   </div>
@@ -494,7 +519,9 @@ export function LibraryPage() {
             >
               {t("library.previousPage")}
             </Button>
-            <span className="muted small">{t("library.page", { page: Math.floor(offset / PAGE_SIZE) + 1 })}</span>
+            <span className="muted small">
+              {t("library.page", { page: Math.floor(offset / PAGE_SIZE) + 1 })}
+            </span>
             <Button
               size="sm"
               disabled={offset + PAGE_SIZE >= total}
@@ -507,12 +534,22 @@ export function LibraryPage() {
       )}
 
       {selectMode && selectedIds.length > 0 ? (
-        <div className="selection-bar" role="region" aria-label={t("library.selectionCount", { count: selectedIds.length })}>
+        <div
+          className="selection-bar"
+          role="region"
+          aria-label={t("library.selectionCount", { count: selectedIds.length })}
+        >
           <span>{t("library.selectionCount", { count: selectedIds.length })}</span>
           <Button size="sm" variant="ghost" onClick={() => setSelectedIds([])}>
             {t("library.clearSelection")}
           </Button>
-          <Button size="sm" variant="primary" loading={joining} icon={<Link2 size={14} aria-hidden="true" />} onClick={() => void joinSelected()}>
+          <Button
+            size="sm"
+            variant="primary"
+            loading={joining}
+            icon={<Link2 size={14} aria-hidden="true" />}
+            onClick={() => void joinSelected()}
+          >
             {t("library.joinSelected")}
           </Button>
         </div>
@@ -635,7 +672,11 @@ function AssetDetails({
       size="lg"
       footer={
         <>
-          <Button variant="danger" icon={<Trash2 size={15} aria-hidden="true" />} onClick={onDelete}>
+          <Button
+            variant="danger"
+            icon={<Trash2 size={15} aria-hidden="true" />}
+            onClick={onDelete}
+          >
             {t("common.delete")}
           </Button>
           <span className="spacer" />
@@ -652,12 +693,30 @@ function AssetDetails({
             <FileAudio size={28} aria-hidden="true" />
           </div>
           <dl className="detail-list detail-list--inline">
-            <div><dt>{t("library.created")}</dt><dd>{formatDate(asset.created_at)}</dd></div>
-            <div><dt>{t("library.duration")}</dt><dd>{formatDuration(asset.duration)}</dd></div>
-            <div><dt>{t("library.sampleRate")}</dt><dd>{formatSampleRate(asset.sample_rate)}</dd></div>
-            <div><dt>{t("library.channels")}</dt><dd>{asset.channels === 1 ? t("common.mono") : t("common.stereo")}</dd></div>
-            <div><dt>{t("library.format")}</dt><dd>{asset.format.toUpperCase()}</dd></div>
-            <div><dt>{t("library.size")}</dt><dd>{formatBytes(asset.size_bytes)}</dd></div>
+            <div>
+              <dt>{t("library.created")}</dt>
+              <dd>{formatDate(asset.created_at)}</dd>
+            </div>
+            <div>
+              <dt>{t("library.duration")}</dt>
+              <dd>{formatDuration(asset.duration)}</dd>
+            </div>
+            <div>
+              <dt>{t("library.sampleRate")}</dt>
+              <dd>{formatSampleRate(asset.sample_rate)}</dd>
+            </div>
+            <div>
+              <dt>{t("library.channels")}</dt>
+              <dd>{asset.channels === 1 ? t("common.mono") : t("common.stereo")}</dd>
+            </div>
+            <div>
+              <dt>{t("library.format")}</dt>
+              <dd>{asset.format.toUpperCase()}</dd>
+            </div>
+            <div>
+              <dt>{t("library.size")}</dt>
+              <dd>{formatBytes(asset.size_bytes)}</dd>
+            </div>
           </dl>
         </div>
 
@@ -668,7 +727,12 @@ function AssetDetails({
           <Button size="sm" icon={<Pencil size={14} aria-hidden="true" />} onClick={onOpenEditor}>
             {t("library.openInEditor")}
           </Button>
-          <Button size="sm" icon={<Plus size={14} aria-hidden="true" />} onClick={onAddToStudio} loading={busy}>
+          <Button
+            size="sm"
+            icon={<Plus size={14} aria-hidden="true" />}
+            onClick={onAddToStudio}
+            loading={busy}
+          >
             {t("library.addToStudio")}
           </Button>
           <Button size="sm" icon={<FilePlus2 size={14} aria-hidden="true" />} onClick={onExport}>
@@ -678,10 +742,19 @@ function AssetDetails({
 
         <div className="form-grid__two">
           <Field label={t("common.name")} htmlFor="asset-name">
-            <TextInput id="asset-name" value={name} onChange={(event) => setName(event.target.value)} maxLength={160} />
+            <TextInput
+              id="asset-name"
+              value={name}
+              onChange={(event) => setName(event.target.value)}
+              maxLength={160}
+            />
           </Field>
           <Field label={t("common.type")} htmlFor="asset-type">
-            <Select id="asset-type" value={mediaType} onChange={(event) => setMediaType(event.target.value as MediaType)}>
+            <Select
+              id="asset-type"
+              value={mediaType}
+              onChange={(event) => setMediaType(event.target.value as MediaType)}
+            >
               {MEDIA_TYPES.map((type) => (
                 <option key={type} value={type}>
                   {t(`mediaTypes.${type}`)}

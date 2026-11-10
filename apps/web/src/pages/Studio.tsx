@@ -1024,10 +1024,7 @@ export function StudioPage() {
 
             <div className="studio-timeline">
               <div className="timeline-scroll" ref={scrollRef}>
-                <div
-                  className="timeline-content"
-                  style={{ width: TRACK_HEADER + timelineWidth }}
-                >
+                <div className="timeline-content" style={{ width: TRACK_HEADER + timelineWidth }}>
                   <div
                     className="timeline-ruler-row"
                     style={{ marginLeft: TRACK_HEADER, width: timelineWidth }}
@@ -1035,17 +1032,11 @@ export function StudioPage() {
                     <div
                       className="timeline-ruler"
                       style={{ width: timelineWidth }}
-                      onPointerDown={(event) =>
-                        seek(timeFromPointer(event, timelineWidth))
-                      }
+                      onPointerDown={(event) => seek(timeFromPointer(event, timelineWidth))}
                       role="presentation"
                     >
                       {ticks.map((time) => (
-                        <div
-                          key={time}
-                          className="timeline-tick"
-                          style={{ left: time * pps }}
-                        >
+                        <div key={time} className="timeline-tick" style={{ left: time * pps }}>
                           <span>{formatDuration(time)}</span>
                         </div>
                       ))}
@@ -1053,11 +1044,7 @@ export function StudioPage() {
                   </div>
 
                   {document.tracks.map((track) => (
-                    <div
-                      key={track.id}
-                      className="timeline-row"
-                      style={{ minHeight: ROW_HEIGHT }}
-                    >
+                    <div key={track.id} className="timeline-row" style={{ minHeight: ROW_HEIGHT }}>
                       <div
                         className="track-header"
                         style={{ width: TRACK_HEADER }}
@@ -1158,8 +1145,7 @@ export function StudioPage() {
                           const asset = assets[clip.asset_id];
                           const width = Math.max(6, clip.duration * pps);
                           const isSelected =
-                            selectedClip?.trackId === track.id &&
-                            selectedClip?.clipId === clip.id;
+                            selectedClip?.trackId === track.id && selectedClip?.clipId === clip.id;
                           const typeClass =
                             asset?.media_type === "sfx"
                               ? " timeline-clip--sfx"
@@ -1416,10 +1402,7 @@ export function StudioPage() {
             </div>
           </Panel>
 
-          <Panel
-            title={t("studio.effectChain")}
-            subtitle={t("studio.effectsNotice")}
-          >
+          <Panel title={t("studio.effectChain")} subtitle={t("studio.effectsNotice")}>
             <div className="effect-list">
               <div className="add-effect-row">
                 <Select
@@ -1433,11 +1416,7 @@ export function StudioPage() {
                     </option>
                   ))}
                 </Select>
-                <Button
-                  size="sm"
-                  icon={<Plus size={14} aria-hidden="true" />}
-                  onClick={addEffect}
-                >
+                <Button size="sm" icon={<Plus size={14} aria-hidden="true" />} onClick={addEffect}>
                   {t("studio.addEffect")}
                 </Button>
               </div>
@@ -1515,14 +1494,11 @@ export function StudioPage() {
           <Panel title={t("studio.track")}>
             <p className="muted small">
               {t("studio.pan")}:{" "}
-              {panLabel(
-                selected?.track.pan ?? 0,
-                {
-                  left: t("studio.left"),
-                  center: t("studio.panCenter"),
-                  right: t("studio.right"),
-                },
-              )}
+              {panLabel(selected?.track.pan ?? 0, {
+                left: t("studio.left"),
+                center: t("studio.panCenter"),
+                right: t("studio.right"),
+              })}
             </p>
             <p className="muted small">{t("studio.snapHint")}</p>
           </Panel>
@@ -1542,10 +1518,7 @@ export function StudioPage() {
       ) : null}
 
       {exportOpen && renderedAsset ? (
-        <ExportDialog
-          asset={renderedAsset}
-          onClose={() => setExportOpen(false)}
-        />
+        <ExportDialog asset={renderedAsset} onClose={() => setExportOpen(false)} />
       ) : null}
 
       {deleteTarget ? (

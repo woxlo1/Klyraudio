@@ -42,23 +42,26 @@ export function AssetPicker({
   useEffect(() => {
     let cancelled = false;
     setLoading(true);
-    const timer = window.setTimeout(async () => {
-      try {
-        const response = await api.assets({
-          query: query.trim() || undefined,
-          media_type: mediaType,
-          sort: "newest",
-          limit: 200,
-        });
-        if (cancelled) return;
-        setAssets(response.items);
-        setError(null);
-      } catch (caught) {
-        if (!cancelled) setError(caught);
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
-    }, query ? 200 : 0);
+    const timer = window.setTimeout(
+      async () => {
+        try {
+          const response = await api.assets({
+            query: query.trim() || undefined,
+            media_type: mediaType,
+            sort: "newest",
+            limit: 200,
+          });
+          if (cancelled) return;
+          setAssets(response.items);
+          setError(null);
+        } catch (caught) {
+          if (!cancelled) setError(caught);
+        } finally {
+          if (!cancelled) setLoading(false);
+        }
+      },
+      query ? 200 : 0,
+    );
     return () => {
       cancelled = true;
       window.clearTimeout(timer);

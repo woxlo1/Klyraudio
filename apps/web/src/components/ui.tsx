@@ -268,7 +268,12 @@ export function ProgressBar({
         aria-valuemax={100}
         aria-valuenow={indeterminate ? undefined : Math.round((value ?? 0) * 100)}
       >
-        <span className="progress__bar" style={indeterminate ? undefined : { width: `${Math.max(0, Math.min(1, value ?? 0)) * 100}%` }} />
+        <span
+          className="progress__bar"
+          style={
+            indeterminate ? undefined : { width: `${Math.max(0, Math.min(1, value ?? 0)) * 100}%` }
+          }
+        />
       </div>
     </div>
   );
@@ -353,7 +358,10 @@ export function InlineNotice({
   children: ReactNode;
 }) {
   return (
-    <div className={classNames("notice", `notice--${tone}`)} role={tone === "danger" ? "alert" : undefined}>
+    <div
+      className={classNames("notice", `notice--${tone}`)}
+      role={tone === "danger" ? "alert" : undefined}
+    >
       {icon ? <span className="notice__icon">{icon}</span> : null}
       <div className="notice__body">{children}</div>
     </div>

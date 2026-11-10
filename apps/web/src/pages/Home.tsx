@@ -17,7 +17,15 @@ import {
 import { api } from "../api/client";
 import type { AssetInfo, JobInfo, ModelInfo } from "../api/types";
 import { JobStatusBadge } from "../components/StatusBadge";
-import { Badge, Button, EmptyState, InlineNotice, PageHeader, Panel, Spinner } from "../components/ui";
+import {
+  Badge,
+  Button,
+  EmptyState,
+  InlineNotice,
+  PageHeader,
+  Panel,
+  Spinner,
+} from "../components/ui";
 import { useI18n } from "../i18n";
 import { describeError } from "../lib/errors";
 import { formatBytes, formatMemoryMb } from "../lib/format";
@@ -91,17 +99,26 @@ export function HomePage() {
         subtitle={t("app.localFirst")}
         actions={
           <>
-            <Button variant="primary" icon={<Music size={16} aria-hidden="true" />} onClick={() => navigate("/generate/music")}>
+            <Button
+              variant="primary"
+              icon={<Music size={16} aria-hidden="true" />}
+              onClick={() => navigate("/generate/music")}
+            >
               {t("home.startMusic")}
             </Button>
-            <Button icon={<LayoutGrid size={16} aria-hidden="true" />} onClick={() => navigate("/studio")}>
+            <Button
+              icon={<LayoutGrid size={16} aria-hidden="true" />}
+              onClick={() => navigate("/studio")}
+            >
               {t("home.openStudio")}
             </Button>
           </>
         }
       />
 
-      {loadError ? <InlineNotice tone="danger">{describeError(loadError, t).message}</InlineNotice> : null}
+      {loadError ? (
+        <InlineNotice tone="danger">{describeError(loadError, t).message}</InlineNotice>
+      ) : null}
 
       <section className="hero" aria-labelledby="home-hero-title">
         <div className="hero__content">
@@ -140,7 +157,10 @@ export function HomePage() {
         <button type="button" className="stat" onClick={() => navigate("/queue")}>
           <LayoutGrid size={18} aria-hidden="true" />
           <span>
-            <strong>{jobs?.filter((job) => job.status === "queued" || job.status === "running").length ?? "—"}</strong>
+            <strong>
+              {jobs?.filter((job) => job.status === "queued" || job.status === "running").length ??
+                "—"}
+            </strong>
             <small>{t("queue.active")}</small>
           </span>
         </button>
@@ -152,7 +172,10 @@ export function HomePage() {
           </span>
         </button>
         <div className="stat">
-          <span className={`status-dot ${online ? "status-dot--online" : "status-dot--offline"}`} aria-hidden="true" />
+          <span
+            className={`status-dot ${online ? "status-dot--online" : "status-dot--offline"}`}
+            aria-hidden="true"
+          />
           <span>
             <strong>{online ? t("settings.online") : t("settings.offline")}</strong>
             <small>{t("home.engine")}</small>
@@ -222,12 +245,17 @@ export function HomePage() {
                     <div className="recent-list__body">
                       <strong>{job.prompt}</strong>
                       <small>
-                        {t(`task.${job.task}`)} · {formatRelative(job.finished_at ?? job.created_at)}
+                        {t(`task.${job.task}`)} ·{" "}
+                        {formatRelative(job.finished_at ?? job.created_at)}
                       </small>
                     </div>
                     <JobStatusBadge status={job.status} />
                     <div className="recent-list__actions">
-                      <Button size="sm" variant="ghost" onClick={() => navigate(`/editor/${outputId}`)}>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => navigate(`/editor/${outputId}`)}
+                      >
                         {t("generate.viewInEditor")}
                       </Button>
                       <Button
@@ -246,14 +274,19 @@ export function HomePage() {
           )}
         </Panel>
 
-        <Panel title={t("home.engine")} subtitle={online ? t("home.engineHealthy") : t("home.engineUnavailable")}>
+        <Panel
+          title={t("home.engine")}
+          subtitle={online ? t("home.engineHealthy") : t("home.engineUnavailable")}
+        >
           <div className="status-block">
             <div className={`status-orb ${online ? "is-online" : "is-offline"}`} aria-hidden="true">
               {online ? <Cpu size={22} /> : <WifiOff size={22} />}
             </div>
             <div>
               <strong>{online ? t("nav.online") : t("nav.offline")}</strong>
-              <p className="muted small">{online ? t("home.engineHealthy") : t("home.engineUnavailable")}</p>
+              <p className="muted small">
+                {online ? t("home.engineHealthy") : t("home.engineUnavailable")}
+              </p>
             </div>
           </div>
           {system ? (
@@ -264,20 +297,28 @@ export function HomePage() {
                   {gpu
                     ? t("home.gpuDetected", {
                         name: gpu.name,
-                        memory: gpu.total_vram_mb ? formatMemoryMb(gpu.total_vram_mb) : t("common.unknown"),
+                        memory: gpu.total_vram_mb
+                          ? formatMemoryMb(gpu.total_vram_mb)
+                          : t("common.unknown"),
                       })
                     : t("home.noGpu")}
                 </dd>
               </div>
               <div>
                 <dt>{t("settings.ffmpeg")}</dt>
-                <dd>{system.ffmpeg_available ? system.ffmpeg_version ?? t("common.available") : t("settings.ffmpegMissing")}</dd>
+                <dd>
+                  {system.ffmpeg_available
+                    ? (system.ffmpeg_version ?? t("common.available"))
+                    : t("settings.ffmpegMissing")}
+                </dd>
               </div>
               <div>
                 <dt>{t("settings.storageFree")}</dt>
                 <dd>
                   {system.storage_free_gb !== null
-                    ? t("home.storageFree", { size: `${formatBytes(system.storage_free_gb * 1024 ** 3)}` })
+                    ? t("home.storageFree", {
+                        size: `${formatBytes(system.storage_free_gb * 1024 ** 3)}`,
+                      })
                     : "—"}
                 </dd>
               </div>
@@ -305,11 +346,22 @@ export function HomePage() {
           <ul className="check-list">
             <li className={system?.ffmpeg_available ? "is-ok" : "is-warn"}>
               <HardDrive size={16} aria-hidden="true" />
-              <span>{system?.ffmpeg_available ? t("home.ffmpegReady") : t("home.ffmpegMissing")}</span>
+              <span>
+                {system?.ffmpeg_available ? t("home.ffmpegReady") : t("home.ffmpegMissing")}
+              </span>
             </li>
             <li className={gpu ? "is-ok" : "is-info"}>
               <Cpu size={16} aria-hidden="true" />
-              <span>{gpu ? t("home.gpuDetected", { name: gpu.name, memory: gpu.total_vram_mb ? formatMemoryMb(gpu.total_vram_mb) : t("common.unknown") }) : t("home.noGpu")}</span>
+              <span>
+                {gpu
+                  ? t("home.gpuDetected", {
+                      name: gpu.name,
+                      memory: gpu.total_vram_mb
+                        ? formatMemoryMb(gpu.total_vram_mb)
+                        : t("common.unknown"),
+                    })
+                  : t("home.noGpu")}
+              </span>
             </li>
             <li className="is-ok">
               <ShieldCheck size={16} aria-hidden="true" />
@@ -367,9 +419,15 @@ export function HomePage() {
             }
           >
             <div className="onboarding-steps">
-              <span><FolderOpen size={15} aria-hidden="true" /> {t("onboarding.storageTitle")}</span>
-              <span><Boxes size={15} aria-hidden="true" /> {t("onboarding.modelTitle")}</span>
-              <span><Sparkles size={15} aria-hidden="true" /> {t("onboarding.testTitle")}</span>
+              <span>
+                <FolderOpen size={15} aria-hidden="true" /> {t("onboarding.storageTitle")}
+              </span>
+              <span>
+                <Boxes size={15} aria-hidden="true" /> {t("onboarding.modelTitle")}
+              </span>
+              <span>
+                <Sparkles size={15} aria-hidden="true" /> {t("onboarding.testTitle")}
+              </span>
             </div>
           </Panel>
         ) : null}

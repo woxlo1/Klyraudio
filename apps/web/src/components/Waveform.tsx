@@ -1,4 +1,10 @@
-import { useCallback, useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type PointerEvent as ReactPointerEvent,
+} from "react";
 import { useI18n } from "../i18n";
 import { clamp } from "../lib/format";
 
@@ -66,7 +72,8 @@ export function Waveform({
 
     const styles = getComputedStyle(canvas);
     const waveColor = styles.getPropertyValue("--wave-color").trim() || "rgba(140, 165, 255, 0.8)";
-    const selectedColor = styles.getPropertyValue("--wave-selected").trim() || "rgba(111, 227, 255, 0.95)";
+    const selectedColor =
+      styles.getPropertyValue("--wave-selected").trim() || "rgba(111, 227, 255, 0.95)";
     const gridColor = styles.getPropertyValue("--wave-grid").trim() || "rgba(255, 255, 255, 0.08)";
 
     context.strokeStyle = gridColor;
@@ -84,8 +91,12 @@ export function Waveform({
     const points = Math.floor(channel.length / 2);
     if (points === 0) return;
     const step = cssWidth / points;
-    const selectedStart = selection ? Math.min(selection.start, selection.end) / Math.max(duration, 0.0001) : -1;
-    const selectedEnd = selection ? Math.max(selection.start, selection.end) / Math.max(duration, 0.0001) : -1;
+    const selectedStart = selection
+      ? Math.min(selection.start, selection.end) / Math.max(duration, 0.0001)
+      : -1;
+    const selectedEnd = selection
+      ? Math.max(selection.start, selection.end) / Math.max(duration, 0.0001)
+      : -1;
     const mid = cssHeight / 2;
     const amplitude = cssHeight * 0.42;
 
@@ -144,7 +155,10 @@ export function Waveform({
     const canvas = canvasRef.current;
     if (!canvas) return;
     const observer = new MutationObserver(() => draw());
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-theme"],
+    });
     return () => observer.disconnect();
   }, [draw]);
 

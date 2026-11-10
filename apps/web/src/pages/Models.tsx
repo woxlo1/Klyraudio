@@ -241,7 +241,9 @@ export function ModelsPage() {
                     value={download.progress}
                     label={
                       download.progress > 0
-                        ? t("models.downloadProgress", { percent: Math.round(download.progress * 100) })
+                        ? t("models.downloadProgress", {
+                            percent: Math.round(download.progress * 100),
+                          })
                         : t("models.downloadUnknown")
                     }
                   />
@@ -382,11 +384,19 @@ export function ModelsPage() {
                 </div>
                 <div>
                   <dt>{t("models.vram")}</dt>
-                  <dd>{installTarget.vram_estimate_mb ? formatMemoryMb(installTarget.vram_estimate_mb) : "—"}</dd>
+                  <dd>
+                    {installTarget.vram_estimate_mb
+                      ? formatMemoryMb(installTarget.vram_estimate_mb)
+                      : "—"}
+                  </dd>
                 </div>
                 <div>
                   <dt>{t("models.ram")}</dt>
-                  <dd>{installTarget.ram_estimate_mb ? formatMemoryMb(installTarget.ram_estimate_mb) : "—"}</dd>
+                  <dd>
+                    {installTarget.ram_estimate_mb
+                      ? formatMemoryMb(installTarget.ram_estimate_mb)
+                      : "—"}
+                  </dd>
                 </div>
                 <div>
                   <dt>{t("models.os")}</dt>
@@ -399,7 +409,12 @@ export function ModelsPage() {
               <InlineNotice tone="warning">
                 <strong>{t("models.gatedTitle")}</strong>
                 <p>{t("models.gatedBody")}</p>
-                <a href={installTarget.source_url} target="_blank" rel="noreferrer" className="text-button">
+                <a
+                  href={installTarget.source_url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-button"
+                >
                   {t("models.openModelPage")} <ExternalLink size={13} aria-hidden="true" />
                 </a>
               </InlineNotice>
@@ -485,14 +500,26 @@ function ModelCard({
       <p className="model-card__description">{model.description}</p>
 
       <div className="row row--wrap">
-        <Badge tone={model.availability === "ready" ? "success" : model.availability === "installed-missing-deps" ? "danger" : model.availability === "unsupported" ? "warning" : "neutral"}>
+        <Badge
+          tone={
+            model.availability === "ready"
+              ? "success"
+              : model.availability === "installed-missing-deps"
+                ? "danger"
+                : model.availability === "unsupported"
+                  ? "warning"
+                  : "neutral"
+          }
+        >
           {t(`status.${availabilityKey(model)}`)}
         </Badge>
         {model.requires_license_acknowledgement && model.license_acknowledged ? (
           <Badge tone="info">{t("models.licenseAck")}</Badge>
         ) : null}
         {model.size_bytes !== null && !model.builtin ? (
-          <span className="muted small">{t("models.downloadSize", { size: formatBytes(model.size_bytes) })}</span>
+          <span className="muted small">
+            {t("models.downloadSize", { size: formatBytes(model.size_bytes) })}
+          </span>
         ) : null}
       </div>
 
@@ -518,7 +545,12 @@ function ModelCard({
           <p>{model.availability_detail ?? t("models.missingDepsBody")}</p>
           <div className="inline-field">
             <code className="command-code">{INSTALL_COMMAND}</code>
-            <Button size="sm" variant="ghost" icon={<Copy size={14} aria-hidden="true" />} onClick={onCopyCommand}>
+            <Button
+              size="sm"
+              variant="ghost"
+              icon={<Copy size={14} aria-hidden="true" />}
+              onClick={onCopyCommand}
+            >
               {t("models.copyCommand")}
             </Button>
           </div>
@@ -532,16 +564,43 @@ function ModelCard({
       {expanded ? (
         <div className="model-card__details">
           <dl className="detail-list detail-list--inline">
-            <div><dt>{t("models.vram")}</dt><dd>{model.vram_estimate_mb ? formatMemoryMb(model.vram_estimate_mb) : "—"}</dd></div>
-            <div><dt>{t("models.ram")}</dt><dd>{model.ram_estimate_mb ? formatMemoryMb(model.ram_estimate_mb) : "—"}</dd></div>
-            <div><dt>{t("models.runtime")}</dt><dd>{model.runtime.join(", ")}</dd></div>
-            <div><dt>{t("models.acceleration")}</dt><dd>{model.acceleration.join(", ")}</dd></div>
-            <div><dt>{t("models.os")}</dt><dd>{model.operating_systems.join(", ")}</dd></div>
-            <div><dt>{t("models.license")}</dt><dd>{model.license_name}</dd></div>
-            <div><dt>{t("models.commercialUse")}</dt><dd>{t(`models.${commercialKey(model.commercial_use)}`)}</dd></div>
-            <div><dt>{t("models.redistribution")}</dt><dd>{t(`models.${redistributionKey(model.redistribution)}`)}</dd></div>
+            <div>
+              <dt>{t("models.vram")}</dt>
+              <dd>{model.vram_estimate_mb ? formatMemoryMb(model.vram_estimate_mb) : "—"}</dd>
+            </div>
+            <div>
+              <dt>{t("models.ram")}</dt>
+              <dd>{model.ram_estimate_mb ? formatMemoryMb(model.ram_estimate_mb) : "—"}</dd>
+            </div>
+            <div>
+              <dt>{t("models.runtime")}</dt>
+              <dd>{model.runtime.join(", ")}</dd>
+            </div>
+            <div>
+              <dt>{t("models.acceleration")}</dt>
+              <dd>{model.acceleration.join(", ")}</dd>
+            </div>
+            <div>
+              <dt>{t("models.os")}</dt>
+              <dd>{model.operating_systems.join(", ")}</dd>
+            </div>
+            <div>
+              <dt>{t("models.license")}</dt>
+              <dd>{model.license_name}</dd>
+            </div>
+            <div>
+              <dt>{t("models.commercialUse")}</dt>
+              <dd>{t(`models.${commercialKey(model.commercial_use)}`)}</dd>
+            </div>
+            <div>
+              <dt>{t("models.redistribution")}</dt>
+              <dd>{t(`models.${redistributionKey(model.redistribution)}`)}</dd>
+            </div>
             {model.installed_path ? (
-              <div><dt>{t("models.installLocation")}</dt><dd className="mono-break">{model.installed_path}</dd></div>
+              <div>
+                <dt>{t("models.installLocation")}</dt>
+                <dd className="mono-break">{model.installed_path}</dd>
+              </div>
             ) : null}
           </dl>
           <p className="muted small">
@@ -576,7 +635,12 @@ function ModelCard({
             <CheckCircle2 size={14} aria-hidden="true" /> {t("models.builtinNotice")}
           </span>
         ) : model.installed ? (
-          <Button size="sm" variant="danger" icon={<Trash2 size={14} aria-hidden="true" />} onClick={onRemove}>
+          <Button
+            size="sm"
+            variant="danger"
+            icon={<Trash2 size={14} aria-hidden="true" />}
+            onClick={onRemove}
+          >
             {t("models.removeModel")}
           </Button>
         ) : (

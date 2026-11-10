@@ -136,7 +136,9 @@ export function GeneratePage() {
 
   useEffect(() => {
     if (!capability) return;
-    setDuration((current) => Math.min(capability.duration_max, Math.max(capability.duration_min, current)));
+    setDuration((current) =>
+      Math.min(capability.duration_max, Math.max(capability.duration_min, current)),
+    );
     setVariations((current) => Math.min(capability.max_variations, Math.max(1, current)));
   }, [capability]);
 
@@ -144,7 +146,9 @@ export function GeneratePage() {
   const licenseBlocked = Boolean(
     selectedModel?.requires_license_acknowledgement && !selectedModel.license_acknowledged,
   );
-  const canGenerate = Boolean(selectedModel && capability && ready && !licenseBlocked && !submitting);
+  const canGenerate = Boolean(
+    selectedModel && capability && ready && !licenseBlocked && !submitting,
+  );
   const suggestions = tList(`prompts.${task}`);
   const cpuOnly = Boolean(
     system && !system.available_backends.some((backend) => backend === "cuda" || backend === "mps"),
@@ -251,7 +255,9 @@ export function GeneratePage() {
         }
       />
 
-      {modelsError ? <InlineNotice tone="danger">{describeError(modelsError, t).message}</InlineNotice> : null}
+      {modelsError ? (
+        <InlineNotice tone="danger">{describeError(modelsError, t).message}</InlineNotice>
+      ) : null}
 
       <div className="generate-layout">
         <div className="generate-layout__main">
@@ -313,7 +319,9 @@ export function GeneratePage() {
                     onChange={(event) => setPrompt(event.target.value)}
                     rows={5}
                     maxLength={2000}
-                    placeholder={t(`generate.promptPlaceholder${task === "music" ? "Music" : task === "sfx" ? "Sfx" : "Ambient"}`)}
+                    placeholder={t(
+                      `generate.promptPlaceholder${task === "music" ? "Music" : task === "sfx" ? "Sfx" : "Ambient"}`,
+                    )}
                   />
                 </Field>
 
@@ -334,7 +342,11 @@ export function GeneratePage() {
                 </div>
 
                 {capability?.supports_negative_prompt ? (
-                  <Field label={t("generate.negativePrompt")} htmlFor="generate-negative" optional={t("common.optional")}>
+                  <Field
+                    label={t("generate.negativePrompt")}
+                    htmlFor="generate-negative"
+                    optional={t("common.optional")}
+                  >
                     <TextInput
                       id="generate-negative"
                       value={negativePrompt}
@@ -345,7 +357,11 @@ export function GeneratePage() {
                 ) : null}
 
                 <div className="form-grid__two">
-                  <Field label={t("generate.model")} htmlFor="generate-model" hint={t("generate.modelHint", { task: t(`task.${task}`).toLowerCase() })}>
+                  <Field
+                    label={t("generate.model")}
+                    htmlFor="generate-model"
+                    hint={t("generate.modelHint", { task: t(`task.${task}`).toLowerCase() })}
+                  >
                     <Select
                       id="generate-model"
                       value={selectedModelId}
@@ -368,7 +384,10 @@ export function GeneratePage() {
                       onChange={(event) => setVariations(Number(event.target.value))}
                       disabled={!capability?.supports_variations}
                     >
-                      {Array.from({ length: capability?.max_variations ?? 1 }, (_, index) => index + 1).map((count) => (
+                      {Array.from(
+                        { length: capability?.max_variations ?? 1 },
+                        (_, index) => index + 1,
+                      ).map((count) => (
                         <option key={count} value={count}>
                           {count}
                         </option>
@@ -388,7 +407,11 @@ export function GeneratePage() {
                     onChange={setDuration}
                     format={(value) => t("generate.durationValue", { seconds: value })}
                   />
-                  <Field label={t("generate.seed")} htmlFor="generate-seed" hint={t("generate.seedHint")}>
+                  <Field
+                    label={t("generate.seed")}
+                    htmlFor="generate-seed"
+                    hint={t("generate.seedHint")}
+                  >
                     <div className="inline-field">
                       <TextInput
                         id="generate-seed"
@@ -412,7 +435,11 @@ export function GeneratePage() {
                   title={t("generate.advanced")}
                   subtitle={t("generate.supportedHint")}
                   action={
-                    <Button size="sm" variant="ghost" onClick={() => setShowAdvanced((value) => !value)}>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => setShowAdvanced((value) => !value)}
+                    >
                       {showAdvanced ? t("common.hideAdvanced") : t("common.showAdvanced")}
                     </Button>
                   }
@@ -449,7 +476,11 @@ export function GeneratePage() {
                       </div>
                       <div className="form-grid__two">
                         {supports("musical_key") ? (
-                          <Field label={t("generate.key")} htmlFor="generate-key" optional={t("common.optional")}>
+                          <Field
+                            label={t("generate.key")}
+                            htmlFor="generate-key"
+                            optional={t("common.optional")}
+                          >
                             <TextInput
                               id="generate-key"
                               value={musicalKey}
@@ -459,7 +490,11 @@ export function GeneratePage() {
                           </Field>
                         ) : null}
                         {supports("mood") ? (
-                          <Field label={t("generate.mood")} htmlFor="generate-mood" optional={t("common.optional")}>
+                          <Field
+                            label={t("generate.mood")}
+                            htmlFor="generate-mood"
+                            optional={t("common.optional")}
+                          >
                             <TextInput
                               id="generate-mood"
                               value={mood}
@@ -471,7 +506,11 @@ export function GeneratePage() {
                       </div>
                       <div className="form-grid__two">
                         {supports("style") ? (
-                          <Field label={t("generate.style")} htmlFor="generate-style" optional={t("common.optional")}>
+                          <Field
+                            label={t("generate.style")}
+                            htmlFor="generate-style"
+                            optional={t("common.optional")}
+                          >
                             <TextInput
                               id="generate-style"
                               value={style}
@@ -523,7 +562,9 @@ export function GeneratePage() {
                       ) : null}
                     </div>
                   ) : (
-                    <p className="muted small">{t("generate.supportedControls")}: {Array.from(params).join(", ")}</p>
+                    <p className="muted small">
+                      {t("generate.supportedControls")}: {Array.from(params).join(", ")}
+                    </p>
                   )}
                 </Panel>
 
@@ -576,7 +617,9 @@ export function GeneratePage() {
                     {selectedModel.builtin ? t("models.sketchBadge") : t("models.neuralBadge")}
                   </Badge>
                   <Badge tone={ready ? "success" : "warning"}>
-                    {t(`status.${selectedModel.availability === "installed-missing-deps" ? "installedMissingDeps" : selectedModel.availability === "not-installed" ? "notInstalled" : selectedModel.availability}`)}
+                    {t(
+                      `status.${selectedModel.availability === "installed-missing-deps" ? "installedMissingDeps" : selectedModel.availability === "not-installed" ? "notInstalled" : selectedModel.availability}`,
+                    )}
                   </Badge>
                 </div>
                 <p className="muted small">{selectedModel.description}</p>
@@ -585,7 +628,9 @@ export function GeneratePage() {
                     {t("generate.sketchNote")}
                   </InlineNotice>
                 ) : null}
-                {cpuOnly ? <InlineNotice tone="warning">{t("generate.cpuOnlyNote")}</InlineNotice> : null}
+                {cpuOnly ? (
+                  <InlineNotice tone="warning">{t("generate.cpuOnlyNote")}</InlineNotice>
+                ) : null}
                 {selectedModel.known_limitations.length > 0 ? (
                   <div>
                     <h4 className="small-heading">{t("models.limitations")}</h4>
@@ -602,7 +647,14 @@ export function GeneratePage() {
             )}
           </Panel>
 
-          <Panel title={t("generate.recent")} action={<Link className="text-button" to="/queue">{t("common.more")}</Link>}>
+          <Panel
+            title={t("generate.recent")}
+            action={
+              <Link className="text-button" to="/queue">
+                {t("common.more")}
+              </Link>
+            }
+          >
             {recent.length === 0 ? (
               <EmptyState compact title={t("generate.recentEmpty")} />
             ) : (
@@ -619,7 +671,11 @@ export function GeneratePage() {
                     ) : null}
                     {job.output_asset_ids.length > 0 ? (
                       <div className="recent-list__actions">
-                        <Button size="sm" variant="ghost" onClick={() => navigate(`/editor/${job.output_asset_ids[0]}`)}>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => navigate(`/editor/${job.output_asset_ids[0]}`)}
+                        >
                           {t("generate.viewInEditor")}
                         </Button>
                         <Button
@@ -640,7 +696,12 @@ export function GeneratePage() {
 
           <Panel title={t("generate.jobOutputs")}>
             <p className="muted small">{t("generate.noOutputsYet")}</p>
-            <Button variant="ghost" size="sm" icon={<Play size={14} aria-hidden="true" />} onClick={() => navigate("/queue")}>
+            <Button
+              variant="ghost"
+              size="sm"
+              icon={<Play size={14} aria-hidden="true" />}
+              onClick={() => navigate("/queue")}
+            >
               {t("generate.openQueue")}
             </Button>
           </Panel>

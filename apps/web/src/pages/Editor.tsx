@@ -98,9 +98,7 @@ export function EditorPage() {
   const fileInput = useRef<HTMLInputElement>(null);
   const playerRef = useRef<AudioPlayerHandle>(null);
 
-  useDocumentTitle(
-    current ? t("editor.titleForAsset", { name: current.name }) : t("editor.title"),
-  );
+  useDocumentTitle(current ? t("editor.titleForAsset", { name: current.name }) : t("editor.title"));
 
   const loadSource = (asset: AssetInfo) => {
     playerRef.current?.stop();
@@ -165,7 +163,10 @@ export function EditorPage() {
   const selectionLength = Math.max(0, selectionEnd - selectionStart);
   const hasSelection = selectionLength > 0.01;
 
-  const applyOperation = async (operation: AudioOperation, extra: Partial<AudioOperationRequest> = {}) => {
+  const applyOperation = async (
+    operation: AudioOperation,
+    extra: Partial<AudioOperationRequest> = {},
+  ) => {
     if (!current || busy) return;
     if ((operation === "trim" || operation === "silence") && !hasSelection) {
       notify({ message: t("editor.selectionRequired"), tone: "warning" });
@@ -486,7 +487,9 @@ export function EditorPage() {
                     label={t("editor.trim")}
                     disabled={!hasSelection}
                     busy={busy === "trim"}
-                    onClick={() => void applyOperation("trim", { start: selectionStart, end: selectionEnd })}
+                    onClick={() =>
+                      void applyOperation("trim", { start: selectionStart, end: selectionEnd })
+                    }
                   />
                   <OperationButton
                     icon={<Eraser size={15} />}
@@ -615,7 +618,9 @@ export function EditorPage() {
                 >
                   {t("editor.addToStudio")}
                 </Button>
-                <p className="muted small">{t("editor.currentLabel")}: {current.name}</p>
+                <p className="muted small">
+                  {t("editor.currentLabel")}: {current.name}
+                </p>
                 {history.length > 1 ? (
                   <p className="muted small">
                     {t("editor.sourceLabel")}: {history[0].asset.name}
