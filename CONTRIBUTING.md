@@ -121,6 +121,13 @@ python -m pytest services/api/tests -q
 python -m ruff check services/api
 ```
 
+Repository automation:
+
+```bash
+python -m pytest .github/scripts -q
+python .github/scripts/check_links.py
+```
+
 If a check cannot run in your environment, say so in the pull request instead of
 silently skipping it.
 

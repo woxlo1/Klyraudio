@@ -71,6 +71,13 @@ npm run typecheck --workspace @klyraudio/desktop
 npm run test --workspace @klyraudio/desktop
 ```
 
+Repository automation checks:
+
+```bash
+python -m pytest .github/scripts -q
+python .github/scripts/check_links.py
+```
+
 The UI test runner uses Vitest and jsdom. The desktop tests use Node's built-in
 test runner and do not launch a window.
 
