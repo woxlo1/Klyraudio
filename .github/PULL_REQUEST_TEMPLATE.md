@@ -6,6 +6,13 @@ Describe the behavior this pull request changes and why.
 
 -
 
+## Commit outline
+
+List the logical commits in this pull request. A substantial change usually has
+several small commits rather than one large commit.
+
+-
+
 ## Testing
 
 List the commands you ran and any manual verification.
