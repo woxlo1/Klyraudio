@@ -16,7 +16,7 @@ import os
 import sys
 import urllib.error
 import urllib.request
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 MARKER = "<!-- klyraudio-ai-review -->"
 MODELS_URL = "https://models.github.ai/inference/chat/completions"
@@ -51,7 +51,7 @@ review under 250 words. Do not restate the diff and do not pad with praise."""
 
 
 def github_request(
-    url: str, token: str, method: str = "GET", payload: Optional[dict] = None
+    url: str, token: str, method: str = "GET", payload: dict | None = None
 ) -> Any:
     data = None
     headers = {
@@ -73,7 +73,7 @@ def notice(message: str) -> None:
     print(f"::notice::AI review skipped: {message}")
 
 
-def load_event() -> Optional[Dict[str, Any]]:
+def load_event() -> dict[str, Any] | None:
     path = os.environ.get("GITHUB_EVENT_PATH")
     if not path or not os.path.exists(path):
         return None
@@ -81,8 +81,8 @@ def load_event() -> Optional[Dict[str, Any]]:
         return json.load(handle)
 
 
-def collect_diff(api: str, repository: str, number: int, token: str) -> List[Dict[str, str]]:
-    files: List[Dict[str, Any]] = []
+def collect_diff(api: str, repository: str, number: int, token: str) -> list[dict[str, str]]:
+    files: list[dict[str, Any]] = []
     page = 1
     while page <= 30:
         batch = github_request(
@@ -96,7 +96,7 @@ def collect_diff(api: str, repository: str, number: int, token: str) -> List[Dic
             break
         page += 1
 
-    selected: List[Dict[str, str]] = []
+    selected: list[dict[str, str]] = []
     total = 0
     for item in files:
         name = item.get("filename", "")
@@ -114,14 +114,14 @@ def collect_diff(api: str, repository: str, number: int, token: str) -> List[Dic
     return selected
 
 
-def build_prompt(files: List[Dict[str, str]]) -> str:
+def build_prompt(files: list[dict[str, str]]) -> str:
     sections = []
     for item in files:
         sections.append(f"### {item['filename']}\n```diff\n{item['patch']}\n```")
     return "Review this pull request diff.\n\n" + "\n\n".join(sections)
 
 
-def request_review(model: str, prompt: str, token: str) -> Optional[str]:
+def request_review(model: str, prompt: str, token: str) -> str | None:
     payload = {
         "model": model,
         "temperature": 0.1,
@@ -178,7 +178,7 @@ def format_comment(model: str, text: str) -> str:
 
 def upsert_comment(api: str, repository: str, number: int, token: str, body: str) -> None:
     comments_url = f"{api}/repos/{repository}/issues/{number}/comments"
-    existing: List[Dict[str, Any]] = []
+    existing: list[dict[str, Any]] = []
     page = 1
     while page <= 10:
         batch = github_request(f"{comments_url}?per_page=100&page={page}", token)
