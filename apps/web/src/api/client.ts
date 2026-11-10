@@ -257,6 +257,12 @@ export const api = {
   exportHistory: (limit = 50) =>
     request<ExportRecord[]>(`/export/history${queryString({ limit })}`),
   exportFolder: () => request<{ path: string }>("/export/folder"),
+  openFolder: (kind: "data" | "exports" | "models") =>
+    request<{ opened: boolean; path: string }>("/system/open-folder", {
+      method: "POST",
+      body: { kind },
+      timeoutMs: 15000,
+    }),
 };
 
 export type Api = typeof api;
