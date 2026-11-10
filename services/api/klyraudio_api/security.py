@@ -16,6 +16,32 @@ LOCAL_ORIGIN = re.compile(r"^http://(localhost|127\.0\.0\.1|\[::1\])(:\d+)?$")
 ALLOWED_HOSTS = {"127.0.0.1", "localhost", "::1", "testserver"}
 
 
+def hostname_from_header(host: str) -> str:
+    """Extract the host name and reject malformed bracketed literals.
+
+    HTTP requires IPv6 literals in brackets. A value such as ``[::1].evil`` must
+    not be reduced to ``::1`` by ignoring the suffix.
+    """
+    value = (host or "").strip().lower()
+    if not value:
+        return ""
+    if value.startswith("["):
+        end = value.find("]")
+        if end == -1:
+            return value
+        address = value[1:end]
+        rest = value[end + 1 :]
+        if rest and (not rest.startswith(":") or not rest[1:].isdigit()):
+            return value
+        return address
+    if value.count(":") > 1:
+        return value
+    if ":" in value:
+        name, _, port = value.rpartition(":")
+        return name if port.isdigit() else value
+    return value
+
+
 class LocalOnlyMiddleware(BaseHTTPMiddleware):
     """Reject DNS-rebinding hosts and non-local browser origins.
 
@@ -25,12 +51,7 @@ class LocalOnlyMiddleware(BaseHTTPMiddleware):
 
     async def dispatch(self, request: Request, call_next):  # type: ignore[no-untyped-def]
         if not allow_lan():
-            host = (request.headers.get("host") or "").strip().lower()
-            hostname = host
-            if hostname.startswith("["):
-                hostname = hostname.split("]")[0].strip("[")
-            else:
-                hostname = hostname.rsplit(":", 1)[0] if ":" in hostname else hostname
+            hostname = hostname_from_header(request.headers.get("host") or "")
             if hostname not in ALLOWED_HOSTS:
                 return JSONResponse(
                     status_code=403,
