@@ -85,6 +85,12 @@ for same-repository pull requests authored by people.
 - Only labels under the `area: `, `size: `, and `needs: ` prefixes are managed
   or removed. Other labels are left untouched.
 
+The bot checks the pull request title, not individual commit subjects. A pull
+request may contain several logical commits; reviewers still read the commit
+outline and the commit messages. Commit granularity, co-author trailers, and
+review-comment expectations are documented in
+[CONTRIBUTING.md](../CONTRIBUTING.md).
+
 The title, path, size, and translation logic is covered by
 `.github/scripts/test_pr_quality.py` in the `Automation scripts` CI job.
 
