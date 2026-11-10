@@ -463,9 +463,13 @@ class ProjectRepository:
         timestamp = now_iso()
         with self._db.connect() as connection:
             if autosave:
+                # Autosave stores the working document so reopening the project never loses
+                # changes. The autosave columns still mark that the state was not saved
+                # explicitly, and an explicit save clears them.
                 connection.execute(
-                    "UPDATE projects SET autosave_json = ?, autosave_at = ? WHERE id = ?",
-                    (serialized, timestamp, project_id),
+                    "UPDATE projects SET document_json = ?, version = ?, updated_at = ?, "
+                    "name = COALESCE(?, name), autosave_json = ?, autosave_at = ? WHERE id = ?",
+                    (serialized, version, timestamp, name, serialized, timestamp, project_id),
                 )
             else:
                 connection.execute(

@@ -174,16 +174,19 @@ class ProjectService:
 
         if total_frames == 0:
             raise ValidationFailed("This project has no audible clips to render.")
-        # Extra room for reverb/delay tails; keep the bound explicit and finite.
-        tail = int(8.0 * sample_rate)
-        total_frames = min(total_frames + tail, int(3600 * sample_rate))
+        master_chain: List[EffectSpec] = []
+        if request.master_effects:
+            master_chain = [effect for effect in document.master.effects if effect.enabled]
+        # Only time-based master effects need room for their tails. Rendering a dry
+        # mix must end exactly with the last clip instead of adding silent padding.
+        needs_tail = any(effect.type in {"reverb", "delay"} for effect in master_chain)
+        if needs_tail:
+            tail = int(8.0 * sample_rate)
+            total_frames = min(total_frames + tail, int(3600 * sample_rate))
         mix = np.zeros((total_frames, 2), dtype=np.float32)
         for start_frame, segment, gain, pan in placeholders:
             dsp.mix_at(mix, segment, start_frame, gain, pan)
 
-        master_chain: List[EffectSpec] = []
-        if request.master_effects:
-            master_chain = [effect for effect in document.master.effects if effect.enabled]
         if master_chain:
             mix = effects.apply_chain(mix, sample_rate, master_chain)
         mix = mix * float(document.master.volume)
