@@ -4,7 +4,7 @@
 
 - A 64-bit desktop distribution with a modern glibc
 - Node.js 20+ and npm 10+
-- Python 3.9+ with venv support
+- Python 3.10+ with venv support
 - libsndfile
 - Optional: FFmpeg for compressed import and lossy export
 - A working X11 or Wayland session for the desktop app

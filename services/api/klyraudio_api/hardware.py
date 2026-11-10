@@ -12,7 +12,6 @@ import os
 import platform
 import shutil
 import subprocess
-import sys
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
@@ -199,10 +198,6 @@ def detect_system(data_dir: Path, ffmpeg: Optional[str], ffmpeg_version: Optiona
     if not ffmpeg:
         warnings.append(
             "FFmpeg was not found. MP3, OGG, Opus, AAC, and M4A export will be unavailable until it is installed."
-        )
-    if sys.version_info < (3, 10):
-        warnings.append(
-            "Python 3.9 is supported but some optional AI model packages may require Python 3.10 or newer."
         )
     if not _torch_backend_available("cpu"):
         warnings.append(

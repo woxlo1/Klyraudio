@@ -11,7 +11,7 @@ The UI is a plain single-page app. It has no server-side rendering, no remote
 font or asset CDN, and no runtime configuration fetch. This keeps it usable
 offline and avoids leaking project data to third parties.
 
-## Local service: Python 3.9+ + FastAPI
+## Local service: Python 3.10+ + FastAPI
 
 **Chosen** because audio DSP, NumPy, soundfile, and the neural model ecosystem
 (PyTorch, Transformers, Diffusers) are Python-first. FastAPI provides typed

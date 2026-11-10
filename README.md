@@ -72,7 +72,7 @@ See [docs/architecture.md](docs/architecture.md) for boundaries and data flow.
 ## Requirements
 
 - **Node.js 20 or newer** and npm 10+.
-- **Python 3.9 or newer** for the local service.
+- **Python 3.10 or newer** for the local service (3.11 or 3.12 recommended).
 - **Optional:** FFmpeg + FFprobe for importing compressed formats and exporting
   MP3/Ogg/Opus/AAC/M4A. WAV, FLAC, and AIFF work without FFmpeg.
 - **Optional:** an NVIDIA GPU (CUDA) or Apple Silicon GPU (MPS) for neural
