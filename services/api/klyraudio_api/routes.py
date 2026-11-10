@@ -2,19 +2,16 @@
 
 from __future__ import annotations
 
-import io as stdlib_io
 import os
-import shutil
 import subprocess
 import sys
 import uuid
 from pathlib import Path
-from typing import Optional
+from typing import Annotated, Optional
 
 from fastapi import APIRouter, File, Form, Query, Request, UploadFile
-from fastapi.responses import JSONResponse, Response, StreamingResponse
+from fastapi.responses import Response, StreamingResponse
 from pydantic import ValidationError
-from starlette.background import BackgroundTask
 
 from .audio import io, waveform
 from .config import SUPPORTED_IMPORT_EXTENSIONS, allow_lan
@@ -34,9 +31,9 @@ from .schemas import (
     ExportResult,
     GenerationRequest,
     HealthResponse,
-    JoinRequest,
     JobCreateResponse,
     JobInfo,
+    JoinRequest,
     ModelInfo,
     ModelInstallRequest,
     OpenFolderRequest,
@@ -262,8 +259,8 @@ def build_router(services: Services) -> APIRouter:
 
     @router.post("/assets/import", response_model=AssetInfo)
     async def import_asset(
-        file: UploadFile = File(...),
-        media_type: str = Form(default="other"),
+        file: Annotated[UploadFile, File()],
+        media_type: Annotated[str, Form()] = "other",
     ) -> AssetInfo:
         filename = file.filename or "import.wav"
         try:

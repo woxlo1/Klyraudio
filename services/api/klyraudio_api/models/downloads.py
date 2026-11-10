@@ -19,7 +19,7 @@ from urllib.parse import quote
 
 import httpx
 
-from ..config import ConfigStore, Paths, sanitize_filename
+from ..config import ConfigStore, Paths
 from ..errors import ApiError, NotFound, ResourceBusy, ValidationFailed
 from ..repositories import DownloadRepository, ModelInstallRepository, now_iso
 from ..schemas import DownloadInfo

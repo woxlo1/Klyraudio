@@ -4,9 +4,8 @@ from __future__ import annotations
 
 import io
 
-from fastapi.testclient import TestClient
-
 from conftest import generate_asset
+from fastapi.testclient import TestClient
 
 
 def test_health_reports_local_only_service(client: TestClient) -> None:

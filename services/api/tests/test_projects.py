@@ -4,9 +4,8 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from fastapi.testclient import TestClient
-
 from conftest import generate_asset
+from fastapi.testclient import TestClient
 
 
 def create_project(client: TestClient, name: str = "Test project") -> dict:

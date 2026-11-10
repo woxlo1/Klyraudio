@@ -3,24 +3,21 @@
 from __future__ import annotations
 
 import uuid
-from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Dict, List
 
 import numpy as np
 
-from .audio import dsp, effects, io
 from .assets_service import AssetService
-from .config import PROJECT_FORMAT_VERSION, ServiceContext, sanitize_filename
+from .audio import dsp, effects, io
+from .config import PROJECT_FORMAT_VERSION, ServiceContext
 from .errors import NotFound, ValidationFailed
 from .repositories import AssetRepository, ProjectRepository, now_iso
 from .schemas import (
-    ClipSpec,
     EffectSpec,
     ProjectDocument,
     ProjectInfo,
     ProjectSummary,
     RenderRequest,
-    TrackSpec,
 )
 
 
