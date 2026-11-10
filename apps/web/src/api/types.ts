@@ -110,6 +110,7 @@ export interface ModelInfo {
   availability_detail: string | null;
   requires_license_acknowledgement: boolean;
   license_acknowledged: boolean;
+  gated: boolean;
   installed_path: string | null;
 }
 

@@ -16,7 +16,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 
-from .config import APP_VERSION, ServiceContext, allow_lan, is_loopback_host
+from .config import APP_VERSION, ServiceContext
 from .errors import ApiError
 from .logging_setup import configure_logging
 from .routes import build_router

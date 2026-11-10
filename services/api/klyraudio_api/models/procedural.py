@@ -12,7 +12,7 @@ from __future__ import annotations
 
 import hashlib
 import math
-from typing import Callable, Dict, List, Optional
+from typing import Callable, List, Optional
 
 import numpy as np
 
@@ -40,7 +40,7 @@ ENERGETIC_WORDS = {
 def _seed_from_request(request: GenerationRequest, variation: int) -> int:
     if request.seed is not None:
         return (request.seed + variation * 7919) & 0xFFFFFFFF
-    digest = hashlib.sha256(f"{request.prompt}|{request.task}|{variation}".encode("utf-8")).digest()
+    digest = hashlib.sha256(f"{request.prompt}|{request.task}|{variation}".encode()).digest()
     return int.from_bytes(digest[:4], "big")
 
 
@@ -83,7 +83,6 @@ def _adsr(length: int, attack: float, decay: float, sustain: float, release: flo
 
 
 def _oscillator(freq: np.ndarray, length: int, kind: str = "sine", phase: float = 0.0) -> np.ndarray:
-    t = np.arange(length, dtype=np.float32) / SAMPLE_RATE
     if np.isscalar(freq):
         f = np.full(length, float(freq), dtype=np.float32)
     else:
@@ -331,7 +330,7 @@ def _sfx(request: GenerationRequest, rng: np.random.Generator) -> np.ndarray:
         right = noise * envelope * (1.0 + pan_curve) * 0.5
         _place(mix, np.stack([left, right], axis=1), 0, 0.7)
     if magic:
-        for index in range(10):
+        for _index in range(10):
             start = int(rng.uniform(0, max(0.01, request.duration - 0.4)) * SAMPLE_RATE)
             freq = rng.uniform(1200, 4800)
             length = min(int(0.4 * SAMPLE_RATE), frames - start)
@@ -352,7 +351,7 @@ def _sfx(request: GenerationRequest, rng: np.random.Generator) -> np.ndarray:
         water = _lowpass(rng.standard_normal(length).astype(np.float32), 900.0)
         water *= np.sin(np.linspace(0, np.pi, length, dtype=np.float32)) ** 2
         _place(mix, (water * 0.4)[:, None], 0, 1.0)
-        for index in range(8):
+        for _index in range(8):
             start = int(rng.uniform(0, max(0.01, request.duration - 0.2)) * SAMPLE_RATE)
             length = min(int(0.18 * SAMPLE_RATE), frames - start)
             if length <= 0:

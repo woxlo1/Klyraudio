@@ -12,7 +12,6 @@ from starlette.responses import JSONResponse
 
 from .config import Paths, allow_lan
 
-
 LOCAL_ORIGIN = re.compile(r"^http://(localhost|127\.0\.0\.1|\[::1\])(:\d+)?$")
 ALLOWED_HOSTS = {"127.0.0.1", "localhost", "::1", "testserver"}
 

@@ -1,0 +1,80 @@
+version: 2
+
+updates:
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+      time: "03:00"
+      timezone: Asia/Tokyo
+    open-pull-requests-limit: 5
+    versioning-strategy: increase
+    groups:
+      react:
+        patterns:
+          - react
+          - react-dom
+          - react-router-dom
+          - "@types/react"
+          - "@types/react-dom"
+      frontend-tooling:
+        patterns:
+          - vite
+          - vitest
+          - "@vitejs/*"
+          - typescript
+          - typescript-eslint
+          - eslint
+          - eslint-plugin-*
+          - "@eslint/js"
+          - globals
+          - prettier
+          - jsdom
+          - "@testing-library/*"
+      electron:
+        patterns:
+          - electron
+          - electron-builder
+
+  - package-ecosystem: pip
+    directory: "/services/api"
+    schedule:
+      interval: weekly
+      day: monday
+      time: "03:00"
+      timezone: Asia/Tokyo
+    open-pull-requests-limit: 5
+    groups:
+      python-runtime:
+        patterns:
+          - fastapi
+          - uvicorn
+          - pydantic
+          - numpy
+          - soundfile
+          - httpx
+          - python-multipart
+      python-dev:
+        patterns:
+          - pytest
+          - pytest-cov
+          - ruff
+    ignore:
+      # Neural runtime extras track upstream major versions separately.
+      - dependency-name: torch
+      - dependency-name: transformers
+      - dependency-name: diffusers
+
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+      time: "03:00"
+      timezone: Asia/Tokyo
+    open-pull-requests-limit: 5
+    groups:
+      actions:
+        patterns:
+          - "*"

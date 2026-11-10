@@ -1,0 +1,59 @@
+{
+  "name": "@klyraudio/desktop",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Electron desktop shell for the local-first Klyraudio studio",
+  "license": "GPL-3.0-only",
+  "main": "src/main.cjs",
+  "scripts": {
+    "start": "electron .",
+    "dev": "node scripts/dev.cjs",
+    "build": "electron-builder --dir",
+    "dist": "electron-builder",
+    "typecheck": "node --check src/main.cjs && node --check src/preload.cjs && node --check src/backend.cjs && node --check scripts/dev.cjs",
+    "test": "node --test tests/backend.test.cjs"
+  },
+  "devDependencies": {
+    "electron": "45.2.3",
+    "electron-builder": "26.18.0"
+  },
+  "build": {
+    "appId": "app.klyraudio.desktop",
+    "productName": "Klyraudio",
+    "copyright": "Copyright © Klyraudio contributors",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "src/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "../web/dist",
+        "to": "web"
+      },
+      {
+        "from": "../../services/api/klyraudio_api",
+        "to": "services/api/klyraudio_api"
+      }
+    ],
+    "mac": {
+      "category": "public.app-category.music",
+      "target": [
+        "dmg"
+      ]
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ]
+    },
+    "linux": {
+      "category": "AudioVideo",
+      "target": [
+        "AppImage"
+      ]
+    }
+  }
+}

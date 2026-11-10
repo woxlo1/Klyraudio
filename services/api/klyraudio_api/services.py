@@ -4,9 +4,9 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+from .assets_service import AssetService
 from .config import ConfigStore, ServiceContext
 from .database import Database
-from .assets_service import AssetService
 from .export_service import ExportService
 from .jobs import JobManager
 from .models.downloads import DownloadManager

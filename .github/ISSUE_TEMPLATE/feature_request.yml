@@ -1,0 +1,65 @@
+name: Feature request
+description: Propose a capability or improvement that fits the local-first design.
+title: "feat: "
+labels: ["enhancement", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Klyraudio is local-first by contract. Proposals that require cloud
+        inference, telemetry, accounts, or bundled model weights are out of
+        scope. Describe the problem before the solution.
+  - type: checkboxes
+    id: preflight
+    attributes:
+      label: Pre-flight checks
+      options:
+        - label: I searched existing issues and discussions for this request.
+          required: true
+        - label: This request keeps audio, prompts, and models on the user's device.
+          required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What can you not do today, and why does it matter?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: Describe the behavior you want, including UI and API expectations.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Existing workarounds, other tools, or designs you rejected.
+    validations:
+      required: false
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Generation and models
+        - Editing
+        - Multitrack Studio
+        - Export
+        - Library and storage
+        - Web UI
+        - Desktop app
+        - Installer and packaging
+        - Documentation
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: licensing
+    attributes:
+      label: Licensing and model impact
+      description: Does this require a new dependency, model, or codec? Note any license constraints.
+    validations:
+      required: false
