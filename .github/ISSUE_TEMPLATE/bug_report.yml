@@ -1,0 +1,95 @@
+name: Bug report
+description: Report a reproducible defect in Klyraudio.
+title: "bug: "
+labels: ["bug", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve Klyraudio. Please do not include private
+        prompts, personal audio, access tokens, model weights, or user
+        databases. For a security vulnerability, use the **Security** tab
+        instead of a public issue.
+  - type: checkboxes
+    id: preflight
+    attributes:
+      label: Pre-flight checks
+      options:
+        - label: I searched existing issues and did not find a duplicate.
+          required: true
+        - label: This report is not a security vulnerability.
+          required: true
+        - label: I removed tokens, personal paths, and private audio from logs and attachments.
+          required: true
+  - type: input
+    id: version
+    attributes:
+      label: Klyraudio version
+      description: Release version or commit SHA.
+      placeholder: "0.1.0 or 8130ef2"
+    validations:
+      required: true
+  - type: dropdown
+    id: mode
+    attributes:
+      label: Mode
+      options:
+        - Web mode
+        - Desktop mode
+        - Development server
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: platform
+    attributes:
+      label: Platform
+      description: OS and version, plus CPU/GPU if relevant.
+      placeholder: Windows 11 24H2, NVIDIA RTX 4060
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: A minimal, deterministic sequence.
+      placeholder: |
+        1. Open ...
+        2. Set ...
+        3. Click ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: Include the exact error message or request id when available.
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: Relevant lines from `<data>/logs/` or the desktop startup page, with secrets removed.
+      render: text
+    validations:
+      required: false
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Optional integrations
+      multiple: true
+      options:
+        - FFmpeg is installed
+        - A CUDA GPU is available
+        - Apple Silicon (MPS) is available
+        - A neural model is installed
+        - None of the above
+    validations:
+      required: false

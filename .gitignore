@@ -21,6 +21,7 @@ apps/desktop/dist/
 apps/web/dist/
 services/api/build/
 services/api/dist/
+*.egg-info/
 *.spec
 
 # Local runtime data (audio, databases, models, caches)

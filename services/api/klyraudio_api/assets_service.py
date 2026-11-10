@@ -11,7 +11,7 @@ from typing import Dict, List, Optional
 import numpy as np
 
 from .audio import dsp, io
-from .config import Paths, ServiceContext, sanitize_filename
+from .config import ServiceContext, sanitize_filename
 from .errors import NotFound, ValidationFailed
 from .repositories import AssetRepository, now_iso
 from .schemas import AssetInfo, AssetUpdate, AudioOperationRequest, JoinRequest

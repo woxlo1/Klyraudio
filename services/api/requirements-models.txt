@@ -1,0 +1,16 @@
+# Optional neural inference runtime for Klyraudio.
+#
+# Klyraudio works without these packages using the built-in Sketch DSP engine.
+# Install them only if you want to run downloaded neural models (MusicGen or
+# Stable Audio Open) on this machine:
+#
+#   python -m pip install -r services/api/requirements-models.txt
+#
+# For NVIDIA GPUs install a CUDA-enabled PyTorch build first, following the
+# selector at https://pytorch.org/get-started/locally/. The plain `torch`
+# requirement below installs the default build for your platform.
+torch>=2.2,<3
+transformers>=4.44,<5
+diffusers>=0.31,<1
+accelerate>=1.0,<2
+safetensors>=0.4,<1

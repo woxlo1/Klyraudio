@@ -2,15 +2,16 @@
 
 from __future__ import annotations
 
-import io as stdlib_io
-import shutil
+import os
+import subprocess
+import sys
 import uuid
 from pathlib import Path
-from typing import Optional
+from typing import Annotated, Optional
 
 from fastapi import APIRouter, File, Form, Query, Request, UploadFile
-from fastapi.responses import JSONResponse, Response, StreamingResponse
-from starlette.background import BackgroundTask
+from fastapi.responses import Response, StreamingResponse
+from pydantic import ValidationError
 
 from .audio import io, waveform
 from .config import SUPPORTED_IMPORT_EXTENSIONS, allow_lan
@@ -30,11 +31,13 @@ from .schemas import (
     ExportResult,
     GenerationRequest,
     HealthResponse,
-    JoinRequest,
     JobCreateResponse,
     JobInfo,
+    JoinRequest,
     ModelInfo,
     ModelInstallRequest,
+    OpenFolderRequest,
+    OpenFolderResponse,
     ProjectCreate,
     ProjectInfo,
     ProjectSummary,
@@ -104,7 +107,15 @@ def build_router(services: Services) -> APIRouter:
         changes = update.model_dump(exclude_unset=True, exclude_none=True)
         if not changes:
             return RuntimeSettingsResponse(**services.config.settings.model_dump())
-        settings = services.config.update(**changes)
+        try:
+            settings = services.config.update(**changes)
+        except ValidationError as exc:
+            issue = exc.errors()[0] if exc.errors() else {}
+            location = ".".join(str(part) for part in issue.get("loc", ()))
+            raise ValidationFailed(
+                str(issue.get("msg", "The setting value is invalid.")),
+                {"field": location} if location else {},
+            ) from exc
         return RuntimeSettingsResponse(**settings.model_dump())
 
     @router.get("/storage")
@@ -119,6 +130,33 @@ def build_router(services: Services) -> APIRouter:
                     except OSError:
                         pass
         return {"data_dir": str(data_dir), "managed_bytes": total}
+
+    @router.post("/system/open-folder", response_model=OpenFolderResponse)
+    def open_folder(request: OpenFolderRequest) -> OpenFolderResponse:
+        paths = context.paths
+        targets = {
+            "data": paths.data_dir,
+            "exports": paths.exports,
+            "models": paths.models,
+        }
+        target = targets[request.kind]
+        target.mkdir(parents=True, exist_ok=True)
+        try:
+            if sys.platform.startswith("win"):
+                os.startfile(str(target))  # type: ignore[attr-defined]
+            elif sys.platform == "darwin":
+                subprocess.Popen(["open", str(target)])
+            else:
+                subprocess.Popen(["xdg-open", str(target)])
+        except (OSError, subprocess.SubprocessError) as exc:
+            raise ApiError(
+                "open_folder_failed",
+                "The folder could not be opened on this system.",
+                status_code=500,
+                details={"path": str(target), "error": str(exc)},
+                remediation="Open the folder path manually in your file manager.",
+            ) from exc
+        return OpenFolderResponse(opened=True, path=str(target))
 
     # ------------------------------------------------------------------ models
     @router.get("/models", response_model=list[ModelInfo])
@@ -221,8 +259,8 @@ def build_router(services: Services) -> APIRouter:
 
     @router.post("/assets/import", response_model=AssetInfo)
     async def import_asset(
-        file: UploadFile = File(...),
-        media_type: str = Form(default="other"),
+        file: Annotated[UploadFile, File()],
+        media_type: Annotated[str, Form()] = "other",
     ) -> AssetInfo:
         filename = file.filename or "import.wav"
         try:

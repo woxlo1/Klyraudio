@@ -88,6 +88,7 @@ def describe_model(
         availability_detail=detail,
         requires_license_acknowledgement=definition.requires_license_acknowledgement,
         license_acknowledged=acknowledged,
+        gated=definition.gated,
         installed_path=install_path,
     )
 

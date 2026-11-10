@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import gc
 import importlib.util
-import math
 import random
 from dataclasses import dataclass
 from typing import Callable, List, Optional
@@ -14,7 +13,7 @@ import numpy as np
 from ..audio import dsp, effects
 from ..errors import ApiError, DependencyMissing, OutOfMemory
 from ..schemas import EffectSpec, GenerationRequest
-from .procedural import SAMPLE_RATE, generate as generate_sketch
+from .procedural import generate as generate_sketch
 from .registry import ModelDefinition
 
 ProgressCallback = Callable[[Optional[float], str], None]

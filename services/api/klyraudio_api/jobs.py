@@ -7,14 +7,14 @@ import queue
 import threading
 import time
 import uuid
-from typing import Callable, Dict, List, Optional
+from typing import Dict, List, Optional
 
+from .assets_service import AssetService
 from .audio import io
-from .config import APP_NAME, ConfigStore, ServiceContext, sanitize_filename
+from .config import ConfigStore, ServiceContext, sanitize_filename
 from .errors import ApiError, NotFound, ValidationFailed
 from .hardware import detect_system, select_device
 from .models.adapters import (
-    Adapter,
     AudioResult,
     GenerationCancelled,
     build_adapter,
@@ -27,7 +27,6 @@ from .schemas import (
     HardwareWarning,
     JobInfo,
 )
-from .assets_service import AssetService
 
 logger = logging.getLogger("klyraudio.jobs")
 
@@ -48,7 +47,7 @@ class JobManager:
         self.installs = installs
         self.config = config
         self.assets = AssetService(context, assets)
-        self._queue: "queue.Queue[Optional[str]]" = queue.Queue()
+        self._queue: queue.Queue[Optional[str]] = queue.Queue()
         self._workers: List[threading.Thread] = []
         self._stopping = threading.Event()
         self._cancels: Dict[str, threading.Event] = {}
