@@ -120,6 +120,7 @@ class ModelInfo(BaseModel):
     availability_detail: Optional[str] = None
     requires_license_acknowledgement: bool
     license_acknowledged: bool
+    gated: bool = False
     installed_path: Optional[str] = None
 
 
@@ -403,3 +404,12 @@ class HealthResponse(BaseModel):
     database_version: int
     uptime_seconds: float
     local_only: bool
+
+
+class OpenFolderRequest(BaseModel):
+    kind: Literal["data", "exports", "models"]
+
+
+class OpenFolderResponse(BaseModel):
+    opened: bool
+    path: str

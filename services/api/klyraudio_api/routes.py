@@ -3,7 +3,10 @@
 from __future__ import annotations
 
 import io as stdlib_io
+import os
 import shutil
+import subprocess
+import sys
 import uuid
 from pathlib import Path
 from typing import Optional
@@ -35,6 +38,8 @@ from .schemas import (
     JobInfo,
     ModelInfo,
     ModelInstallRequest,
+    OpenFolderRequest,
+    OpenFolderResponse,
     ProjectCreate,
     ProjectInfo,
     ProjectSummary,
@@ -119,6 +124,33 @@ def build_router(services: Services) -> APIRouter:
                     except OSError:
                         pass
         return {"data_dir": str(data_dir), "managed_bytes": total}
+
+    @router.post("/system/open-folder", response_model=OpenFolderResponse)
+    def open_folder(request: OpenFolderRequest) -> OpenFolderResponse:
+        paths = context.paths
+        targets = {
+            "data": paths.data_dir,
+            "exports": paths.exports,
+            "models": paths.models,
+        }
+        target = targets[request.kind]
+        target.mkdir(parents=True, exist_ok=True)
+        try:
+            if sys.platform.startswith("win"):
+                os.startfile(str(target))  # type: ignore[attr-defined]
+            elif sys.platform == "darwin":
+                subprocess.Popen(["open", str(target)])
+            else:
+                subprocess.Popen(["xdg-open", str(target)])
+        except (OSError, subprocess.SubprocessError) as exc:
+            raise ApiError(
+                "open_folder_failed",
+                "The folder could not be opened on this system.",
+                status_code=500,
+                details={"path": str(target), "error": str(exc)},
+                remediation="Open the folder path manually in your file manager.",
+            ) from exc
+        return OpenFolderResponse(opened=True, path=str(target))
 
     # ------------------------------------------------------------------ models
     @router.get("/models", response_model=list[ModelInfo])
