@@ -8,7 +8,7 @@ human review, and it must never be able to merge its own changes.
 
 | Workflow | Trigger | Purpose |
 | --- | --- | --- |
-| `ci.yml` | Pull requests, pushes to `main`, manual | Typecheck, lint, formatting, tests, and production build for the web UI; syntax checks and tests for the Electron shell; ruff and pytest for the API across supported Python versions; ruff and pytest for repository automation scripts. |
+| `ci.yml` | Pull requests, pushes to `main`, manual | Typecheck, lint, formatting, tests, and production build for the web UI; syntax checks and tests for the Electron shell; ruff and pytest for the API across supported Python versions; ruff and pytest for repository automation scripts; Markdown link checks for documentation. |
 | `codeql.yml` | Pull requests, pushes to `main`, weekly, manual | CodeQL analysis for JavaScript/TypeScript and Python. |
 | `dependency-review.yml` | Pull requests | Blocks high-severity dependency changes. The job probes the dependency-graph API first and publishes a notice instead of failing when the graph is unavailable. |
 | `ai-review.yml` | Pull request activity | Posts or refreshes an advisory AI review comment. |
@@ -93,6 +93,22 @@ review-comment expectations are documented in
 
 The title, path, size, and translation logic is covered by
 `.github/scripts/test_pr_quality.py` in the `Automation scripts` CI job.
+
+## Documentation links
+
+`ci.yml` runs `.github/scripts/check_links.py` in the `Docs links` job. The
+checker is offline and uses only the Python standard library.
+
+- Relative links, images, and HTML `href`/`src` values must resolve to a file
+  inside the repository.
+- Heading anchors must match a heading or an explicit HTML `id`/`name` anchor in
+  the target Markdown file.
+- External URLs are not fetched, so their availability is not checked.
+- Fenced code blocks, inline code, `node_modules`, `dist`, `coverage`, and
+  virtual environments are ignored.
+
+The link and anchor logic is covered by
+`.github/scripts/test_check_links.py` in the `Automation scripts` CI job.
 
 ### Review workflow
 
