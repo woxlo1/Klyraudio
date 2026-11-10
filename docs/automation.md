@@ -101,8 +101,9 @@ checker is offline and uses only the Python standard library.
 
 - Relative links, images, and HTML `href`/`src` values must resolve to a file
   inside the repository.
-- Heading anchors must match a heading or an explicit HTML `id`/`name` anchor in
-  the target Markdown file.
+- Heading anchors must match an ATX heading (`# Heading`) or an explicit HTML
+  `id`/`name` anchor in the target Markdown file. Setext headings are not
+  recognized.
 - External URLs are not fetched, so their availability is not checked.
 - Fenced code blocks, inline code, `node_modules`, `dist`, `coverage`, and
   virtual environments are ignored.
