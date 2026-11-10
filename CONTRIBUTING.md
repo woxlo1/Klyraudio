@@ -85,6 +85,23 @@ Co-authored-by: Name <email@example.com>
   The address belongs to the public OpenCode assistant account. The trailer
   discloses tool assistance; it is not a claim that a human wrote the commit.
 
+### Pull request comments
+
+Write the description for reviewers, then use comments for the parts that change
+while the branch is under review.
+
+- Post a short comment when the pull request is ready for review: decisions,
+  trade-offs, and the checks you ran. Keep the description as the stable
+  summary.
+- Reply in the existing review thread instead of starting a parallel discussion.
+- Comment when you push a fix so reviewers know what changed and which check to
+  re-run.
+- Leave a final comment when the work is complete: follow-ups, known
+  limitations, and anything a future contributor needs.
+- Keep comments in English. Do not paste secrets, private prompts, tokens, user
+  data, or long generated logs.
+- Do not claim a check passed when it did not run.
+
 ## Development checks
 
 Frontend and desktop:
