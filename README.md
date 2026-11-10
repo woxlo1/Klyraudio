@@ -211,6 +211,7 @@ python -m ruff check services/api
 - [Installation](docs/installation.md)
 - [Hardware requirements](docs/hardware.md)
 - [Troubleshooting](docs/troubleshooting.md)
+- [Automation and AI-assisted review](docs/automation.md)
 - [Contributing](CONTRIBUTING.md)
 - [Security policy](SECURITY.md)
 
