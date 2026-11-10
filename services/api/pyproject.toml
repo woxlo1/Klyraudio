@@ -7,7 +7,7 @@ name = "klyraudio-api"
 version = "0.1.0"
 description = "Local API and audio engine for Klyraudio"
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 license = { text = "GPL-3.0-only" }
 dependencies = [
   "fastapi==0.115.6",
@@ -38,7 +38,7 @@ addopts = "-q"
 
 [tool.ruff]
 line-length = 100
-target-version = "py39"
+target-version = "py310"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B"]

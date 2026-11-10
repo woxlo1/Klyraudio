@@ -4,7 +4,7 @@
 
 - Windows 10 or 11, 64-bit
 - Node.js 20+ and npm 10+
-- Python 3.9+ (3.11 or 3.12 recommended)
+- Python 3.10+ (3.11 or 3.12 recommended)
 - Git (for source installs)
 - Optional: FFmpeg for MP3/Ogg/Opus/AAC/M4A and compressed imports
 
