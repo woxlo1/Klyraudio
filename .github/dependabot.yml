@@ -12,6 +12,7 @@ updates:
     versioning-strategy: increase
     groups:
       react:
+        update-types: ["minor", "patch"]
         patterns:
           - react
           - react-dom
@@ -19,6 +20,7 @@ updates:
           - "@types/react"
           - "@types/react-dom"
       frontend-tooling:
+        update-types: ["minor", "patch"]
         patterns:
           - vite
           - vitest
@@ -33,6 +35,7 @@ updates:
           - jsdom
           - "@testing-library/*"
       electron:
+        update-types: ["minor", "patch"]
         patterns:
           - electron
           - electron-builder
@@ -47,6 +50,7 @@ updates:
     open-pull-requests-limit: 5
     groups:
       python-runtime:
+        update-types: ["minor", "patch"]
         patterns:
           - fastapi
           - uvicorn
@@ -56,6 +60,7 @@ updates:
           - httpx
           - python-multipart
       python-dev:
+        update-types: ["minor", "patch"]
         patterns:
           - pytest
           - pytest-cov
@@ -76,5 +81,6 @@ updates:
     open-pull-requests-limit: 5
     groups:
       actions:
+        update-types: ["minor", "patch"]
         patterns:
           - "*"
