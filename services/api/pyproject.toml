@@ -10,13 +10,13 @@ readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "GPL-3.0-only" }
 dependencies = [
-  "fastapi==0.115.6",
-  "uvicorn==0.34.0",
-  "pydantic==2.10.4",
-  "numpy==1.26.4",
-  "soundfile==0.12.1",
+  "fastapi==0.162.0",
+  "uvicorn==0.54.0",
+  "pydantic==2.14.3",
+  "numpy==2.2.6",
+  "soundfile==0.14.0",
   "httpx==0.28.1",
-  "python-multipart==0.0.20",
+  "python-multipart==0.0.32",
 ]
 
 [project.optional-dependencies]
