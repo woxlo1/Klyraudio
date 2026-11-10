@@ -74,6 +74,9 @@ npm run test --workspace @klyraudio/desktop
 The UI test runner uses Vitest and jsdom. The desktop tests use Node's built-in
 test runner and do not launch a window.
 
+Commit granularity, co-author trailers, and pull request comment conventions
+live in [CONTRIBUTING.md](../CONTRIBUTING.md).
+
 ## Repository layout
 
 ```text
