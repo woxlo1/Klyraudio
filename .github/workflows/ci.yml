@@ -41,8 +41,12 @@ jobs:
         run: npm run build
 
   desktop:
-    name: Desktop shell
-    runs-on: ubuntu-latest
+    name: Desktop shell (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
     steps:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
@@ -61,11 +65,12 @@ jobs:
         run: npm run test --workspace @klyraudio/desktop
 
   api:
-    name: API (Python ${{ matrix.python-version }})
-    runs-on: ubuntu-latest
+    name: API (Python ${{ matrix.python-version }}, ${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
         python-version: ["3.10", "3.11", "3.12"]
     steps:
       - name: Check out repository
