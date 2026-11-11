@@ -78,7 +78,12 @@ python -m pytest .github/scripts -q
 python .github/scripts/check_links.py
 ```
 
-The UI test runner uses Vitest and jsdom. The desktop tests use Node's built-in
+The UI test runner uses Vitest and jsdom. The suite covers the English/Japanese
+translation parity, formatting and error helpers, the shared controls in
+`src/components/ui.tsx`, job status badges, dialog behavior including focus and
+keyboard handling, and toast notifications. Component tests render through
+React Testing Library and clean up after every test through
+`apps/web/src/test/setup.ts`. The desktop tests use Node's built-in
 test runner and do not launch a window.
 
 Commit granularity, co-author trailers, and pull request comment conventions
