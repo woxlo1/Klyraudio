@@ -38,6 +38,9 @@ First end-to-end development release.
   with context isolation, sandboxing, denied permissions, and navigation
   restrictions.
 - Desktop development launcher and backend unit tests.
+- Continuous integration on Linux, Windows, and macOS: the API and desktop
+  shell suites run on all three platforms, and each platform's unpacked
+  desktop package is built and layout-checked.
 - GPL-3.0-only license, third-party notices, README files, setup guides, and
   architecture documentation.
 

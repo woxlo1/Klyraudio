@@ -8,7 +8,7 @@ human review, and it must never be able to merge its own changes.
 
 | Workflow | Trigger | Purpose |
 | --- | --- | --- |
-| `ci.yml` | Pull requests, pushes to `main`, manual | Typecheck, lint, formatting, tests, and production build for the web UI; syntax checks and tests for the Electron shell; ruff and pytest for the API across supported Python versions; ruff and pytest for repository automation scripts; Markdown link checks for documentation. |
+| `ci.yml` | Pull requests, pushes to `main`, manual | Typecheck, lint, formatting, tests, and production build for the web UI; syntax checks, tests, and an unpacked package build with a layout smoke check for the Electron shell on Linux, Windows, and macOS; ruff and pytest for the API across supported Python versions on all three platforms; ruff and pytest for repository automation scripts; Markdown link checks for documentation. |
 | `codeql.yml` | Pull requests, pushes to `main`, weekly, manual | CodeQL analysis for JavaScript/TypeScript and Python. |
 | `dependency-review.yml` | Pull requests | Blocks high-severity dependency changes. The job probes the dependency-graph API first and publishes a notice instead of failing when the graph is unavailable. |
 | `ai-review.yml` | Pull request activity | Posts or refreshes an advisory AI review comment. |
@@ -16,6 +16,30 @@ human review, and it must never be able to merge its own changes.
 
 All third-party actions are pinned to full commit SHAs and updated through
 Dependabot. Workflows request the least privilege they need.
+
+### Cross-platform checks
+
+The Electron shell tests, the API suite, and the desktop package build run on
+`ubuntu-latest`, `windows-latest`, and `macos-latest`. The API matrix crosses
+every platform with each supported Python version (3.10, 3.11, and 3.12), so
+all nine combinations run on every pull request. The `Package` job installs
+dependencies and builds the web UI on every platform as part of packaging, so
+the production web build is exercised on all three platforms even though the
+dedicated web job runs on Linux only. The automation script and documentation
+jobs also stay on Linux because they exercise repository tooling, not shipped
+code.
+
+### Packaging smoke test
+
+The `Package` job builds the web UI, runs `electron-builder --dir` for the
+desktop app, and then verifies the result with
+`apps/desktop/scripts/verify-package.cjs` (also available as
+`npm run verify-package --workspace @klyraudio/desktop`). The check asserts
+that the unpacked app contains the platform executable, the application
+archive, the built web UI, and the Python service package. It catches
+packaging regressions before merge. It does not build installers, sign or
+notarize anything, or launch the packaged app; installer builds and signing
+are manual and described in [desktop-mode.md](desktop-mode.md).
 
 ## Dependabot
 
