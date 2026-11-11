@@ -52,6 +52,7 @@
       ]
     },
     "linux": {
+      "executableName": "klyraudio",
       "category": "AudioVideo",
       "target": [
         "AppImage"

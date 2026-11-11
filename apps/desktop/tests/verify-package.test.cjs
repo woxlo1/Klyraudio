@@ -13,6 +13,7 @@ const {
 } = require("../scripts/verify-package.cjs");
 
 const productName = "Klyraudio";
+const linuxExecutableName = require("../package.json").build.linux.executableName;
 
 function temporaryDirectory() {
   return fs.mkdtempSync(path.join(os.tmpdir(), "klyraudio-package-"));
@@ -21,7 +22,7 @@ function temporaryDirectory() {
 function writeLayout(root, platform, { omit = [] } = {}) {
   const executablePaths = {
     win32: [path.join(root, "win-unpacked", `${productName}.exe`)],
-    linux: [path.join(root, "linux-unpacked", productName.toLowerCase())],
+    linux: [path.join(root, "linux-unpacked", linuxExecutableName)],
     darwin: [
       path.join(root, "mac-arm64", `${productName}.app`, "Contents", "MacOS", productName),
     ],
@@ -55,7 +56,7 @@ test("verifyPackageLayout accepts a Windows unpacked build", () => {
   assert.equal(layout.resourcesDir, path.join(releaseDir, "win-unpacked", "resources"));
 });
 
-test("verifyPackageLayout accepts a Linux unpacked build with a lowercase binary", () => {
+test("verifyPackageLayout accepts a Linux unpacked build with the configured binary name", () => {
   const root = temporaryDirectory();
   const releaseDir = path.join(root, "release");
   fs.mkdirSync(releaseDir);
