@@ -258,6 +258,7 @@ export function ProgressBar({
   tone?: "accent" | "success" | "danger";
 }) {
   const indeterminate = value === null;
+  const clamped = Math.max(0, Math.min(1, value ?? 0));
   return (
     <div className="progress-wrap">
       {label ? <div className="progress-label">{label}</div> : null}
@@ -266,13 +267,11 @@ export function ProgressBar({
         role="progressbar"
         aria-valuemin={0}
         aria-valuemax={100}
-        aria-valuenow={indeterminate ? undefined : Math.round((value ?? 0) * 100)}
+        aria-valuenow={indeterminate ? undefined : Math.round(clamped * 100)}
       >
         <span
           className="progress__bar"
-          style={
-            indeterminate ? undefined : { width: `${Math.max(0, Math.min(1, value ?? 0)) * 100}%` }
-          }
+          style={indeterminate ? undefined : { width: `${clamped * 100}%` }}
         />
       </div>
     </div>
