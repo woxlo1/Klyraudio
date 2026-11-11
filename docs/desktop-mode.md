@@ -38,7 +38,10 @@ npm run build
 npm run build:desktop
 ```
 
-This produces an unpacked app under `apps/desktop/release/`. Installers:
+This produces an unpacked app under `apps/desktop/release/`. CI verifies the
+result on every platform with `npm run verify-package --workspace
+@klyraudio/desktop`, which checks that the executable, the application
+archive, the web UI build, and the service package are present. Installers:
 
 ```bash
 npm run dist --workspace @klyraudio/desktop
