@@ -35,8 +35,10 @@ const UNPACKED_DIRECTORY_PATTERNS = {
 /** The executable inside each platform's unpacked app root. */
 const EXECUTABLE_PATHS = {
   win32: [`${productName}.exe`],
-  // electron-builder lowercases the sanitized product name on Linux.
-  linux: [productName.toLowerCase()],
+  // electron-builder derives the Linux binary name from the npm package name
+  // ("@klyraudio/desktop" becomes "@klyraudiodesktop") unless executableName
+  // is configured, so the build config declares the product-based name.
+  linux: [desktopPackage.build.linux.executableName],
   darwin: ["Contents", "MacOS", productName],
 };
 
