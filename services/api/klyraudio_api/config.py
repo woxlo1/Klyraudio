@@ -6,7 +6,6 @@ import json
 import os
 import platform
 import re
-import sys
 import threading
 from pathlib import Path
 from typing import Any, Dict, List, Optional
@@ -280,10 +279,6 @@ class ServiceContext:
         from shutil import which
 
         return which("ffprobe")
-
-    @property
-    def python_ok(self) -> bool:
-        return sys.version_info >= (3, 9)
 
     def describe(self) -> Dict[str, Any]:
         return {
