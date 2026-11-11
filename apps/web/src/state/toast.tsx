@@ -4,6 +4,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
   type ReactNode,
 } from "react";
@@ -73,12 +74,17 @@ export function ToastProvider({ children }: { children: ReactNode }) {
 
 function ToastCard({ item, onDismiss }: { item: ToastItem; onDismiss: () => void }) {
   const Icon = TONE_ICON[item.tone];
+  // The provider re-renders whenever notifications change; keep the timer
+  // independent of those renders so unrelated toasts do not reset it.
+  const dismissRef = useRef(onDismiss);
+  useEffect(() => {
+    dismissRef.current = onDismiss;
+  });
   useEffect(() => {
     const duration = item.durationMs ?? (item.tone === "error" ? 9000 : 5000);
-    const timer = window.setTimeout(onDismiss, duration);
+    const timer = window.setTimeout(() => dismissRef.current(), duration);
     return () => window.clearTimeout(timer);
-  }, [item.durationMs, item.tone, onDismiss]);
-
+  }, [item.durationMs, item.tone]);
   return (
     <div className={`toast toast--${item.tone}`} role="status">
       <Icon size={18} aria-hidden="true" className="toast__icon" />
