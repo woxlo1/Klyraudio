@@ -93,7 +93,12 @@ export function GeneratePage() {
           setModelsError(null);
         }
       } catch (caught) {
-        if (!cancelled) setModelsError(caught);
+        if (!cancelled) {
+          setModelsError(caught);
+          // Render the form instead of an endless loading row so the user can
+          // still read the error and open the Model Manager.
+          setModels([]);
+        }
       }
     };
     const loadJobs = async () => {
