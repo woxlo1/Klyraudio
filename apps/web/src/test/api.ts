@@ -2,6 +2,7 @@ import { vi } from "vitest";
 import { api } from "../api/client";
 import {
   makeAsset,
+  makeDownloadInfo,
   makeExportCapabilities,
   makeHealth,
   makeJob,
@@ -26,7 +27,14 @@ export function mockApi() {
     getSettings: vi.spyOn(api, "getSettings").mockResolvedValue(makeSettings()),
     updateSettings: vi.spyOn(api, "updateSettings").mockResolvedValue(makeSettings()),
     models: vi.spyOn(api, "models").mockResolvedValue([makeModel()]),
+    installModel: vi
+      .spyOn(api, "installModel")
+      .mockResolvedValue(makeDownloadInfo({ status: "queued", progress: 0, current_file: null })),
     downloads: vi.spyOn(api, "downloads").mockResolvedValue([]),
+    cancelDownload: vi
+      .spyOn(api, "cancelDownload")
+      .mockResolvedValue(makeDownloadInfo({ status: "cancelled" })),
+    removeModel: vi.spyOn(api, "removeModel").mockResolvedValue({ removed: true }),
     jobs: vi.spyOn(api, "jobs").mockResolvedValue([]),
     job: vi.spyOn(api, "job").mockResolvedValue(makeJob()),
     generate: vi.spyOn(api, "generate").mockResolvedValue({ jobs: [makeJob()], warnings: [] }),
@@ -36,6 +44,18 @@ export function mockApi() {
     assets: vi.spyOn(api, "assets").mockResolvedValue({ items: [], total: 0 }),
     asset: vi.spyOn(api, "asset").mockResolvedValue(makeAsset()),
     assetTags: vi.spyOn(api, "assetTags").mockResolvedValue([]),
+    updateAsset: vi
+      .spyOn(api, "updateAsset")
+      .mockImplementation(async (_assetId, update) => makeAsset(update)),
+    deleteAsset: vi.spyOn(api, "deleteAsset").mockResolvedValue({ deleted: true }),
+    importAsset: vi
+      .spyOn(api, "importAsset")
+      .mockResolvedValue(makeAsset({ name: "Imported take.wav", origin: "imported" })),
+    joinAssets: vi.spyOn(api, "joinAssets").mockResolvedValue({
+      assets: [makeAsset({ name: "Joined take.wav" })],
+      description: "Joined 2 assets.",
+    }),
+    audioUrl: vi.spyOn(api, "audioUrl").mockReturnValue("/api/assets/asset-1/audio"),
     openFolder: vi.spyOn(api, "openFolder").mockResolvedValue({ opened: true, path: "" }),
     projects: vi.spyOn(api, "projects").mockResolvedValue([]),
     createProject: vi.spyOn(api, "createProject").mockResolvedValue(makeProjectInfo()),
