@@ -221,7 +221,7 @@ export function OnboardingPage() {
               <HardDrive size={18} aria-hidden="true" />
               <div>
                 <strong>{t("app.localFirst")}</strong>
-                <p>{t("onboarding.welcomeBody")}</p>
+                <p>{t("onboarding.localFirstBody")}</p>
               </div>
             </div>
             <div className="onboarding-option">
