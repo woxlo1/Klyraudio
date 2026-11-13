@@ -658,8 +658,8 @@ export const en = {
     queuedAt: "Queued {time}",
     startedAt: "Started {time}",
     finishedAt: "Finished {time}",
-    durationRequested: "Requested length: {duration}",
-    variationsCount: "Variations: {count}",
+    durationRequested: "Requested length",
+    variationsCount: "Variations",
     seed: "Seed",
     model: "Model",
     task: "Task",
@@ -822,6 +822,8 @@ export const en = {
     welcomeTitle: "Welcome to your local audio studio",
     welcomeBody:
       "Klyraudio generates and edits audio on your computer. No account is required, and nothing is uploaded.",
+    localFirstBody:
+      "Everything runs on this device, so your audio stays private and works offline.",
     systemTitle: "Check your system",
     systemBody:
       "Klyraudio detected the hardware below. The built-in engine runs on any supported CPU; neural models have additional requirements.",

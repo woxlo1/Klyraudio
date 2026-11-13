@@ -657,8 +657,8 @@ export const ja: Widen<typeof en> = {
     queuedAt: "{time} に待機開始",
     startedAt: "{time} に開始",
     finishedAt: "{time} に終了",
-    durationRequested: "要求した長さ: {duration}",
-    variationsCount: "バリエーション: {count}",
+    durationRequested: "要求した長さ",
+    variationsCount: "バリエーション",
     seed: "シード",
     model: "モデル",
     task: "タスク",
@@ -819,6 +819,8 @@ export const ja: Widen<typeof en> = {
     welcomeTitle: "ローカルオーディオスタジオへようこそ",
     welcomeBody:
       "Klyraudio はこのコンピューター上で音声を生成・編集します。アカウントは不要で、何もアップロードされません。",
+    localFirstBody:
+      "すべてこのデバイス上で動作するため、音声は非公開のままオフラインでも利用できます。",
     systemTitle: "システムを確認",
     systemBody:
       "Klyraudio が以下のハードウェアを検出しました。内蔵エンジンは対応する任意の CPU で動作します。ニューラルモデルには追加要件があります。",
