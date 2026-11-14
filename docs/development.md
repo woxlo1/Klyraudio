@@ -100,6 +100,30 @@ services/api/
 docs/              User and contributor documentation
 ```
 
+## Release flow
+
+Releases are tagged from `main` after the changelog entry for that version is
+merged and CI is green.
+
+1. Confirm that `package.json`, `apps/web/package.json`,
+   `apps/desktop/package.json`, and `services/api/pyproject.toml` all carry the
+   version being released.
+2. Update `docs/changelog.md` with the release date, notable changes, and known
+   limitations.
+3. Merge that change to `main` and wait for every required check to pass.
+4. Create an annotated tag on `main` and push it:
+
+   ```bash
+   git tag -a vX.Y.Z -m "Klyraudio vX.Y.Z"
+   git push origin vX.Y.Z
+   ```
+
+5. Publish a GitHub Release from the tag, using the changelog entry as the body.
+
+No signed installers are attached to a release. Desktop builds are unsigned and
+require a user-provided Python environment with the API requirements, so the
+release notes must say so rather than implying a self-contained installer.
+
 ## Configuration
 
 The service reads environment variables at startup:
