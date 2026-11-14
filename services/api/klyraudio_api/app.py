@@ -6,9 +6,9 @@ import logging
 import os
 import time
 import uuid
+from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from pathlib import Path
-from typing import AsyncIterator, Optional
 
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
@@ -26,7 +26,7 @@ from .services import build_services
 logger = logging.getLogger("klyraudio.api")
 
 
-def _web_directory() -> Optional[Path]:
+def _web_directory() -> Path | None:
     override = os.environ.get("KLYRAUDIO_WEB_DIR")
     candidates = []
     if override:
@@ -39,7 +39,7 @@ def _web_directory() -> Optional[Path]:
 
 
 def create_app(
-    data_dir: Optional[Path] = None,
+    data_dir: Path | None = None,
     *,
     workers: bool = True,
 ) -> FastAPI:

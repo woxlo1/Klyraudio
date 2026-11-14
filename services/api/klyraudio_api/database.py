@@ -3,11 +3,11 @@
 from __future__ import annotations
 
 import sqlite3
+from collections.abc import Iterator
 from contextlib import contextmanager
 from pathlib import Path
-from typing import Iterator, List
 
-MIGRATIONS: List[str] = [
+MIGRATIONS: list[str] = [
     # 1: initial schema
     """
     CREATE TABLE assets (

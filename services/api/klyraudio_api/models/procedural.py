@@ -12,7 +12,7 @@ from __future__ import annotations
 
 import hashlib
 import math
-from typing import Callable, List, Optional
+from collections.abc import Callable
 
 import numpy as np
 
@@ -262,7 +262,7 @@ def _music(request: GenerationRequest, rng: np.random.Generator) -> np.ndarray:
     mix *= 0.8
     if request.params.loop:
         mix = dsp.make_loop(mix, 1.5, SAMPLE_RATE)
-    chain: List[EffectSpec] = []
+    chain: list[EffectSpec] = []
     if not calm:
         chain.append(EffectSpec(type="compressor", params=effects.DEFAULT_EFFECTS["compressor"]))
     chain.append(EffectSpec(type="reverb", params={**effects.DEFAULT_EFFECTS["reverb"], "mix": 0.18}))
@@ -491,7 +491,7 @@ def _ambient(request: GenerationRequest, rng: np.random.Generator) -> np.ndarray
 def generate(
     request: GenerationRequest,
     variation: int = 0,
-    progress: Optional[ProgressCallback] = None,
+    progress: ProgressCallback | None = None,
 ) -> tuple[np.ndarray, int]:
     seed = _seed_from_request(request, variation)
     rng = np.random.default_rng(seed)

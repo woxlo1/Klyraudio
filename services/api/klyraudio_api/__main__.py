@@ -9,7 +9,6 @@ import threading
 import time
 import webbrowser
 from pathlib import Path
-from typing import Optional
 
 from .config import APP_VERSION, allow_lan, is_loopback_host
 
@@ -39,7 +38,7 @@ def _open_later(url: str) -> None:
     threading.Thread(target=open_it, daemon=True).start()
 
 
-def main(argv: Optional[list[str]] = None) -> int:
+def main(argv: list[str] | None = None) -> int:
     args = _parser().parse_args(argv)
     if not is_loopback_host(args.host) and not allow_lan():
         print(

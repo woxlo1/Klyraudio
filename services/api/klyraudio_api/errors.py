@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, Optional
+from typing import Any
 
 
 class ApiError(Exception):
@@ -14,8 +14,8 @@ class ApiError(Exception):
         message: str,
         *,
         status_code: int = 400,
-        details: Optional[Dict[str, Any]] = None,
-        remediation: Optional[str] = None,
+        details: dict[str, Any] | None = None,
+        remediation: str | None = None,
     ) -> None:
         super().__init__(message)
         self.code = code
@@ -24,7 +24,7 @@ class ApiError(Exception):
         self.details = details or {}
         self.remediation = remediation
 
-    def to_payload(self, request_id: str) -> Dict[str, Any]:
+    def to_payload(self, request_id: str) -> dict[str, Any]:
         return {
             "error": {
                 "code": self.code,
@@ -47,7 +47,7 @@ class NotFound(ApiError):
 
 
 class ValidationFailed(ApiError):
-    def __init__(self, message: str, details: Optional[Dict[str, Any]] = None) -> None:
+    def __init__(self, message: str, details: dict[str, Any] | None = None) -> None:
         super().__init__("validation_failed", message, status_code=422, details=details)
 
 

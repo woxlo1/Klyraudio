@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, List, Literal, Optional
+from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
@@ -15,8 +15,8 @@ MediaType = Literal["music", "sfx", "ambient", "voice", "other"]
 class ErrorBody(BaseModel):
     code: str
     message: str
-    details: Dict[str, Any] = Field(default_factory=dict)
-    remediation: Optional[str] = None
+    details: dict[str, Any] = Field(default_factory=dict)
+    remediation: str | None = None
     request_id: str
 
 
@@ -28,9 +28,9 @@ class GpuInfo(BaseModel):
     index: int
     name: str
     backend: str
-    total_vram_mb: Optional[int] = None
-    free_vram_mb: Optional[int] = None
-    driver: Optional[str] = None
+    total_vram_mb: int | None = None
+    free_vram_mb: int | None = None
+    driver: str | None = None
 
 
 class SystemInfo(BaseModel):
@@ -40,18 +40,18 @@ class SystemInfo(BaseModel):
     architecture: str
     cpu_model: str
     cpu_count: int
-    ram_total_mb: Optional[int]
-    ram_available_mb: Optional[int]
-    gpus: List[GpuInfo]
-    available_backends: List[str]
+    ram_total_mb: int | None
+    ram_available_mb: int | None
+    gpus: list[GpuInfo]
+    available_backends: list[str]
     recommended_backend: str
     data_dir: str
     ffmpeg_available: bool
-    ffmpeg_version: Optional[str]
+    ffmpeg_version: str | None
     ffprobe_available: bool
     python_version: str
-    storage_free_gb: Optional[float]
-    warnings: List[str]
+    storage_free_gb: float | None
+    warnings: list[str]
 
 
 class RuntimeSettingsResponse(BaseModel):
@@ -62,11 +62,11 @@ class RuntimeSettingsResponse(BaseModel):
     max_concurrent_jobs: int
     gpu_preference: str
     onboarding_complete: bool
-    default_project_dir: Optional[str]
+    default_project_dir: str | None
     reduce_motion: bool
     telemetry: bool
-    last_seen_version: Optional[str]
-    model_license_acknowledgements: Dict[str, str]
+    last_seen_version: str | None
+    model_license_acknowledgements: dict[str, str]
 
 
 class RuntimeSettingsUpdate(BaseModel):
@@ -75,21 +75,21 @@ class RuntimeSettingsUpdate(BaseModel):
     # other field the service does not support.
     model_config = ConfigDict(extra="forbid")
 
-    language: Optional[str] = None
-    theme: Optional[str] = None
-    default_export_format: Optional[str] = None
-    default_sample_rate: Optional[int] = None
-    max_concurrent_jobs: Optional[int] = None
-    gpu_preference: Optional[str] = None
-    onboarding_complete: Optional[bool] = None
-    default_project_dir: Optional[str] = None
-    reduce_motion: Optional[bool] = None
-    model_license_acknowledgements: Optional[Dict[str, str]] = None
+    language: str | None = None
+    theme: str | None = None
+    default_export_format: str | None = None
+    default_sample_rate: int | None = None
+    max_concurrent_jobs: int | None = None
+    gpu_preference: str | None = None
+    onboarding_complete: bool | None = None
+    default_project_dir: str | None = None
+    reduce_motion: bool | None = None
+    model_license_acknowledgements: dict[str, str] | None = None
 
 
 class ModelCapability(BaseModel):
     task: TaskType
-    supported_parameters: List[str]
+    supported_parameters: list[str]
     duration_min: float
     duration_max: float
     supports_negative_prompt: bool = False
@@ -104,34 +104,34 @@ class ModelInfo(BaseModel):
     name: str
     family: str
     description: str
-    tasks: List[TaskType]
-    capabilities: List[ModelCapability]
-    runtime: List[str]
-    operating_systems: List[str]
-    acceleration: List[str]
-    vram_estimate_mb: Optional[int]
-    ram_estimate_mb: Optional[int]
-    size_bytes: Optional[int]
+    tasks: list[TaskType]
+    capabilities: list[ModelCapability]
+    runtime: list[str]
+    operating_systems: list[str]
+    acceleration: list[str]
+    vram_estimate_mb: int | None
+    ram_estimate_mb: int | None
+    size_bytes: int | None
     source_url: str
     license_name: str
     license_url: str
     commercial_use: Literal["permitted", "prohibited", "unclear", "varies"]
     redistribution: Literal["permitted", "prohibited", "unclear", "varies"]
     bundling: Literal["builtin", "user-download"]
-    known_limitations: List[str]
+    known_limitations: list[str]
     builtin: bool
     installed: bool
     availability: Literal["ready", "installed-missing-deps", "not-installed", "unsupported"]
-    availability_detail: Optional[str] = None
+    availability_detail: str | None = None
     requires_license_acknowledgement: bool
     license_acknowledged: bool
     gated: bool = False
-    installed_path: Optional[str] = None
+    installed_path: str | None = None
 
 
 class ModelInstallRequest(BaseModel):
     accept_license: bool
-    version: Optional[str] = None
+    version: str | None = None
 
 
 class DownloadInfo(BaseModel):
@@ -139,25 +139,25 @@ class DownloadInfo(BaseModel):
     model_id: str
     status: Literal["queued", "running", "completed", "failed", "cancelled"]
     progress: float
-    total_bytes: Optional[int]
+    total_bytes: int | None
     downloaded_bytes: int
-    current_file: Optional[str]
-    error: Optional[str]
+    current_file: str | None
+    error: str | None
     created_at: str
-    finished_at: Optional[str]
+    finished_at: str | None
 
 
 class GenerationParams(BaseModel):
-    tempo: Optional[int] = Field(default=None, ge=20, le=300)
-    musical_key: Optional[str] = None
-    mood: Optional[str] = None
-    style: Optional[str] = None
-    instrumental: Optional[bool] = None
+    tempo: int | None = Field(default=None, ge=20, le=300)
+    musical_key: str | None = None
+    mood: str | None = None
+    style: str | None = None
+    instrumental: bool | None = None
     loop: bool = False
     quality: Literal["fast", "balanced", "high"] = "balanced"
-    guidance: Optional[float] = Field(default=None, ge=0.0, le=20.0)
-    steps: Optional[int] = Field(default=None, ge=1, le=500)
-    extra: Dict[str, Any] = Field(default_factory=dict)
+    guidance: float | None = Field(default=None, ge=0.0, le=20.0)
+    steps: int | None = Field(default=None, ge=1, le=500)
+    extra: dict[str, Any] = Field(default_factory=dict)
 
 
 class GenerationRequest(BaseModel):
@@ -166,7 +166,7 @@ class GenerationRequest(BaseModel):
     prompt: str = Field(min_length=2, max_length=2000)
     negative_prompt: str = Field(default="", max_length=2000)
     duration: float = Field(default=8.0, ge=1.0, le=300.0)
-    seed: Optional[int] = Field(default=None, ge=0, le=4_294_967_295)
+    seed: int | None = Field(default=None, ge=0, le=4_294_967_295)
     variations: int = Field(default=1, ge=1, le=4)
     params: GenerationParams = Field(default_factory=GenerationParams)
 
@@ -185,19 +185,19 @@ class JobInfo(BaseModel):
     prompt: str
     negative_prompt: str
     status: JobStatus
-    progress: Optional[float]
-    progress_label: Optional[str]
+    progress: float | None
+    progress_label: str | None
     created_at: str
-    started_at: Optional[str]
-    finished_at: Optional[str]
-    error: Optional[Dict[str, Any]]
-    output_asset_ids: List[str]
-    seed: Optional[int]
+    started_at: str | None
+    finished_at: str | None
+    error: dict[str, Any] | None
+    output_asset_ids: list[str]
+    seed: int | None
     requested_variations: int
-    retry_of: Optional[str]
-    backend: Optional[str]
+    retry_of: str | None
+    backend: str | None
     duration_requested: float
-    params: Dict[str, Any]
+    params: dict[str, Any]
 
 
 class HardwareWarning(BaseModel):
@@ -206,8 +206,8 @@ class HardwareWarning(BaseModel):
 
 
 class JobCreateResponse(BaseModel):
-    jobs: List[JobInfo]
-    warnings: List[HardwareWarning]
+    jobs: list[JobInfo]
+    warnings: list[HardwareWarning]
 
 
 class AssetInfo(BaseModel):
@@ -222,24 +222,24 @@ class AssetInfo(BaseModel):
     size_bytes: int
     created_at: str
     updated_at: str
-    source_job_id: Optional[str]
-    parent_asset_id: Optional[str]
+    source_job_id: str | None
+    parent_asset_id: str | None
     favorite: bool
     notes: str
-    tags: List[str]
+    tags: list[str]
     file_url: str
 
 
 class AssetUpdate(BaseModel):
-    name: Optional[str] = Field(default=None, min_length=1, max_length=200)
-    favorite: Optional[bool] = None
-    notes: Optional[str] = Field(default=None, max_length=4000)
-    media_type: Optional[MediaType] = None
-    tags: Optional[List[str]] = None
+    name: str | None = Field(default=None, min_length=1, max_length=200)
+    favorite: bool | None = None
+    notes: str | None = Field(default=None, max_length=4000)
+    media_type: MediaType | None = None
+    tags: list[str] | None = None
 
 
 class AssetListResponse(BaseModel):
-    items: List[AssetInfo]
+    items: list[AssetInfo]
     total: int
 
 
@@ -247,7 +247,7 @@ class WaveformResponse(BaseModel):
     asset_id: str
     duration: float
     channels: int
-    peaks: List[List[float]]
+    peaks: list[list[float]]
     sample_rate: int
 
 
@@ -264,29 +264,29 @@ class AudioOperationRequest(BaseModel):
         "split",
         "duplicate",
     ]
-    start: Optional[float] = Field(default=None, ge=0)
-    end: Optional[float] = Field(default=None, ge=0)
-    amount: Optional[float] = None
-    duration: Optional[float] = Field(default=None, gt=0, le=60)
-    crossfade: Optional[float] = Field(default=None, ge=0, le=10)
-    name: Optional[str] = None
+    start: float | None = Field(default=None, ge=0)
+    end: float | None = Field(default=None, ge=0)
+    amount: float | None = None
+    duration: float | None = Field(default=None, gt=0, le=60)
+    crossfade: float | None = Field(default=None, ge=0, le=10)
+    name: str | None = None
 
 
 class AudioOperationResponse(BaseModel):
-    assets: List[AssetInfo]
+    assets: list[AssetInfo]
     description: str
 
 
 class JoinRequest(BaseModel):
-    asset_ids: List[str] = Field(min_length=1, max_length=50)
+    asset_ids: list[str] = Field(min_length=1, max_length=50)
     crossfade: float = Field(default=0.0, ge=0.0, le=10.0)
-    name: Optional[str] = None
+    name: str | None = None
 
 
 class EffectSpec(BaseModel):
     type: Literal["eq", "compressor", "limiter", "reverb", "delay"]
     enabled: bool = True
-    params: Dict[str, float] = Field(default_factory=dict)
+    params: dict[str, float] = Field(default_factory=dict)
 
 
 class ClipSpec(BaseModel):
@@ -307,12 +307,12 @@ class TrackSpec(BaseModel):
     pan: float = Field(default=0.0, ge=-1, le=1)
     mute: bool = False
     solo: bool = False
-    clips: List[ClipSpec] = Field(default_factory=list)
+    clips: list[ClipSpec] = Field(default_factory=list)
 
 
 class MasterSpec(BaseModel):
     volume: float = Field(default=1.0, ge=0, le=4)
-    effects: List[EffectSpec] = Field(default_factory=list)
+    effects: list[EffectSpec] = Field(default_factory=list)
     normalize: bool = False
 
 
@@ -321,8 +321,8 @@ class ProjectDocument(BaseModel):
     id: str
     name: str
     sample_rate: int = 44100
-    bpm: Optional[float] = None
-    tracks: List[TrackSpec] = Field(default_factory=list)
+    bpm: float | None = None
+    tracks: list[TrackSpec] = Field(default_factory=list)
     master: MasterSpec = Field(default_factory=MasterSpec)
     created_at: str
     updated_at: str
@@ -355,8 +355,8 @@ class ProjectInfo(ProjectSummary):
 
 class RenderRequest(BaseModel):
     format: str = "wav"
-    sample_rate: Optional[int] = None
-    bit_depth: Optional[int] = None
+    sample_rate: int | None = None
+    bit_depth: int | None = None
     normalize: bool = True
     master_effects: bool = True
 
@@ -365,31 +365,31 @@ class ExportFormatOption(BaseModel):
     id: str
     label: str
     container: str
-    codecs: List[str]
+    codecs: list[str]
     supports_bitrate: bool
     supports_bit_depth: bool
     supports_sample_rate: bool
     available: bool
-    reason: Optional[str] = None
+    reason: str | None = None
     extension: str
 
 
 class ExportCapabilities(BaseModel):
     ffmpeg_available: bool
-    ffmpeg_version: Optional[str]
-    formats: List[ExportFormatOption]
-    encoders: List[str]
+    ffmpeg_version: str | None
+    formats: list[ExportFormatOption]
+    encoders: list[str]
 
 
 class ExportRequest(BaseModel):
     asset_id: str
     format: str
-    bitrate_kbps: Optional[int] = Field(default=None, ge=32, le=512)
-    sample_rate: Optional[int] = None
-    bit_depth: Optional[int] = None
-    channels: Optional[int] = Field(default=None, ge=1, le=2)
-    filename: Optional[str] = None
-    normalize_peak_db: Optional[float] = Field(default=None, ge=-24, le=0)
+    bitrate_kbps: int | None = Field(default=None, ge=32, le=512)
+    sample_rate: int | None = None
+    bit_depth: int | None = None
+    channels: int | None = Field(default=None, ge=1, le=2)
+    filename: str | None = None
+    normalize_peak_db: float | None = Field(default=None, ge=-24, le=0)
     dither: bool = False
 
 
@@ -399,7 +399,7 @@ class ExportResult(BaseModel):
     path: str
     size_bytes: int
     verified: bool
-    duration: Optional[float]
+    duration: float | None
     message: str
 
 

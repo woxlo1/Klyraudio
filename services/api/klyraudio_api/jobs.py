@@ -2,12 +2,12 @@
 
 from __future__ import annotations
 
+import builtins
 import logging
 import queue
 import threading
 import time
 import uuid
-from typing import Dict, List, Optional
 
 from .assets_service import AssetService
 from .audio import io
@@ -47,10 +47,10 @@ class JobManager:
         self.installs = installs
         self.config = config
         self.assets = AssetService(context, assets)
-        self._queue: queue.Queue[Optional[str]] = queue.Queue()
-        self._workers: List[threading.Thread] = []
+        self._queue: queue.Queue[str | None] = queue.Queue()
+        self._workers: list[threading.Thread] = []
         self._stopping = threading.Event()
-        self._cancels: Dict[str, threading.Event] = {}
+        self._cancels: dict[str, threading.Event] = {}
         self._lock = threading.RLock()
         self._gpu_lock = threading.Lock()
         self._worker_count = max(1, min(4, config.settings.max_concurrent_jobs))
@@ -96,7 +96,7 @@ class JobManager:
             thread.join(timeout=max(0.1, deadline - time.time()))
 
     # ------------------------------------------------------------------ public API
-    def submit(self, request: GenerationRequest) -> tuple[List[JobInfo], List[HardwareWarning]]:
+    def submit(self, request: GenerationRequest) -> tuple[builtins.list[JobInfo], builtins.list[HardwareWarning]]:
         definition = get_model(request.model_id)
         if not definition:
             raise NotFound("Model", request.model_id)
@@ -173,7 +173,7 @@ class JobManager:
         )
         return [self.to_info(record)], warnings
 
-    def list(self, status: Optional[str] = None) -> List[JobInfo]:
+    def list(self, status: str | None = None) -> builtins.list[JobInfo]:
         return [self.to_info(job) for job in self.jobs.list(status=status)]
 
     def get(self, job_id: str) -> JobInfo:
@@ -291,7 +291,7 @@ class JobManager:
             "Generation started",
             extra={"job_id": job_id, "model_id": job["model_id"], "event": "job_started"},
         )
-        written: List[str] = []
+        written: list[str] = []
         try:
             install = self.installs.get(definition.id)
             adapter = build_adapter(
@@ -317,7 +317,7 @@ class JobManager:
             )
             last_update = {"time": 0.0}
 
-            def progress(value: Optional[float], label: str) -> None:
+            def progress(value: float | None, label: str) -> None:
                 now = time.monotonic()
                 if now - last_update["time"] < 0.25 and value is not None:
                     return
@@ -412,11 +412,11 @@ class JobManager:
 
     def _save_results(
         self,
-        job: Dict[str, object],
+        job: dict[str, object],
         request: GenerationRequest,
-        results: List[AudioResult],
-    ) -> List[str]:
-        output_ids: List[str] = []
+        results: builtins.list[AudioResult],
+    ) -> builtins.list[str]:
+        output_ids: list[str] = []
         base = sanitize_filename(str(job["prompt"]).strip().splitlines()[0][:60], "Klyraudio audio")
         for index, result in enumerate(results):
             target = (
@@ -441,7 +441,7 @@ class JobManager:
             output_ids.append(str(asset["id"]))
         return output_ids
 
-    def to_info(self, job: Dict[str, object]) -> JobInfo:
+    def to_info(self, job: dict[str, object]) -> JobInfo:
         return JobInfo(
             id=str(job["id"]),
             model_id=str(job["model_id"]),
@@ -464,8 +464,8 @@ class JobManager:
             params=dict(job.get("params") or {}),  # type: ignore[arg-type]
         )
 
-    def _hardware_warnings(self, definition: ModelDefinition) -> List[HardwareWarning]:
-        warnings: List[HardwareWarning] = []
+    def _hardware_warnings(self, definition: ModelDefinition) -> builtins.list[HardwareWarning]:
+        warnings: list[HardwareWarning] = []
         try:
             system = detect_system(
                 self.context.paths.data_dir,

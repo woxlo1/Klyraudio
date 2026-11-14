@@ -8,7 +8,7 @@ import platform
 import re
 import threading
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from pydantic import BaseModel, Field, field_validator
 
@@ -50,11 +50,11 @@ class RuntimeSettings(BaseModel):
     max_concurrent_jobs: int = 1
     gpu_preference: str = "auto"
     onboarding_complete: bool = False
-    default_project_dir: Optional[str] = None
-    model_license_acknowledgements: Dict[str, str] = Field(default_factory=dict)
+    default_project_dir: str | None = None
+    model_license_acknowledgements: dict[str, str] = Field(default_factory=dict)
     reduce_motion: bool = False
     telemetry: bool = False
-    last_seen_version: Optional[str] = None
+    last_seen_version: str | None = None
 
     @field_validator("language")
     @classmethod
@@ -131,7 +131,7 @@ class Paths:
         ):
             path.mkdir(parents=True, exist_ok=True)
 
-    def allowed_roots(self) -> List[Path]:
+    def allowed_roots(self) -> list[Path]:
         return [
             self.media,
             self.imports,
@@ -232,7 +232,7 @@ SUPPORTED_IMPORT_EXTENSIONS = {
 }
 
 
-def find_ffmpeg() -> Optional[str]:
+def find_ffmpeg() -> str | None:
     """Locate FFmpeg without executing anything from an untrusted location."""
     override = os.environ.get("KLYRAUDIO_FFMPEG")
     if override and Path(override).is_file():
@@ -256,7 +256,7 @@ def find_ffmpeg() -> Optional[str]:
 class ServiceContext:
     """Dependency container shared by routers and services."""
 
-    def __init__(self, data_dir: Optional[Path] = None) -> None:
+    def __init__(self, data_dir: Path | None = None) -> None:
         self.paths = Paths(data_dir or default_data_dir())
         self.paths.ensure()
         self.config = ConfigStore(self.paths)
@@ -266,7 +266,7 @@ class ServiceContext:
         self.request_id = ""
 
     @staticmethod
-    def _find_ffprobe(ffmpeg_path: Optional[str]) -> Optional[str]:
+    def _find_ffprobe(ffmpeg_path: str | None) -> str | None:
         override = os.environ.get("KLYRAUDIO_FFPROBE")
         if override and Path(override).is_file():
             return str(Path(override))
@@ -280,7 +280,7 @@ class ServiceContext:
 
         return which("ffprobe")
 
-    def describe(self) -> Dict[str, Any]:
+    def describe(self) -> dict[str, Any]:
         return {
             "version": APP_VERSION,
             "data_dir": str(self.paths.data_dir),

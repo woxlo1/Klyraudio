@@ -8,7 +8,6 @@ Models whose licenses restrict commercial use are labeled explicitly.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional
 
 from ..schemas import ModelCapability
 
@@ -19,32 +18,32 @@ class ModelDefinition:
     name: str
     family: str
     description: str
-    tasks: List[str]
-    capabilities: List[ModelCapability]
-    runtime: List[str]
-    operating_systems: List[str]
-    acceleration: List[str]
-    vram_estimate_mb: Optional[int]
-    ram_estimate_mb: Optional[int]
-    size_bytes: Optional[int]
+    tasks: list[str]
+    capabilities: list[ModelCapability]
+    runtime: list[str]
+    operating_systems: list[str]
+    acceleration: list[str]
+    vram_estimate_mb: int | None
+    ram_estimate_mb: int | None
+    size_bytes: int | None
     source_url: str
     license_name: str
     license_url: str
     commercial_use: str
     redistribution: str
     bundling: str
-    known_limitations: List[str]
+    known_limitations: list[str]
     adapter: str
     builtin: bool = False
-    repo_id: Optional[str] = None
-    exclude_files: List[str] = field(default_factory=list)
+    repo_id: str | None = None
+    exclude_files: list[str] = field(default_factory=list)
     gated: bool = False
     requires_license_acknowledgement: bool = True
 
 
 def _cap(
     task: str,
-    params: List[str],
+    params: list[str],
     duration_min: float,
     duration_max: float,
     *,
@@ -235,21 +234,21 @@ STABLE_AUDIO = ModelDefinition(
     gated=True,
 )
 
-MODELS: List[ModelDefinition] = [
+MODELS: list[ModelDefinition] = [
     SKETCH,
     MUSICGEN_SMALL,
     MUSICGEN_MEDIUM,
     STABLE_AUDIO,
 ]
 
-MODEL_BY_ID: Dict[str, ModelDefinition] = {model.id: model for model in MODELS}
+MODEL_BY_ID: dict[str, ModelDefinition] = {model.id: model for model in MODELS}
 
 
-def get_model(model_id: str) -> Optional[ModelDefinition]:
+def get_model(model_id: str) -> ModelDefinition | None:
     return MODEL_BY_ID.get(model_id)
 
 
-def task_capability(model: ModelDefinition, task: str) -> Optional[ModelCapability]:
+def task_capability(model: ModelDefinition, task: str) -> ModelCapability | None:
     for capability in model.capabilities:
         if capability.task == task:
             return capability
