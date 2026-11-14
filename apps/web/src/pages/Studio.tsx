@@ -1461,6 +1461,7 @@ export function StudioPage() {
                           <RangeField
                             key={name}
                             label={t(PARAM_KEY[name] ?? name)}
+                            id={`effect-${index}-${name}`}
                             value={value}
                             min={range.min}
                             max={range.max}
