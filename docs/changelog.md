@@ -4,6 +4,15 @@ All notable changes are recorded here. The project follows semantic versioning
 for releases; during early development, minor versions may include breaking
 changes.
 
+## Unreleased
+
+### Fixed
+
+- The built-in Sketch engine now derives tempo, key, scale, chord progression,
+  timbre, rhythm pattern, and layer mix from the prompt, so distinct prompts no
+  longer reuse one fallback arrangement. Variations of the same prompt remain
+  deterministic and recognisably related to each other.
+
 ## 0.1.0 — 2026-11-14
 
 First end-to-end development release.
