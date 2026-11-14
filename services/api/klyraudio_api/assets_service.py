@@ -6,7 +6,6 @@ import hashlib
 import shutil
 import uuid
 from pathlib import Path
-from typing import Dict, List, Optional
 
 import numpy as np
 
@@ -31,7 +30,7 @@ OPERATION_LABELS = {
 }
 
 
-def _checksum(path: Path) -> Optional[str]:
+def _checksum(path: Path) -> str | None:
     digest = hashlib.sha256()
     try:
         with path.open("rb") as handle:
@@ -48,7 +47,7 @@ class AssetService:
         self.paths = context.paths
         self.repository = repository
 
-    def info(self, asset: Dict[str, object]) -> AssetInfo:
+    def info(self, asset: dict[str, object]) -> AssetInfo:
         return AssetInfo(
             id=str(asset["id"]),
             name=str(asset["name"]),
@@ -69,13 +68,13 @@ class AssetService:
             file_url=f"/api/assets/{asset['id']}/audio",
         )
 
-    def get(self, asset_id: str) -> Dict[str, object]:
+    def get(self, asset_id: str) -> dict[str, object]:
         asset = self.repository.get(asset_id)
         if not asset:
             raise NotFound("Asset", asset_id)
         return asset
 
-    def file_path(self, asset: Dict[str, object]) -> Path:
+    def file_path(self, asset: dict[str, object]) -> Path:
         path = resolve_managed(self.paths, str(asset["path"]))
         if not path.is_file():
             raise NotFound("Asset file", str(asset["path"]))
@@ -88,10 +87,10 @@ class AssetService:
         name: str,
         origin: str,
         media_type: str,
-        source_job_id: Optional[str] = None,
-        parent_asset_id: Optional[str] = None,
+        source_job_id: str | None = None,
+        parent_asset_id: str | None = None,
         notes: str = "",
-    ) -> Dict[str, object]:
+    ) -> dict[str, object]:
         path = ensure_allowed_existing(self.paths, path)
         metadata = io.probe(path, self.context.ffprobe_path)
         relative = self.paths.relative_to_data(path)
@@ -120,7 +119,7 @@ class AssetService:
 
     def import_upload(
         self, temp_path: Path, original_name: str, media_type: str = "other"
-    ) -> Dict[str, object]:
+    ) -> dict[str, object]:
         target = self.paths.imports / f"{uuid.uuid4().hex[:10]}-{sanitize_filename(original_name)}"
         shutil.move(str(temp_path), target)
         try:
@@ -157,16 +156,16 @@ class AssetService:
         io.write(target, data, sample_rate, subtype="PCM_24")
         return target
 
-    def _base_name(self, asset: Dict[str, object]) -> str:
+    def _base_name(self, asset: dict[str, object]) -> str:
         return str(asset["name"])[:120]
 
-    def operate(self, asset_id: str, request: AudioOperationRequest) -> tuple[List[AssetInfo], str]:
+    def operate(self, asset_id: str, request: AudioOperationRequest) -> tuple[list[AssetInfo], str]:
         asset = self.get(asset_id)
         source = self.file_path(asset)
         audio = io.load(source, ffmpeg=self.context.ffmpeg_path)
         sample_rate = int(asset["sample_rate"])
         duration = float(asset["duration"])
-        outputs: List[np.ndarray] = []
+        outputs: list[np.ndarray] = []
         label = OPERATION_LABELS[request.operation]
 
         if request.operation in {"trim", "split", "silence"}:
@@ -221,7 +220,7 @@ class AssetService:
             )
             return [self.info(duplicate)], "Duplicated"
 
-        created: List[AssetInfo] = []
+        created: list[AssetInfo] = []
         for index, output in enumerate(outputs):
             if output.size == 0:
                 raise ValidationFailed("The edit produced empty audio.")
@@ -238,7 +237,7 @@ class AssetService:
             created.append(self.info(record))
         return created, label
 
-    def join(self, request: JoinRequest) -> List[AssetInfo]:
+    def join(self, request: JoinRequest) -> list[AssetInfo]:
         if not request.asset_ids:
             raise ValidationFailed("Select at least one audio file to join.")
         assets = [self.get(asset_id) for asset_id in request.asset_ids]

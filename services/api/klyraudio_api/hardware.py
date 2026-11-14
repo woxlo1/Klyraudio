@@ -13,12 +13,12 @@ import platform
 import shutil
 import subprocess
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from .schemas import GpuInfo, SystemInfo
 
 
-def _run(command: List[str], timeout: int = 15) -> Optional[str]:
+def _run(command: list[str], timeout: int = 15) -> str | None:
     try:
         result = subprocess.run(command, capture_output=True, text=True, timeout=timeout, check=False)
     except (OSError, subprocess.SubprocessError):
@@ -56,7 +56,7 @@ def _cpu_model() -> str:
     return platform.processor() or "Unknown CPU"
 
 
-def _memory_mb() -> tuple[Optional[int], Optional[int]]:
+def _memory_mb() -> tuple[int | None, int | None]:
     try:
         import psutil  # type: ignore
 
@@ -93,7 +93,7 @@ def _memory_mb() -> tuple[Optional[int], Optional[int]]:
             return int(int(total.strip()) / (1024 * 1024)), None
     try:
         lines = Path("/proc/meminfo").read_text(encoding="utf-8").splitlines()
-        values: Dict[str, int] = {}
+        values: dict[str, int] = {}
         for line in lines:
             key, _, rest = line.partition(":")
             values[key] = int(rest.strip().split()[0])
@@ -107,7 +107,7 @@ def _memory_mb() -> tuple[Optional[int], Optional[int]]:
         return None, None
 
 
-def _nvidia_gpus() -> List[GpuInfo]:
+def _nvidia_gpus() -> list[GpuInfo]:
     output = _run(
         [
             "nvidia-smi",
@@ -117,7 +117,7 @@ def _nvidia_gpus() -> List[GpuInfo]:
     )
     if not output:
         return []
-    gpus: List[GpuInfo] = []
+    gpus: list[GpuInfo] = []
     for line in output.splitlines():
         parts = [part.strip() for part in line.split(",")]
         if len(parts) < 5:
@@ -141,7 +141,7 @@ def _nvidia_gpus() -> List[GpuInfo]:
     return gpus
 
 
-def _apple_gpu() -> List[GpuInfo]:
+def _apple_gpu() -> list[GpuInfo]:
     if platform.system() != "Darwin" or platform.machine().lower() not in {"arm64", "aarch64"}:
         return []
     total, available = _memory_mb()
@@ -169,7 +169,7 @@ def _torch_backend_available(backend: str) -> bool:
     return True
 
 
-def detect_system(data_dir: Path, ffmpeg: Optional[str], ffmpeg_version: Optional[str]) -> SystemInfo:
+def detect_system(data_dir: Path, ffmpeg: str | None, ffmpeg_version: str | None) -> SystemInfo:
     system = platform.system()
     gpus = _nvidia_gpus() + _apple_gpu()
     total_ram, available_ram = _memory_mb()
@@ -186,7 +186,7 @@ def detect_system(data_dir: Path, ffmpeg: Optional[str], ffmpeg_version: Optiona
     else:
         recommended = "cpu"
 
-    warnings: List[str] = []
+    warnings: list[str] = []
     if total_ram and total_ram < 8192:
         warnings.append("Less than 8 GB of system RAM detected; neural models may fail to load.")
     if not gpus:
@@ -204,7 +204,7 @@ def detect_system(data_dir: Path, ffmpeg: Optional[str], ffmpeg_version: Optiona
             "PyTorch is not installed. The built-in Sketch engine works without it; neural models require it."
         )
 
-    free_gb: Optional[float] = None
+    free_gb: float | None = None
     try:
         free_gb = round(shutil.disk_usage(str(data_dir)).free / (1024**3), 1)
     except OSError:
@@ -247,6 +247,6 @@ def select_device(preference: str) -> str:
     return "cpu"
 
 
-def hardware_summary(data_dir: Path) -> Dict[str, Any]:
+def hardware_summary(data_dir: Path) -> dict[str, Any]:
     info = detect_system(data_dir, shutil.which("ffmpeg"), None)
     return json.loads(info.model_dump_json())

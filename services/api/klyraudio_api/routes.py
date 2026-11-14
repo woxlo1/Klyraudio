@@ -7,7 +7,7 @@ import subprocess
 import sys
 import uuid
 from pathlib import Path
-from typing import Annotated, Optional
+from typing import Annotated
 
 from fastapi import APIRouter, File, Form, Query, Request, UploadFile
 from fastapi.responses import Response, StreamingResponse
@@ -207,7 +207,7 @@ def build_router(services: Services) -> APIRouter:
         return JobCreateResponse(jobs=jobs, warnings=warnings)
 
     @router.get("/jobs", response_model=list[JobInfo])
-    def jobs(status: Optional[str] = None) -> list[JobInfo]:
+    def jobs(status: str | None = None) -> list[JobInfo]:
         return services.jobs.list(status=status)
 
     @router.get("/jobs/{job_id}", response_model=JobInfo)
@@ -231,10 +231,10 @@ def build_router(services: Services) -> APIRouter:
     @router.get("/assets", response_model=AssetListResponse)
     def assets(
         query: str = "",
-        media_type: Optional[str] = None,
-        origin: Optional[str] = None,
-        favorite: Optional[bool] = None,
-        tag: Optional[str] = None,
+        media_type: str | None = None,
+        origin: str | None = None,
+        favorite: bool | None = None,
+        tag: str | None = None,
         sort: str = "newest",
         limit: int = Query(default=100, ge=1, le=500),
         offset: int = Query(default=0, ge=0),

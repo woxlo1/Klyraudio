@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
+import builtins
 import uuid
-from typing import Dict, List
 
 import numpy as np
 
@@ -82,7 +82,7 @@ class ProjectService:
         )
         return self.get(project_id)
 
-    def list(self) -> List[ProjectSummary]:
+    def list(self) -> builtins.list[ProjectSummary]:
         return [self.summary(record) for record in self.projects.list()]
 
     def delete(self, project_id: str) -> None:
@@ -90,12 +90,12 @@ class ProjectService:
             raise NotFound("Project", project_id)
         self.projects.delete(project_id)
 
-    def info(self, record: Dict[str, object]) -> ProjectInfo:
+    def info(self, record: dict[str, object]) -> ProjectInfo:
         summary = self.summary(record)
         document = ProjectDocument(**record["document"])  # type: ignore[arg-type]
         return ProjectInfo(**summary.model_dump(), document=document)
 
-    def summary(self, record: Dict[str, object]) -> ProjectSummary:
+    def summary(self, record: dict[str, object]) -> ProjectSummary:
         document = record["document"]
         tracks = document.get("tracks", []) if isinstance(document, dict) else []
         duration = 0.0
@@ -133,7 +133,7 @@ class ProjectService:
             raise ValidationFailed("Unsupported render sample rate.")
 
         any_solo = any(track.solo for track in document.tracks)
-        placeholders: List[tuple[int, np.ndarray, float, float]] = []
+        placeholders: list[tuple[int, np.ndarray, float, float]] = []
         total_frames = 0
         for track in document.tracks:
             if track.mute or (any_solo and not track.solo):
@@ -171,7 +171,7 @@ class ProjectService:
 
         if total_frames == 0:
             raise ValidationFailed("This project has no audible clips to render.")
-        master_chain: List[EffectSpec] = []
+        master_chain: list[EffectSpec] = []
         if request.master_effects:
             master_chain = [effect for effect in document.master.effects if effect.enabled]
         # Only time-based master effects need room for their tails. Rendering a dry

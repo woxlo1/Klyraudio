@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import importlib.util
 from pathlib import Path
-from typing import Dict, List, Optional
 
 from ..config import Paths, RuntimeSettings
 from ..repositories import ModelInstallRepository
@@ -13,7 +12,7 @@ from .adapters import build_adapter
 from .registry import MODELS, ModelDefinition, get_model
 
 
-def _installed_map(repo: ModelInstallRepository) -> Dict[str, Dict[str, object]]:
+def _installed_map(repo: ModelInstallRepository) -> dict[str, dict[str, object]]:
     return {row["model_id"]: row for row in repo.list()}
 
 
@@ -35,7 +34,7 @@ def _deps_present(definition: ModelDefinition) -> bool:
 def describe_model(
     definition: ModelDefinition,
     *,
-    install: Optional[Dict[str, object]],
+    install: dict[str, object] | None,
     settings: RuntimeSettings,
     install_repo: ModelInstallRepository,
 ) -> ModelInfo:
@@ -95,7 +94,7 @@ def describe_model(
 
 def list_models(
     settings: RuntimeSettings, install_repo: ModelInstallRepository
-) -> List[ModelInfo]:
+) -> list[ModelInfo]:
     installs = _installed_map(install_repo)
     return [
         describe_model(
@@ -110,7 +109,7 @@ def list_models(
 
 def model_info(
     model_id: str, settings: RuntimeSettings, install_repo: ModelInstallRepository
-) -> Optional[ModelInfo]:
+) -> ModelInfo | None:
     definition = get_model(model_id)
     if not definition:
         return None

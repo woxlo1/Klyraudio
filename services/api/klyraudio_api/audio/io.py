@@ -11,7 +11,7 @@ import shutil
 import subprocess
 import tempfile
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any
 
 import numpy as np
 import soundfile as sf
@@ -21,7 +21,7 @@ from ..errors import ApiError, DependencyMissing, ValidationFailed
 
 
 class AudioDecodeError(ApiError):
-    def __init__(self, message: str, path: Optional[Path] = None) -> None:
+    def __init__(self, message: str, path: Path | None = None) -> None:
         super().__init__(
             "audio_decode_failed",
             message,
@@ -31,7 +31,7 @@ class AudioDecodeError(ApiError):
         )
 
 
-def ffmpeg_version(ffmpeg: Optional[str]) -> Optional[str]:
+def ffmpeg_version(ffmpeg: str | None) -> str | None:
     if not ffmpeg:
         return None
     try:
@@ -78,7 +78,7 @@ def validate_extension(path: Path) -> None:
         )
 
 
-def probe(path: Path, ffprobe: Optional[str] = None) -> Dict[str, Any]:
+def probe(path: Path, ffprobe: str | None = None) -> dict[str, Any]:
     """Return duration, sample rate, channels, format, and frames for an audio file."""
     validate_extension(path)
     if not path.is_file():
@@ -123,7 +123,7 @@ def probe(path: Path, ffprobe: Optional[str] = None) -> Dict[str, Any]:
     }
 
 
-def _run_ffprobe(ffprobe: str, path: Path) -> Dict[str, Any]:
+def _run_ffprobe(ffprobe: str, path: Path) -> dict[str, Any]:
     try:
         result = subprocess.run(
             [
@@ -153,9 +153,9 @@ def _run_ffprobe(ffprobe: str, path: Path) -> Dict[str, Any]:
 def load(
     path: Path,
     *,
-    target_sr: Optional[int] = None,
+    target_sr: int | None = None,
     mono: bool = False,
-    ffmpeg: Optional[str] = None,
+    ffmpeg: str | None = None,
 ) -> np.ndarray:
     """Load audio as float32 with shape ``(frames, channels)``."""
     try:
@@ -172,7 +172,7 @@ def load(
     return np.nan_to_num(data, nan=0.0, posinf=0.0, neginf=0.0)
 
 
-def _decode_with_ffmpeg(path: Path, ffmpeg: Optional[str]) -> tuple[np.ndarray, int]:
+def _decode_with_ffmpeg(path: Path, ffmpeg: str | None) -> tuple[np.ndarray, int]:
     if not ffmpeg:
         raise AudioDecodeError(
             "This format requires FFmpeg, which was not found.",
@@ -204,7 +204,7 @@ def _decode_with_ffmpeg(path: Path, ffmpeg: Optional[str]) -> tuple[np.ndarray, 
 
 
 def _resample_ffmpeg(
-    data: np.ndarray, source_sr: int, target_sr: int, ffmpeg: Optional[str]
+    data: np.ndarray, source_sr: int, target_sr: int, ffmpeg: str | None
 ) -> np.ndarray:
     if source_sr == target_sr:
         return data
@@ -274,7 +274,7 @@ def write_encoded(
     sample_rate: int,
     *,
     fmt: str,
-    ffmpeg: Optional[str] = None,
+    ffmpeg: str | None = None,
 ) -> None:
     fmt = fmt.lower()
     if fmt in {"wav", "flac", "aiff"}:
@@ -306,7 +306,7 @@ def write_encoded(
         )
 
 
-def to_wav(src: Path, dest: Path, *, sample_rate: int, ffmpeg: Optional[str] = None) -> None:
+def to_wav(src: Path, dest: Path, *, sample_rate: int, ffmpeg: str | None = None) -> None:
     data = load(src, target_sr=sample_rate, ffmpeg=ffmpeg)
     write(dest, data, sample_rate)
 

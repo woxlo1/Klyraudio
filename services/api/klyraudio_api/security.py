@@ -3,8 +3,8 @@
 from __future__ import annotations
 
 import re
+from collections.abc import Iterable
 from pathlib import Path
-from typing import Iterable, Optional
 
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
@@ -126,5 +126,5 @@ def check_upload_name(filename: str, allowed_extensions: Iterable[str]) -> str:
     return name
 
 
-def optional_text(value: Optional[str], limit: int = 500) -> str:
+def optional_text(value: str | None, limit: int = 500) -> str:
     return (value or "").strip()[:limit]

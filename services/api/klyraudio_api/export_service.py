@@ -8,7 +8,6 @@ import tempfile
 import time
 import uuid
 from pathlib import Path
-from typing import Dict, List, Optional
 
 import numpy as np
 import soundfile as sf
@@ -38,10 +37,10 @@ LOSSY_FORMATS = {
     "aac": ("aac", "aac", "adts", 192),
 }
 ALLOWED_SAMPLE_RATES = {22050, 32000, 44100, 48000, 96000}
-_encoder_cache: Dict[str, object] = {"at": 0.0, "encoders": set(), "version": None}
+_encoder_cache: dict[str, object] = {"at": 0.0, "encoders": set(), "version": None}
 
 
-def _ffmpeg_encoders(ffmpeg: Optional[str]) -> tuple[set, Optional[str]]:
+def _ffmpeg_encoders(ffmpeg: str | None) -> tuple[set, str | None]:
     if not ffmpeg:
         return set(), None
     now = time.monotonic()
@@ -80,7 +79,7 @@ class ExportService:
 
     def capabilities(self) -> ExportCapabilities:
         encoders, version = _ffmpeg_encoders(self.context.ffmpeg_path)
-        options: List[ExportFormatOption] = [
+        options: list[ExportFormatOption] = [
             ExportFormatOption(
                 id="wav",
                 label="WAV",
@@ -284,7 +283,7 @@ class ExportService:
             target.unlink(missing_ok=True)
             raise
 
-    def _verify(self, path: Path, asset: Dict[str, object], frames: int, sample_rate: int) -> bool:
+    def _verify(self, path: Path, asset: dict[str, object], frames: int, sample_rate: int) -> bool:
         if not path.is_file() or path.stat().st_size == 0:
             raise ApiError("export_verification_failed", "The exported file is empty.", status_code=500)
         try:
@@ -307,7 +306,7 @@ class ExportService:
             )
         return True
 
-    def history(self, limit: int = 50) -> List[Dict[str, object]]:
+    def history(self, limit: int = 50) -> list[dict[str, object]]:
         return self.exports.list(limit)
 
     def exports_dir(self) -> str:

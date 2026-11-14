@@ -2,9 +2,11 @@
 
 from __future__ import annotations
 
+import builtins
 import json
+from collections.abc import Sequence
 from datetime import datetime, timezone
-from typing import Any, Dict, List, Optional, Sequence
+from typing import Any
 
 from .database import Database
 
@@ -13,7 +15,7 @@ def now_iso() -> str:
     return datetime.now(timezone.utc).isoformat(timespec="milliseconds").replace("+00:00", "Z")
 
 
-def _row_to_dict(row: Any) -> Dict[str, Any]:
+def _row_to_dict(row: Any) -> dict[str, Any]:
     return {key: row[key] for key in row.keys()}
 
 
@@ -21,7 +23,7 @@ class AssetRepository:
     def __init__(self, database: Database) -> None:
         self._db = database
 
-    def create(self, asset: Dict[str, Any]) -> Dict[str, Any]:
+    def create(self, asset: dict[str, Any]) -> dict[str, Any]:
         with self._db.connect() as connection:
             connection.execute(
                 """
@@ -53,7 +55,7 @@ class AssetRepository:
             )
         return self.get(asset["id"])  # type: ignore[return-value]
 
-    def get(self, asset_id: str) -> Optional[Dict[str, Any]]:
+    def get(self, asset_id: str) -> dict[str, Any] | None:
         with self._db.connect() as connection:
             row = connection.execute("SELECT * FROM assets WHERE id = ?", (asset_id,)).fetchone()
             if not row:
@@ -62,7 +64,7 @@ class AssetRepository:
             asset["tags"] = self._tags(connection, asset_id)
             return asset
 
-    def find_by_path(self, path: str) -> Optional[Dict[str, Any]]:
+    def find_by_path(self, path: str) -> dict[str, Any] | None:
         with self._db.connect() as connection:
             row = connection.execute("SELECT * FROM assets WHERE path = ?", (path,)).fetchone()
             return _row_to_dict(row) if row else None
@@ -71,16 +73,16 @@ class AssetRepository:
         self,
         *,
         query: str = "",
-        media_type: Optional[str] = None,
-        origin: Optional[str] = None,
-        favorite: Optional[bool] = None,
-        tag: Optional[str] = None,
+        media_type: str | None = None,
+        origin: str | None = None,
+        favorite: bool | None = None,
+        tag: str | None = None,
         sort: str = "newest",
         limit: int = 100,
         offset: int = 0,
-    ) -> tuple[List[Dict[str, Any]], int]:
-        clauses: List[str] = []
-        params: List[Any] = []
+    ) -> tuple[builtins.list[dict[str, Any]], int]:
+        clauses: list[str] = []
+        params: list[Any] = []
         if query:
             clauses.append("(a.name LIKE ? OR a.notes LIKE ?)")
             like = f"%{query}%"
@@ -122,7 +124,7 @@ class AssetRepository:
                 assets.append(asset)
             return assets, int(total)
 
-    def update(self, asset_id: str, changes: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+    def update(self, asset_id: str, changes: dict[str, Any]) -> dict[str, Any] | None:
         allowed = {"name", "favorite", "notes", "media_type"}
         fields = {key: value for key, value in changes.items() if key in allowed and value is not None}
         tags = changes.get("tags")
@@ -140,7 +142,7 @@ class AssetRepository:
                 self._set_tags(connection, asset_id, tags)
         return self.get(asset_id)
 
-    def delete(self, asset_id: str) -> Optional[Dict[str, Any]]:
+    def delete(self, asset_id: str) -> dict[str, Any] | None:
         asset = self.get(asset_id)
         if not asset:
             return None
@@ -148,7 +150,7 @@ class AssetRepository:
             connection.execute("DELETE FROM assets WHERE id = ?", (asset_id,))
         return asset
 
-    def all_tags(self) -> List[Dict[str, Any]]:
+    def all_tags(self) -> builtins.list[dict[str, Any]]:
         with self._db.connect() as connection:
             rows = connection.execute(
                 "SELECT t.name, COUNT(at.asset_id) AS count FROM tags t "
@@ -156,7 +158,7 @@ class AssetRepository:
             ).fetchall()
             return [{"name": row["name"], "count": row["count"]} for row in rows]
 
-    def _tags(self, connection: Any, asset_id: str) -> List[str]:
+    def _tags(self, connection: Any, asset_id: str) -> builtins.list[str]:
         rows = connection.execute(
             "SELECT t.name FROM tags t JOIN asset_tags at ON at.tag_id = t.id "
             "WHERE at.asset_id = ? ORDER BY t.name",
@@ -187,7 +189,7 @@ class JobRepository:
     def __init__(self, database: Database) -> None:
         self._db = database
 
-    def create(self, job: Dict[str, Any]) -> Dict[str, Any]:
+    def create(self, job: dict[str, Any]) -> dict[str, Any]:
         with self._db.connect() as connection:
             connection.execute(
                 """
@@ -223,12 +225,12 @@ class JobRepository:
             )
         return self.get(job["id"])  # type: ignore[return-value]
 
-    def get(self, job_id: str) -> Optional[Dict[str, Any]]:
+    def get(self, job_id: str) -> dict[str, Any] | None:
         with self._db.connect() as connection:
             row = connection.execute("SELECT * FROM jobs WHERE id = ?", (job_id,)).fetchone()
             return _job_row(row) if row else None
 
-    def list(self, *, status: Optional[str] = None, limit: int = 100) -> List[Dict[str, Any]]:
+    def list(self, *, status: str | None = None, limit: int = 100) -> builtins.list[dict[str, Any]]:
         with self._db.connect() as connection:
             if status:
                 rows = connection.execute(
@@ -242,7 +244,7 @@ class JobRepository:
                 ).fetchall()
             return [_job_row(row) for row in rows]
 
-    def update(self, job_id: str, changes: Dict[str, Any]) -> None:
+    def update(self, job_id: str, changes: dict[str, Any]) -> None:
         normalized = dict(changes)
         if "params" in normalized:
             normalized["params_json"] = json.dumps(normalized.pop("params"), ensure_ascii=False)
@@ -280,7 +282,7 @@ class JobRepository:
                 "started_at = NULL, cancel_requested = 0 WHERE status = 'running'"
             )
 
-    def recover_interrupted(self) -> List[str]:
+    def recover_interrupted(self) -> builtins.list[str]:
         """Mark jobs interrupted by a previous crash as failed and return their ids."""
         with self._db.connect() as connection:
             rows = connection.execute(
@@ -303,7 +305,7 @@ class JobRepository:
             return ids
 
 
-def _job_row(row: Any) -> Dict[str, Any]:
+def _job_row(row: Any) -> dict[str, Any]:
     job = _row_to_dict(row)
     job["params"] = json.loads(job.pop("params_json") or "{}")
     job["output_asset_ids"] = json.loads(job.get("output_asset_ids") or "[]")
@@ -317,7 +319,7 @@ class DownloadRepository:
     def __init__(self, database: Database) -> None:
         self._db = database
 
-    def create(self, item: Dict[str, Any]) -> Dict[str, Any]:
+    def create(self, item: dict[str, Any]) -> dict[str, Any]:
         with self._db.connect() as connection:
             connection.execute(
                 """
@@ -343,14 +345,14 @@ class DownloadRepository:
             )
         return self.get(item["id"])  # type: ignore[return-value]
 
-    def get(self, download_id: str) -> Optional[Dict[str, Any]]:
+    def get(self, download_id: str) -> dict[str, Any] | None:
         with self._db.connect() as connection:
             row = connection.execute(
                 "SELECT * FROM downloads WHERE id = ?", (download_id,)
             ).fetchone()
             return _download_row(row) if row else None
 
-    def list(self, limit: int = 50) -> List[Dict[str, Any]]:
+    def list(self, limit: int = 50) -> builtins.list[dict[str, Any]]:
         with self._db.connect() as connection:
             rows = connection.execute(
                 "SELECT * FROM downloads ORDER BY created_at DESC LIMIT ?",
@@ -358,7 +360,7 @@ class DownloadRepository:
             ).fetchall()
             return [_download_row(row) for row in rows]
 
-    def active_for_model(self, model_id: str) -> Optional[Dict[str, Any]]:
+    def active_for_model(self, model_id: str) -> dict[str, Any] | None:
         with self._db.connect() as connection:
             row = connection.execute(
                 "SELECT * FROM downloads WHERE model_id = ? AND status IN ('queued','running') "
@@ -367,7 +369,7 @@ class DownloadRepository:
             ).fetchone()
             return _download_row(row) if row else None
 
-    def update(self, download_id: str, changes: Dict[str, Any]) -> None:
+    def update(self, download_id: str, changes: dict[str, Any]) -> None:
         normalized = dict(changes)
         if "files" in normalized:
             normalized["files_json"] = json.dumps(normalized.pop("files"))
@@ -383,7 +385,7 @@ class DownloadRepository:
             )
 
 
-def _download_row(row: Any) -> Dict[str, Any]:
+def _download_row(row: Any) -> dict[str, Any]:
     item = _row_to_dict(row)
     item["files"] = json.loads(item.pop("files_json") or "[]")
     item["cancel_requested"] = bool(item.get("cancel_requested"))
@@ -394,14 +396,14 @@ class ModelInstallRepository:
     def __init__(self, database: Database) -> None:
         self._db = database
 
-    def get(self, model_id: str) -> Optional[Dict[str, Any]]:
+    def get(self, model_id: str) -> dict[str, Any] | None:
         with self._db.connect() as connection:
             row = connection.execute(
                 "SELECT * FROM model_installs WHERE model_id = ?", (model_id,)
             ).fetchone()
             return _row_to_dict(row) if row else None
 
-    def list(self) -> List[Dict[str, Any]]:
+    def list(self) -> builtins.list[dict[str, Any]]:
         with self._db.connect() as connection:
             rows = connection.execute("SELECT * FROM model_installs ORDER BY installed_at DESC").fetchall()
             return [_row_to_dict(row) for row in rows]
@@ -428,7 +430,7 @@ class ProjectRepository:
     def __init__(self, database: Database) -> None:
         self._db = database
 
-    def create(self, project_id: str, name: str, document: Dict[str, Any], version: int) -> Dict[str, Any]:
+    def create(self, project_id: str, name: str, document: dict[str, Any], version: int) -> dict[str, Any]:
         timestamp = now_iso()
         with self._db.connect() as connection:
             connection.execute(
@@ -438,14 +440,14 @@ class ProjectRepository:
             )
         return self.get(project_id)  # type: ignore[return-value]
 
-    def get(self, project_id: str) -> Optional[Dict[str, Any]]:
+    def get(self, project_id: str) -> dict[str, Any] | None:
         with self._db.connect() as connection:
             row = connection.execute(
                 "SELECT * FROM projects WHERE id = ?", (project_id,)
             ).fetchone()
             return _project_row(row) if row else None
 
-    def list(self) -> List[Dict[str, Any]]:
+    def list(self) -> builtins.list[dict[str, Any]]:
         with self._db.connect() as connection:
             rows = connection.execute("SELECT * FROM projects ORDER BY updated_at DESC").fetchall()
             return [_project_row(row) for row in rows]
@@ -454,11 +456,11 @@ class ProjectRepository:
         self,
         project_id: str,
         *,
-        document: Dict[str, Any],
+        document: dict[str, Any],
         version: int,
         autosave: bool = False,
-        name: Optional[str] = None,
-    ) -> Optional[Dict[str, Any]]:
+        name: str | None = None,
+    ) -> dict[str, Any] | None:
         serialized = json.dumps(document, ensure_ascii=False)
         timestamp = now_iso()
         with self._db.connect() as connection:
@@ -485,7 +487,7 @@ class ProjectRepository:
             return result.rowcount > 0
 
 
-def _project_row(row: Any) -> Dict[str, Any]:
+def _project_row(row: Any) -> dict[str, Any]:
     item = _row_to_dict(row)
     item["document"] = json.loads(item.pop("document_json"))
     autosave = item.pop("autosave_json", None)
@@ -497,7 +499,7 @@ class ExportRepository:
     def __init__(self, database: Database) -> None:
         self._db = database
 
-    def create(self, record: Dict[str, Any]) -> Dict[str, Any]:
+    def create(self, record: dict[str, Any]) -> dict[str, Any]:
         with self._db.connect() as connection:
             connection.execute(
                 "INSERT INTO export_records(id, asset_id, format, path, settings_json, size_bytes, "
@@ -515,7 +517,7 @@ class ExportRepository:
             )
         return record
 
-    def list(self, limit: int = 50) -> List[Dict[str, Any]]:
+    def list(self, limit: int = 50) -> builtins.list[dict[str, Any]]:
         with self._db.connect() as connection:
             rows = connection.execute(
                 "SELECT * FROM export_records ORDER BY created_at DESC LIMIT ?",

@@ -5,8 +5,8 @@ from __future__ import annotations
 import gc
 import importlib.util
 import random
+from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Callable, List, Optional
 
 import numpy as np
 
@@ -16,7 +16,7 @@ from ..schemas import EffectSpec, GenerationRequest
 from .procedural import generate as generate_sketch
 from .registry import ModelDefinition
 
-ProgressCallback = Callable[[Optional[float], str], None]
+ProgressCallback = Callable[[float | None, str], None]
 CancelCheck = Callable[[], bool]
 
 
@@ -39,7 +39,7 @@ def _find_spec(name: str) -> bool:
         return False
 
 
-def missing_dependencies(packages: List[str]) -> List[str]:
+def missing_dependencies(packages: list[str]) -> list[str]:
     return [package for package in packages if not _find_spec(package)]
 
 
@@ -75,12 +75,12 @@ def _postprocess(
 
 
 class Adapter:
-    def __init__(self, definition: ModelDefinition, install_path: Optional[str], device: str) -> None:
+    def __init__(self, definition: ModelDefinition, install_path: str | None, device: str) -> None:
         self.definition = definition
         self.install_path = install_path
         self.device = device
 
-    def availability(self) -> tuple[bool, Optional[str]]:
+    def availability(self) -> tuple[bool, str | None]:
         raise NotImplementedError
 
     def generate_batch(
@@ -89,12 +89,12 @@ class Adapter:
         count: int,
         progress: ProgressCallback,
         cancelled: CancelCheck,
-    ) -> List[AudioResult]:
+    ) -> list[AudioResult]:
         raise NotImplementedError
 
 
 class ProceduralAdapter(Adapter):
-    def availability(self) -> tuple[bool, Optional[str]]:
+    def availability(self) -> tuple[bool, str | None]:
         return True, None
 
     def generate_batch(
@@ -103,12 +103,12 @@ class ProceduralAdapter(Adapter):
         count: int,
         progress: ProgressCallback,
         cancelled: CancelCheck,
-    ) -> List[AudioResult]:
-        results: List[AudioResult] = []
+    ) -> list[AudioResult]:
+        results: list[AudioResult] = []
         for index in range(count):
             _check_cancel(cancelled)
 
-            def report(value: Optional[float], label: str, i: int = index) -> None:
+            def report(value: float | None, label: str, i: int = index) -> None:
                 if value is not None:
                     value = (i + value) / count
                 progress(value, f"{label} ({i + 1}/{count})")
@@ -120,7 +120,7 @@ class ProceduralAdapter(Adapter):
 
 
 class MusicGenAdapter(Adapter):
-    def availability(self) -> tuple[bool, Optional[str]]:
+    def availability(self) -> tuple[bool, str | None]:
         if not self.install_path:
             return False, "Model files are not installed."
         missing = missing_dependencies(["torch", "transformers"])
@@ -138,7 +138,7 @@ class MusicGenAdapter(Adapter):
         count: int,
         progress: ProgressCallback,
         cancelled: CancelCheck,
-    ) -> List[AudioResult]:
+    ) -> list[AudioResult]:
         available, detail = self.availability()
         if not available:
             raise DependencyMissing("MusicGen runtime", detail or "The model is not ready.")
@@ -178,7 +178,7 @@ class MusicGenAdapter(Adapter):
                 )
             _check_cancel(cancelled)
             sample_rate = int(getattr(model.config, "audio_enc_sample_rate", 32000) or 32000)
-            results: List[AudioResult] = []
+            results: list[AudioResult] = []
             for index in range(generated.shape[0]):
                 audio = generated[index, 0].detach().to("cpu").float().numpy()
                 audio = _postprocess(audio, sample_rate, request)
@@ -214,7 +214,7 @@ class MusicGenAdapter(Adapter):
 
 
 class StableAudioAdapter(Adapter):
-    def availability(self) -> tuple[bool, Optional[str]]:
+    def availability(self) -> tuple[bool, str | None]:
         if not self.install_path:
             return False, "Model files are not installed."
         missing = missing_dependencies(["torch", "diffusers", "transformers"])
@@ -232,7 +232,7 @@ class StableAudioAdapter(Adapter):
         count: int,
         progress: ProgressCallback,
         cancelled: CancelCheck,
-    ) -> List[AudioResult]:
+    ) -> list[AudioResult]:
         available, detail = self.availability()
         if not available:
             raise DependencyMissing("Stable Audio runtime", detail or "The model is not ready.")
@@ -272,7 +272,7 @@ class StableAudioAdapter(Adapter):
             ).audios
             _check_cancel(cancelled)
             sample_rate = int(getattr(pipe.vae, "sampling_rate", 44100) or 44100)
-            results: List[AudioResult] = []
+            results: list[AudioResult] = []
             for index in range(audio.shape[0]):
                 waveform = audio[index].detach().to("cpu").float().numpy()
                 if waveform.ndim == 1:
@@ -319,7 +319,7 @@ ADAPTERS = {
 
 
 def build_adapter(
-    definition: ModelDefinition, install_path: Optional[str], device: str
+    definition: ModelDefinition, install_path: str | None, device: str
 ) -> Adapter:
     adapter_class = ADAPTERS.get(definition.adapter)
     if not adapter_class:

@@ -11,12 +11,12 @@ import logging
 import sys
 import time
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 
 
 class JsonFormatter(logging.Formatter):
     def format(self, record: logging.LogRecord) -> str:
-        payload: Dict[str, Any] = {
+        payload: dict[str, Any] = {
             "time": self.formatTime(record, "%Y-%m-%dT%H:%M:%S%z"),
             "level": record.levelname.lower(),
             "logger": record.name,

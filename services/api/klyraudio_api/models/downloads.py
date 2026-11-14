@@ -7,6 +7,7 @@ host (Hugging Face LFS metadata) when available.
 
 from __future__ import annotations
 
+import builtins
 import hashlib
 import os
 import shutil
@@ -14,7 +15,6 @@ import threading
 import time
 import uuid
 from pathlib import Path
-from typing import Dict, List, Optional
 from urllib.parse import quote
 
 import httpx
@@ -31,11 +31,11 @@ SKIP_SUFFIXES = {".png", ".jpg", ".jpeg", ".gif", ".webp", ".md", ".csv", ".gita
 REQUIRED_FREE_MARGIN = 512 * 1024 * 1024
 
 
-def _token() -> Optional[str]:
+def _token() -> str | None:
     return os.environ.get("HF_TOKEN") or os.environ.get("HUGGING_FACE_HUB_TOKEN")
 
 
-def _size_label(value: Optional[int]) -> str:
+def _size_label(value: int | None) -> str:
     if value is None:
         return "unknown size"
     if value >= 1024**3:
@@ -55,18 +55,18 @@ class DownloadManager:
         self.config = config
         self.downloads = downloads
         self.installs = installs
-        self._threads: Dict[str, threading.Thread] = {}
-        self._cancels: Dict[str, threading.Event] = {}
+        self._threads: dict[str, threading.Thread] = {}
+        self._cancels: dict[str, threading.Event] = {}
         self._lock = threading.RLock()
 
-    def _active(self) -> Optional[Dict[str, object]]:
+    def _active(self) -> dict[str, object] | None:
         for item in self.downloads.list(limit=20):
             if item["status"] in {"queued", "running"}:
                 return item
         return None
 
     def start(
-        self, model_id: str, accept_license: bool, version: Optional[str] = None
+        self, model_id: str, accept_license: bool, version: str | None = None
     ) -> DownloadInfo:
         definition = get_model(model_id)
         if not definition:
@@ -139,7 +139,7 @@ class DownloadManager:
         self.downloads.update(download_id, {"cancel_requested": True})
         return self._to_info(self.downloads.get(download_id) or item)
 
-    def list(self) -> List[DownloadInfo]:
+    def list(self) -> builtins.list[DownloadInfo]:
         return [self._to_info(item) for item in self.downloads.list()]
 
     def remove(self, model_id: str) -> None:
@@ -165,7 +165,7 @@ class DownloadManager:
             raise ApiError("invalid_model_path", "Invalid model path.", status_code=400) from exc
         return target
 
-    def _to_info(self, item: Dict[str, object]) -> DownloadInfo:
+    def _to_info(self, item: dict[str, object]) -> DownloadInfo:
         return DownloadInfo(
             id=str(item["id"]),
             model_id=str(item["model_id"]),
@@ -179,7 +179,7 @@ class DownloadManager:
             finished_at=item.get("finished_at"),  # type: ignore[arg-type]
         )
 
-    def _check_disk(self, total: Optional[int]) -> None:
+    def _check_disk(self, total: int | None) -> None:
         if not total:
             return
         try:
@@ -200,7 +200,7 @@ class DownloadManager:
                 remediation="Free disk space or choose a smaller model.",
             )
 
-    def _list_files(self, definition: ModelDefinition) -> List[Dict[str, object]]:
+    def _list_files(self, definition: ModelDefinition) -> builtins.list[dict[str, object]]:
         if not definition.repo_id:
             raise ApiError("download_unavailable", "The model has no download source.", status_code=502)
         headers = {"User-Agent": "Klyraudio/0.1 (+local model manager)"}
@@ -239,7 +239,7 @@ class DownloadManager:
             entries = response.json()
         except ValueError as exc:
             raise ApiError("download_metadata_failed", "The model host returned invalid metadata.", status_code=502) from exc
-        files: List[Dict[str, object]] = []
+        files: list[dict[str, object]] = []
         for entry in entries if isinstance(entries, list) else []:
             if entry.get("type") != "file":
                 continue
@@ -265,7 +265,7 @@ class DownloadManager:
         self,
         download_id: str,
         definition: ModelDefinition,
-        files: List[Dict[str, object]],
+        files: builtins.list[dict[str, object]],
         cancel: threading.Event,
     ) -> None:
         model_dir = self._model_dir(definition.id)

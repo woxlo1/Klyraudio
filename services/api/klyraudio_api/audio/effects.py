@@ -8,8 +8,6 @@ to emulate a specific analog device.
 
 from __future__ import annotations
 
-from typing import Dict, List
-
 import numpy as np
 
 from ..schemas import EffectSpec
@@ -19,7 +17,7 @@ from . import dsp
 def _frequency_response(
     frequencies: np.ndarray,
     sample_rate: int,
-    gains: Dict[str, float],
+    gains: dict[str, float],
 ) -> np.ndarray:
     response = np.ones_like(frequencies, dtype=np.float64)
     low_gain = dsp.db_to_linear(gains.get("low_gain_db", 0.0))
@@ -42,7 +40,7 @@ def _frequency_response(
     return response
 
 
-def apply_eq(data: np.ndarray, sample_rate: int, params: Dict[str, float]) -> np.ndarray:
+def apply_eq(data: np.ndarray, sample_rate: int, params: dict[str, float]) -> np.ndarray:
     audio = dsp.as_2d(data)
     if audio.size == 0:
         return audio
@@ -54,7 +52,7 @@ def apply_eq(data: np.ndarray, sample_rate: int, params: Dict[str, float]) -> np
     return np.fft.irfft(spectrum, n=frames, axis=0).astype(np.float32)
 
 
-def apply_compressor(data: np.ndarray, sample_rate: int, params: Dict[str, float]) -> np.ndarray:
+def apply_compressor(data: np.ndarray, sample_rate: int, params: dict[str, float]) -> np.ndarray:
     audio = dsp.as_2d(data)
     if audio.size == 0:
         return audio
@@ -93,7 +91,7 @@ def apply_compressor(data: np.ndarray, sample_rate: int, params: Dict[str, float
     return (audio * gain_curve[:, None]).astype(np.float32)
 
 
-def apply_limiter(data: np.ndarray, sample_rate: int, params: Dict[str, float]) -> np.ndarray:
+def apply_limiter(data: np.ndarray, sample_rate: int, params: dict[str, float]) -> np.ndarray:
     audio = dsp.as_2d(data)
     if audio.size == 0:
         return audio
@@ -134,7 +132,7 @@ def _impulse_response(
     return ir
 
 
-def apply_reverb(data: np.ndarray, sample_rate: int, params: Dict[str, float]) -> np.ndarray:
+def apply_reverb(data: np.ndarray, sample_rate: int, params: dict[str, float]) -> np.ndarray:
     audio = dsp.as_2d(data)
     if audio.size == 0:
         return audio
@@ -158,7 +156,7 @@ def apply_reverb(data: np.ndarray, sample_rate: int, params: Dict[str, float]) -
     return ((1.0 - mix) * audio + mix * wet).astype(np.float32)
 
 
-def apply_delay(data: np.ndarray, sample_rate: int, params: Dict[str, float]) -> np.ndarray:
+def apply_delay(data: np.ndarray, sample_rate: int, params: dict[str, float]) -> np.ndarray:
     audio = dsp.as_2d(data)
     if audio.size == 0:
         return audio
@@ -184,7 +182,7 @@ def apply_delay(data: np.ndarray, sample_rate: int, params: Dict[str, float]) ->
 
 
 def apply_chain(
-    data: np.ndarray, sample_rate: int, effects: List[EffectSpec]
+    data: np.ndarray, sample_rate: int, effects: list[EffectSpec]
 ) -> np.ndarray:
     output = dsp.as_2d(data).copy()
     for effect in effects:
@@ -203,7 +201,7 @@ def apply_chain(
     return output
 
 
-DEFAULT_EFFECTS: Dict[str, Dict[str, float]] = {
+DEFAULT_EFFECTS: dict[str, dict[str, float]] = {
     "eq": {"low_gain_db": 0.0, "mid_gain_db": 0.0, "high_gain_db": 0.0},
     "compressor": {
         "threshold_db": -18.0,
