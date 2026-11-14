@@ -1,7 +1,9 @@
 import type {
   AssetInfo,
+  ClipSpec,
   DownloadInfo,
   ExportCapabilities,
+  ExportResult,
   HealthResponse,
   JobInfo,
   ModelCapability,
@@ -11,6 +13,8 @@ import type {
   RuntimeSettings,
   StorageInfo,
   SystemInfo,
+  TrackSpec,
+  WaveformResponse,
 } from "../api/types";
 
 /**
@@ -269,7 +273,34 @@ export function makeDownloadInfo(overrides: Partial<DownloadInfo> = {}): Downloa
   };
 }
 
-function makeDocument(): ProjectDocument {
+export function makeWaveform(overrides: Partial<WaveformResponse> = {}): WaveformResponse {
+  return {
+    asset_id: "asset-1",
+    duration: 3.5,
+    channels: 2,
+    peaks: [
+      [-0.4, 0.6, -0.2, 0.8, -0.5, 0.3, -0.1, 0.7],
+      [-0.3, 0.5, -0.1, 0.6, -0.4, 0.2, -0.2, 0.5],
+    ],
+    sample_rate: 44100,
+    ...overrides,
+  };
+}
+
+export function makeExportResult(overrides: Partial<ExportResult> = {}): ExportResult {
+  return {
+    id: "export-1",
+    format: "wav",
+    path: "/home/tester/Klyraudio/exports/Test chime.wav",
+    size_bytes: 616000,
+    verified: true,
+    duration: 3.5,
+    message: "Export complete.",
+    ...overrides,
+  };
+}
+
+export function makeProjectDocument(overrides: Partial<ProjectDocument> = {}): ProjectDocument {
   return {
     version: 1,
     id: "project-1",
@@ -281,6 +312,34 @@ function makeDocument(): ProjectDocument {
     created_at: ISO_TIMESTAMP,
     updated_at: ISO_TIMESTAMP,
     notes: "",
+    ...overrides,
+  };
+}
+
+export function makeClip(overrides: Partial<ClipSpec> = {}): ClipSpec {
+  return {
+    id: "clip-1",
+    asset_id: "asset-1",
+    start: 0,
+    offset: 0,
+    duration: 3.5,
+    fade_in: 0,
+    fade_out: 0,
+    gain: 1,
+    ...overrides,
+  };
+}
+
+export function makeTrack(overrides: Partial<TrackSpec> = {}): TrackSpec {
+  return {
+    id: "track-1",
+    name: "Track 1",
+    volume: 1,
+    pan: 0,
+    mute: false,
+    solo: false,
+    clips: [makeClip()],
+    ...overrides,
   };
 }
 
@@ -293,7 +352,7 @@ export function makeProjectInfo(overrides: Partial<ProjectInfo> = {}): ProjectIn
     created_at: ISO_TIMESTAMP,
     updated_at: ISO_TIMESTAMP,
     has_autosave: false,
-    document: makeDocument(),
+    document: makeProjectDocument(),
     ...overrides,
   };
 }

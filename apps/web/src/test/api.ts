@@ -4,6 +4,7 @@ import {
   makeAsset,
   makeDownloadInfo,
   makeExportCapabilities,
+  makeExportResult,
   makeHealth,
   makeJob,
   makeModel,
@@ -11,6 +12,7 @@ import {
   makeSettings,
   makeStorage,
   makeSystemInfo,
+  makeWaveform,
 } from "./fixtures";
 
 /**
@@ -56,13 +58,24 @@ export function mockApi() {
       description: "Joined 2 assets.",
     }),
     audioUrl: vi.spyOn(api, "audioUrl").mockReturnValue("/api/assets/asset-1/audio"),
+    waveform: vi.spyOn(api, "waveform").mockResolvedValue(makeWaveform()),
+    operate: vi.spyOn(api, "operate").mockResolvedValue({
+      assets: [makeAsset({ name: "Edited take.wav", origin: "edited" })],
+      description: "Operation applied.",
+    }),
     openFolder: vi.spyOn(api, "openFolder").mockResolvedValue({ opened: true, path: "" }),
     projects: vi.spyOn(api, "projects").mockResolvedValue([]),
     createProject: vi.spyOn(api, "createProject").mockResolvedValue(makeProjectInfo()),
+    project: vi.spyOn(api, "project").mockResolvedValue(makeProjectInfo()),
     updateProject: vi.spyOn(api, "updateProject").mockResolvedValue(makeProjectInfo()),
+    deleteProject: vi.spyOn(api, "deleteProject").mockResolvedValue({ deleted: true }),
+    renderProject: vi
+      .spyOn(api, "renderProject")
+      .mockResolvedValue(makeAsset({ id: "rendered-1", name: "Render.wav", origin: "rendered" })),
     exportCapabilities: vi
       .spyOn(api, "exportCapabilities")
       .mockResolvedValue(makeExportCapabilities()),
+    exportAudio: vi.spyOn(api, "exportAudio").mockResolvedValue(makeExportResult()),
     exportFolder: vi.spyOn(api, "exportFolder").mockResolvedValue({ path: "" }),
   };
 }
