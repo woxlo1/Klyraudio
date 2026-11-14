@@ -294,6 +294,7 @@ describe("OnboardingPage", () => {
     expect(
       await screen.findByText("The setup guide is skipped. You can reopen it from Settings."),
     ).toBeTruthy();
+    await screen.findByTestId("location");
     expect(JSON.parse(screen.getByTestId("location").textContent ?? "{}")).toEqual({
       pathname: "/",
       params: {},
@@ -310,6 +311,7 @@ describe("OnboardingPage", () => {
 
     expect(apiSpy.updateSettings).toHaveBeenCalledWith({ onboarding_complete: true });
     expect(await screen.findByText("Setup marked as complete.")).toBeTruthy();
+    await screen.findByTestId("location");
     expect(JSON.parse(screen.getByTestId("location").textContent ?? "{}")).toEqual({
       pathname: "/",
       params: {},
